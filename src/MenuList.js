@@ -45,7 +45,7 @@ export default class MenuList extends React.Component {
             }
           }
           return {
-            setHighlighted: (highlighted: boolean, scrollIntoView: ?boolean) => {
+            setHighlighted: (highlighted: boolean, scrollIntoView: boolean) => {
               const i = this._listItems.indexOf(item);
               if (i < 0) throw new Error("Already unregistered MenuListItem");
               this._highlight(i, scrollIntoView);
@@ -95,7 +95,7 @@ export default class MenuList extends React.Component {
       .onValue(event => this._key(event));
   }
 
-  _highlight(index: ?number, scrollIntoView: ?boolean) {
+  _highlight(index: ?number, scrollIntoView: boolean) {
     if (index == this._highlightedIndex) return;
     if (this._highlightedIndex != null) {
       this._listItems[this._highlightedIndex].control.setHighlighted(false);

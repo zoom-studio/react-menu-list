@@ -52,11 +52,6 @@ export default class Example extends React.Component {
 
           <MenuList>
             <LI>Mercury</LI>
-            <textarea
-              defaultValue={"aaa\naa"}
-              onKeyDown={e=>e.stopPropagation()}
-              onKeyPress={e=>e.stopPropagation()}
-              />
             <LI>Venus</LI>
             <div style={{
                 height: '40px', overflowY: 'scroll', border: '1px solid gray'

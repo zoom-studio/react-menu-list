@@ -47,6 +47,10 @@ export default class MenuListItem extends React.Component {
     //TODO
   }
 
+  setHighlighted(highlighted: boolean, scrollIntoView: boolean=true) {
+    this._menuListHandle.setHighlighted(highlighted, scrollIntoView);
+  }
+
   moveCursorAway(direction: 'up'|'down'|'left'|'right', prevCursorLocation: ?Rect) {
     //TODO
   }
@@ -95,8 +99,8 @@ export default class MenuListItem extends React.Component {
         style={style}
         className={className}
         onClick={onClick}
-        onMouseEnter={() => this._menuListHandle.setHighlighted(true)}
-        onMouseLeave={() => this._menuListHandle.setHighlighted(false)}
+        onMouseEnter={() => this.setHighlighted(true, false)}
+        onMouseLeave={() => this.setHighlighted(false, false)}
         >
         List Item: {this.props.children}
       </div>

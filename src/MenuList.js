@@ -1,15 +1,17 @@
 /* @flow */
 
 import React, {PropTypes} from 'react';
+import {findDOMNode} from 'react-dom';
 import Kefir from 'kefir';
 import kefirStopper from 'kefir-stopper';
 import findIndex from 'array-find-index';
+import fromEventsCapture from './lib/fromEventsCapture';
 
 export default class MenuList extends React.Component {
   _stopper: Object = kefirStopper();
   _listItems: Array<{
     props: Object;
-    control: {setHighlighted(selected: boolean): void};
+    control: {setHighlighted(highlighted: boolean): void};
   }> = [];
   _highlightedIndex: ?number;
 
@@ -70,9 +72,27 @@ export default class MenuList extends React.Component {
   }
 
   componentDidMount() {
-    Kefir.fromEvents(window, 'keydown')
+    const isEnterKey = e => e.which === 13;
+    const isArrowKey = e => 37 <= e.which && e.which <= 40;
+    const el = findDOMNode(this);
+
+    // The only things that should receive keydown/keypress events before us
+    // are our children. This allows a MenuListItem to contain a text input
+    // which selectively stops propagation on key events for example.
+    Kefir.merge([
+        Kefir.merge([
+            Kefir.fromEvents(window, 'keydown').filter(isArrowKey),
+            Kefir.fromEvents(window, 'keypress').filter(isEnterKey)
+          ])
+          .filter(e => el.contains(e.target)),
+        Kefir.merge([
+            fromEventsCapture(window, 'keydown').filter(isArrowKey),
+            fromEventsCapture(window, 'keypress').filter(isEnterKey)
+          ])
+          .filter(e => !el.contains(e.target))
+      ])
       .takeUntilBy(this._stopper)
-      .onValue(event => this._keydown(event));
+      .onValue(event => this._key(event));
   }
 
   _highlight(index: ?number, scrollIntoView: ?boolean) {
@@ -86,8 +106,13 @@ export default class MenuList extends React.Component {
     }
   }
 
-  _keydown(event: Object) {
+  _key(event: Object) {
     const {onLeftPushed, onRightPushed, onUpPushed, onDownPushed} = this.props;
+
+    // TODO When an arrow is pressed and something is highlighted, first check
+    // the MenuListItem for the appropriate callback, check whether we can move
+    // the selection in that direction, and if those fail, try to hand the
+    // event off to a parent MenuList if present.
 
     switch(event.which) {
       case 13: //enter
@@ -97,6 +122,8 @@ export default class MenuList extends React.Component {
             props.onClick(event);
           }
         }
+        event.preventDefault();
+        event.stopPropagation();
         break;
       // case 37: //left
       //   console.log('left');

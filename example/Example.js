@@ -39,14 +39,24 @@ export default class Example extends React.Component {
             same part of the screen.
           </p>
           <div>
+            TODO:{' '}
             <input
               type="button"
-              value={opened ? 'Close' : 'Open'}
+              value={`Menu Button (${opened ? 'Opened' : 'Closed'})`}
               onClick={()=>this.setState({opened: !opened})}
               />
           </div>
+          <div>
+            <textarea defaultValue="fooobar" />
+          </div>
+
           <MenuList>
             <LI>Mercury</LI>
+            <textarea
+              defaultValue={"aaa\naa"}
+              onKeyDown={e=>e.stopPropagation()}
+              onKeyPress={e=>e.stopPropagation()}
+              />
             <LI>Venus</LI>
             <div style={{
                 height: '40px', overflowY: 'scroll', border: '1px solid gray'

@@ -7,6 +7,13 @@ type State = {
   highlighted: boolean;
 };
 
+type Rect = {
+  top: number;
+  bottom: number;
+  left: number;
+  right: number;
+};
+
 export default class MenuListItem extends React.Component {
   _menuListHandle: Object;
   state: State = {
@@ -37,6 +44,10 @@ export default class MenuListItem extends React.Component {
   }
 
   releaseKeyboard() {
+    //TODO
+  }
+
+  moveCursorAway(direction: 'up'|'down'|'left'|'right', prevCursorLocation: ?Rect) {
     //TODO
   }
 

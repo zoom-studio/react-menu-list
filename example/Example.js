@@ -8,7 +8,7 @@ function LI(props) {
   return (
     <MenuListItem
       highlightedStyle={{background: 'gray'}}
-      onSelect={() => alert(`clicked ${props.children}`)}
+      onClick={() => alert(`selected ${props.children}`)}
       >
       {props.children}
     </MenuListItem>

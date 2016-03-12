@@ -20,7 +20,7 @@ export default class MenuListItem extends React.Component {
     style: PropTypes.object,
     highlightedStyle: PropTypes.object,
 
-    onSelect: PropTypes.func,
+    onClick: PropTypes.func,
     onHighlightChange: PropTypes.func,
     onLeftPushed: PropTypes.func,
     onRightPushed: PropTypes.func,
@@ -42,9 +42,9 @@ export default class MenuListItem extends React.Component {
 
   componentDidMount() {
     this._menuListHandle = this.context.menulist.registerItem(this.props, {
-      setHighlighted: (highlighted: boolean) => {
+      setHighlighted: (highlighted: boolean, scrollIntoView: ?boolean) => {
         this.setState({highlighted}, () => {
-          if (highlighted) {
+          if (highlighted && scrollIntoView) {
             const el = findDOMNode(this);
             if (el.scrollIntoViewIfNeeded) {
               el.scrollIntoViewIfNeeded();
@@ -65,7 +65,7 @@ export default class MenuListItem extends React.Component {
   }
 
   render() {
-    const {onSelect} = this.props;
+    const {onClick} = this.props;
     const {highlighted} = this.state;
 
     let style = this.props.style;
@@ -83,9 +83,9 @@ export default class MenuListItem extends React.Component {
       <div
         style={style}
         className={className}
-        onClick={onSelect}
-        onMouseEnter={null}
-        onMouseLeave={null}
+        onClick={onClick}
+        onMouseEnter={() => this._menuListHandle.setHighlighted(true)}
+        onMouseLeave={() => this._menuListHandle.setHighlighted(false)}
         >
         List Item: {this.props.children}
       </div>

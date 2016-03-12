@@ -43,11 +43,16 @@ export default class MenuList extends React.Component {
             }
           }
           return {
+            setHighlighted: (highlighted: boolean, scrollIntoView: ?boolean) => {
+              const i = this._listItems.indexOf(item);
+              if (i < 0) throw new Error("Already unregistered MenuListItem");
+              this._highlight(i, scrollIntoView);
+            },
             unregister: () => {
               const i = this._listItems.indexOf(item);
-              if (i < 0) return;
+              if (i < 0) throw new Error("Already unregistered MenuListItem");
               if (i === this._highlightedIndex) {
-                this._select(i === 0 ? null : i-1);
+                this._highlight(i === 0 ? null : i-1, true);
               } else if (this._highlightedIndex != null && i <= this._highlightedIndex) {
                 this._highlightedIndex--;
               }
@@ -70,13 +75,14 @@ export default class MenuList extends React.Component {
       .onValue(event => this._keydown(event));
   }
 
-  _select(index: ?number) {
+  _highlight(index: ?number, scrollIntoView: ?boolean) {
+    if (index == this._highlightedIndex) return;
     if (this._highlightedIndex != null) {
       this._listItems[this._highlightedIndex].control.setHighlighted(false);
     }
     this._highlightedIndex = index;
     if (index != null) {
-      this._listItems[index].control.setHighlighted(true);
+      this._listItems[index].control.setHighlighted(true, scrollIntoView);
     }
   }
 
@@ -87,8 +93,8 @@ export default class MenuList extends React.Component {
       case 13: //enter
         if (this._highlightedIndex != null) {
           const {props} = this._listItems[this._highlightedIndex];
-          if (props.onSelect) {
-            props.onSelect(event);
+          if (props.onClick) {
+            props.onClick(event);
           }
         }
         break;
@@ -97,9 +103,9 @@ export default class MenuList extends React.Component {
       //   break;
       case 38: //up
         if (this._highlightedIndex == null || this._highlightedIndex == 0) {
-          this._select(this._listItems.length-1);
+          this._highlight(this._listItems.length-1, true);
         } else {
-          this._select(this._highlightedIndex-1);
+          this._highlight(this._highlightedIndex-1, true);
         }
         event.preventDefault();
         event.stopPropagation();
@@ -109,9 +115,9 @@ export default class MenuList extends React.Component {
       //   break;
       case 40: //down
         if (this._highlightedIndex == null || this._highlightedIndex == this._listItems.length-1) {
-          this._select(0);
+          this._highlight(0, true);
         } else {
-          this._select(this._highlightedIndex+1);
+          this._highlight(this._highlightedIndex+1, true);
         }
         event.preventDefault();
         event.stopPropagation();

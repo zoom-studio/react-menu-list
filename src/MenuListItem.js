@@ -16,11 +16,11 @@ export default class MenuListItem extends React.Component {
     index: PropTypes.number,
 
     className: PropTypes.string,
-    selectedClassName: PropTypes.string,
+    highlightedClassName: PropTypes.string,
     style: PropTypes.object,
-    selectedStyle: PropTypes.object,
+    highlightedStyle: PropTypes.object,
 
-    onClick: PropTypes.func,
+    onSelect: PropTypes.func,
     onHighlightChange: PropTypes.func,
     onLeftPushed: PropTypes.func,
     onRightPushed: PropTypes.func,
@@ -65,21 +65,28 @@ export default class MenuListItem extends React.Component {
   }
 
   render() {
+    const {onSelect} = this.props;
     const {highlighted} = this.state;
 
     let style = this.props.style;
     let className = this.props.className;
     if (highlighted) {
-      if (this.props.selectedStyle) {
-        style = {...style, ...this.props.selectedStyle};
+      if (this.props.highlightedStyle) {
+        style = {...style, ...this.props.highlightedStyle};
       }
-      if (this.props.selectedClassName) {
-        className = `${className||''} ${this.props.selectedClassName}`;
+      if (this.props.highlightedClassName) {
+        className = `${className||''} ${this.props.highlightedClassName}`;
       }
     }
 
     return (
-      <div style={style} className={className}>
+      <div
+        style={style}
+        className={className}
+        onClick={onSelect}
+        onMouseEnter={null}
+        onMouseLeave={null}
+        >
         List Item: {this.props.children}
       </div>
     )

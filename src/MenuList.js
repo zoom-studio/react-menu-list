@@ -85,12 +85,17 @@ export default class MenuList extends React.Component {
 
     switch(event.which) {
       case 13: //enter
+        if (this._highlightedIndex != null) {
+          const {props} = this._listItems[this._highlightedIndex];
+          if (props.onSelect) {
+            props.onSelect(event);
+          }
+        }
         break;
       // case 37: //left
       //   console.log('left');
       //   break;
       case 38: //up
-        console.log('up');
         if (this._highlightedIndex == null || this._highlightedIndex == 0) {
           this._select(this._listItems.length-1);
         } else {
@@ -103,7 +108,6 @@ export default class MenuList extends React.Component {
       //   console.log('right');
       //   break;
       case 40: //down
-        console.log('down');
         if (this._highlightedIndex == null || this._highlightedIndex == this._listItems.length-1) {
           this._select(0);
         } else {

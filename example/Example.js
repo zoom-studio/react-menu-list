@@ -6,7 +6,10 @@ import {MenuList, MenuListItem} from '../src';
 
 function LI(props) {
   return (
-    <MenuListItem selectedStyle={{background: 'gray'}}>
+    <MenuListItem
+      highlightedStyle={{background: 'gray'}}
+      onSelect={() => alert(`clicked ${props.children}`)}
+      >
       {props.children}
     </MenuListItem>
   );

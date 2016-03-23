@@ -1,7 +1,6 @@
 /* @flow */
 
-import React from 'react';
-import cx from 'classnames';
+import React, {PropTypes} from 'react';
 import {MenuList, MenuListItem} from '../src';
 
 function LI(props) {
@@ -14,6 +13,9 @@ function LI(props) {
     </MenuListItem>
   );
 }
+LI.propTypes = {
+  children: PropTypes.node
+};
 
 export default class Example extends React.Component {
   state: Object = {
@@ -54,8 +56,8 @@ export default class Example extends React.Component {
             <LI>Mercury</LI>
             <LI>Venus</LI>
             <div style={{
-                height: '40px', overflowY: 'scroll', border: '1px solid gray'
-              }}>
+              height: '40px', overflowY: 'scroll', border: '1px solid gray'
+            }}>
               <LI>Earth</LI>
               <LI>Mars</LI>
               <LI>Jupiter</LI>

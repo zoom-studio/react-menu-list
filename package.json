@@ -8,7 +8,9 @@
     "example-build": "NODE_ENV=development browserify -t babelify -do example/bundle.js example/main.js",
     "example-watch": "NODE_ENV=development-hmr watchify -v -p browserify-hmr -t babelify -do example/bundle.js example/main.js",
     "example-build-prod": "NODE_ENV=production browserify -t babelify -do example/bundle.js example/main.js",
-    "test": "mocha"
+    "test": "npm run lint && mocha",
+    "lint": "eslint .",
+    "lint-fix": "eslint . --fix"
   },
   "repository": {
     "type": "git",
@@ -39,6 +41,7 @@
     "browserify": "^13.0.0",
     "browserify-hmr": "^0.3.1",
     "classnames": "^2.2.3",
+    "eslint": "^2.4.0",
     "flow-copy-source": "^1.0.1",
     "jsdom": "^8.1.0",
     "mocha": "^2.4.5",
@@ -50,7 +53,9 @@
   },
   "dependencies": {
     "array-find-index": "1.0.1",
+    "babel-eslint": "^6.0.0-beta.6",
     "babel-runtime": "^6.6.1",
+    "eslint-plugin-react": "^4.2.3",
     "kefir": "^3.2.1",
     "kefir-stopper": "^2.0.0",
     "react-addons-update": "^0.14.7",

@@ -1,15 +1,16 @@
 /* @flow */
+/*eslint no-console: "off" */
 
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Example from './Example';
 
-const onReady = new Promise((resolve, reject) => {
-  if (document.readyState === "complete") {
+const onReady = new Promise(resolve => {
+  if (document.readyState === 'complete') {
     resolve();
   } else {
-    document.addEventListener("DOMContentLoaded", resolve, false);
-    window.addEventListener("load", resolve, false);
+    document.addEventListener('DOMContentLoaded', resolve, false);
+    window.addEventListener('load', resolve, false);
   }
 });
 

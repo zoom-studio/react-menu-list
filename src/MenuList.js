@@ -19,7 +19,8 @@ export default class MenuList extends React.Component {
     onLeftPushed: PropTypes.func,
     onRightPushed: PropTypes.func,
     onUpPushed: PropTypes.func,
-    onDownPushed: PropTypes.func
+    onDownPushed: PropTypes.func,
+    children: PropTypes.node
   };
 
   static childContextTypes = {
@@ -47,12 +48,12 @@ export default class MenuList extends React.Component {
           return {
             setHighlighted: (highlighted: boolean, scrollIntoView: boolean) => {
               const i = this._listItems.indexOf(item);
-              if (i < 0) throw new Error("Already unregistered MenuListItem");
+              if (i < 0) throw new Error('Already unregistered MenuListItem');
               this._highlight(i, scrollIntoView);
             },
             unregister: () => {
               const i = this._listItems.indexOf(item);
-              if (i < 0) throw new Error("Already unregistered MenuListItem");
+              if (i < 0) throw new Error('Already unregistered MenuListItem');
               if (i === this._highlightedIndex) {
                 this._highlight(i === 0 ? null : i-1, true);
               } else if (this._highlightedIndex != null && i <= this._highlightedIndex) {
@@ -80,17 +81,17 @@ export default class MenuList extends React.Component {
     // are our children. This allows a MenuListItem to contain a text input
     // which selectively stops propagation on key events for example.
     Kefir.merge([
-        Kefir.merge([
-            Kefir.fromEvents(window, 'keydown').filter(isArrowKey),
-            Kefir.fromEvents(window, 'keypress').filter(isEnterKey)
-          ])
-          .filter(e => el.contains(e.target)),
-        Kefir.merge([
-            fromEventsCapture(window, 'keydown').filter(isArrowKey),
-            fromEventsCapture(window, 'keypress').filter(isEnterKey)
-          ])
-          .filter(e => !el.contains(e.target))
+      Kefir.merge([
+        Kefir.fromEvents(window, 'keydown').filter(isArrowKey),
+        Kefir.fromEvents(window, 'keypress').filter(isEnterKey)
       ])
+          .filter(e => el.contains(e.target)),
+      Kefir.merge([
+        fromEventsCapture(window, 'keydown').filter(isArrowKey),
+        fromEventsCapture(window, 'keypress').filter(isEnterKey)
+      ])
+          .filter(e => !el.contains(e.target))
+    ])
       .takeUntilBy(this._stopper)
       .onValue(event => this._key(event));
   }
@@ -107,7 +108,7 @@ export default class MenuList extends React.Component {
   }
 
   _key(event: Object) {
-    const {onLeftPushed, onRightPushed, onUpPushed, onDownPushed} = this.props;
+    const {onLeftPushed, onRightPushed, onUpPushed, onDownPushed} = this.props; // eslint-disable-line no-unused-vars
 
     // TODO When an arrow is pressed and something is highlighted, first check
     // the MenuListItem for the appropriate callback, check whether we can move
@@ -115,40 +116,40 @@ export default class MenuList extends React.Component {
     // event off to a parent MenuList if present.
 
     switch(event.which) {
-      case 13: //enter
-        if (this._highlightedIndex != null) {
-          const {props} = this._listItems[this._highlightedIndex];
-          if (props.onClick) {
-            props.onClick(event);
-          }
+    case 13: //enter
+      if (this._highlightedIndex != null) {
+        const {props} = this._listItems[this._highlightedIndex];
+        if (props.onClick) {
+          props.onClick(event);
         }
-        event.preventDefault();
-        event.stopPropagation();
-        break;
+      }
+      event.preventDefault();
+      event.stopPropagation();
+      break;
       // case 37: //left
       //   console.log('left');
       //   break;
-      case 38: //up
-        if (this._highlightedIndex == null || this._highlightedIndex == 0) {
-          this._highlight(this._listItems.length-1, true);
-        } else {
-          this._highlight(this._highlightedIndex-1, true);
-        }
-        event.preventDefault();
-        event.stopPropagation();
-        break;
+    case 38: //up
+      if (this._highlightedIndex == null || this._highlightedIndex == 0) {
+        this._highlight(this._listItems.length-1, true);
+      } else {
+        this._highlight(this._highlightedIndex-1, true);
+      }
+      event.preventDefault();
+      event.stopPropagation();
+      break;
       // case 39: //right
       //   console.log('right');
       //   break;
-      case 40: //down
-        if (this._highlightedIndex == null || this._highlightedIndex == this._listItems.length-1) {
-          this._highlight(0, true);
-        } else {
-          this._highlight(this._highlightedIndex+1, true);
-        }
-        event.preventDefault();
-        event.stopPropagation();
-        break;
+    case 40: //down
+      if (this._highlightedIndex == null || this._highlightedIndex == this._listItems.length-1) {
+        this._highlight(0, true);
+      } else {
+        this._highlight(this._highlightedIndex+1, true);
+      }
+      event.preventDefault();
+      event.stopPropagation();
+      break;
     }
   }
 

@@ -32,7 +32,9 @@ export default class MenuListItem extends React.Component {
     onLeftPushed: PropTypes.func,
     onRightPushed: PropTypes.func,
     onUpPushed: PropTypes.func,
-    onDownPushed: PropTypes.func
+    onDownPushed: PropTypes.func,
+
+    children: PropTypes.node
   };
 
   static contextTypes = {
@@ -51,7 +53,7 @@ export default class MenuListItem extends React.Component {
     this._menuListHandle.setHighlighted(highlighted, scrollIntoView);
   }
 
-  moveCursorAway(direction: 'up'|'down'|'left'|'right', prevCursorLocation: ?Rect) {
+  moveCursorAway(direction: 'up'|'down'|'left'|'right', prevCursorLocation: ?Rect) { // eslint-disable-line no-unused-vars
     //TODO
   }
 
@@ -104,6 +106,6 @@ export default class MenuListItem extends React.Component {
         >
         List Item: {this.props.children}
       </div>
-    )
+    );
   }
 }

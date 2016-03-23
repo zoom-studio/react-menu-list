@@ -4,12 +4,12 @@ import './lib/testdom';
 import assert from 'assert';
 import sinon from 'sinon';
 import React from 'react';
-import ReactDOM, {findDOMNode} from 'react-dom';
+import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import {MenuList, MenuListItem} from '../src';
 
-describe("MenuList", function() {
-  it("cursor movement works", sinon.test(function() {
+describe('MenuList', function() {
+  it('cursor movement works', sinon.test(function() {
     this.slow();
     this.spy(window, 'addEventListener');
     this.spy(window, 'removeEventListener');

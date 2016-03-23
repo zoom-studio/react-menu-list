@@ -115,7 +115,7 @@ export default class MenuList extends React.Component {
     // the selection in that direction, and if those fail, try to hand the
     // event off to a parent MenuList if present.
 
-    switch(event.which) {
+    switch (event.which) {
     case 13: //enter
       if (this._highlightedIndex != null) {
         const {props} = this._listItems[this._highlightedIndex];

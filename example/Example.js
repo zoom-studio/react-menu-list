@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {PropTypes} from 'react';
-import {MenuList, MenuListItem} from '../src';
+import {MenuList, MenuListItem, FloatAnchor} from '../src';
 
 function LI(props) {
   return (
@@ -42,11 +42,20 @@ export default class Example extends React.Component {
           </p>
           <div>
             TODO:{' '}
-            <input
-              type="button"
-              value={`Menu Button (${opened ? 'Opened' : 'Closed'})`}
-              onClick={()=>this.setState({opened: !opened})}
-              />
+            <FloatAnchor options={{position:'bottom', hAlign:'left'}}>
+              <FloatAnchor.Anchor>
+                <input
+                  type="button"
+                  value={`Menu Button (${opened ? 'Opened' : 'Closed'})`}
+                  onClick={()=>this.setState({opened: !opened})}
+                  />
+              </FloatAnchor.Anchor>
+              {opened &&
+                <FloatAnchor.Float>
+                  <div style={{background:'white', border:'1px solid black'}}>foooooo</div>
+                </FloatAnchor.Float>
+              }
+            </FloatAnchor>
           </div>
           <div>
             <textarea defaultValue="fooobar" />

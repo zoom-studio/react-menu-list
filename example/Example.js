@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {PropTypes} from 'react';
-import {MenuList, MenuListItem, FloatAnchor} from '../src';
+import {MenuList, MenuListItem, FloatAnchor, Dropdown} from '../src';
 
 function LI(props) {
   return (
@@ -42,39 +42,38 @@ export default class Example extends React.Component {
           </p>
           <div>
             TODO:{' '}
-            <FloatAnchor options={{position:'bottom', hAlign:'left'}}>
-              <FloatAnchor.Anchor>
+            <FloatAnchor
+              options={{position:'bottom', hAlign:'left'}}
+              anchor={
                 <input
                   type="button"
                   value={`Menu Button (${opened ? 'Opened' : 'Closed'})`}
                   onClick={()=>this.setState({opened: !opened})}
                   />
-              </FloatAnchor.Anchor>
-              {opened &&
-                <FloatAnchor.Float>
-                  <div style={{background:'white', border:'1px solid black'}}>foooooo</div>
-                </FloatAnchor.Float>
               }
-            </FloatAnchor>
+              float={!opened ? null :
+                <Dropdown>
+                  <MenuList>
+                    <LI>Mercury</LI>
+                    <LI>Venus</LI>
+                    <div style={{
+                      height: '40px', overflowY: 'scroll', border: '1px solid gray'
+                    }}>
+                      <LI>Earth</LI>
+                      <LI>Mars</LI>
+                      <LI>Jupiter</LI>
+                      <LI>Saturn</LI>
+                      <LI>Uranus</LI>
+                    </div>
+                    <LI>Neptune</LI>
+                  </MenuList>
+                </Dropdown>
+              }
+              />
           </div>
           <div>
             <textarea defaultValue="fooobar" />
           </div>
-
-          <MenuList>
-            <LI>Mercury</LI>
-            <LI>Venus</LI>
-            <div style={{
-              height: '40px', overflowY: 'scroll', border: '1px solid gray'
-            }}>
-              <LI>Earth</LI>
-              <LI>Mars</LI>
-              <LI>Jupiter</LI>
-              <LI>Saturn</LI>
-              <LI>Uranus</LI>
-            </div>
-            <LI>Neptune</LI>
-          </MenuList>
         </div>
       </div>
     );

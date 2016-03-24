@@ -8,76 +8,29 @@ import containByScreen from 'contain-by-screen';
 import type {Options} from 'contain-by-screen';
 import isEqual from 'lodash/isEqual';
 
-class Float extends React.Component {
-  static propTypes = {
-    children: PropTypes.element.isRequired
-  };
-
-  render(): React.Element {
-    return this.props.children;
-  }
-}
-
-class Anchor extends React.Component {
-  static propTypes = {
-    children: PropTypes.element.isRequired
-  };
-
-  render(): React.Element {
-    return this.props.children;
-  }
-}
-
 type Props = {
   options?: ?Options;
-  children?: any;
+  anchor: React.Element;
+  float?: ?React.Element;
 };
 export default class FloatAnchor extends React.Component {
   props: Props;
   static propTypes = {
     options: PropTypes.object,
-    children: function(props, propName) {
-      let failed = false;
-      React.Children.forEach(props[propName], child => {
-        if (child && child.type !== Anchor && child.type !== Float) {
-          failed = true;
-        }
-      });
-      if (failed) {
-        return new Error('Children of FloatAnchor must be Float or Anchor elements.');
-      }
-    }
+    anchor: PropTypes.element.isRequired,
+    float: PropTypes.element
   };
-
-  static Anchor = Anchor;
-  static Float = Float;
 
   _portal: ?HTMLElement;
   _portalRemoval: Object = kefirBus();
-
-  _getAnchorChildren(): {anchor: ?React.Element, float: ?React.Element} {
-    let anchor = null;
-    let float = null;
-
-    React.Children.forEach(this.props.children, child => {
-      if (!child) return;
-      if (child.type === Anchor) {
-        anchor = child;
-      } else if (child.type === Float) {
-        float = child;
-      }
-    });
-
-    return {anchor, float};
-  }
 
   componentDidMount() {
     this._updateFloat();
   }
 
-  componentDidUpdate(prevProps: typeof FloatAnchor.prototype.props) {
+  componentDidUpdate(prevProps: Props) {
     let forceReposition = !isEqual(prevProps.options, this.props.options);
-    if (forceReposition || prevProps.children !== this.props.children) {
+    if (forceReposition || prevProps.float !== this.props.float) {
       this._updateFloat(forceReposition);
     }
   }
@@ -87,7 +40,7 @@ export default class FloatAnchor extends React.Component {
   }
 
   _updateFloat(forceReposition: boolean=false) {
-    const {float} = this._getAnchorChildren();
+    const {float} = this.props;
 
     if (float) {
       let shouldReposition = forceReposition;
@@ -133,7 +86,7 @@ export default class FloatAnchor extends React.Component {
   }
 
   render(): ?React.Element {
-    const {anchor} = this._getAnchorChildren();
+    const {anchor} = this.props;
     return anchor;
   }
 }

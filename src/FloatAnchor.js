@@ -36,7 +36,17 @@ export default class FloatAnchor extends React.Component {
   props: Props;
   static propTypes = {
     options: PropTypes.object,
-    children: PropTypes.node
+    children: function(props, propName) {
+      let failed = false;
+      React.Children.forEach(props[propName], child => {
+        if (child && child.type !== Anchor && child.type !== Float) {
+          failed = true;
+        }
+      });
+      if (failed) {
+        return new Error('Children of FloatAnchor must be Float or Anchor elements.');
+      }
+    }
   };
 
   static Anchor = Anchor;

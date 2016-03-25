@@ -24,29 +24,29 @@ export default class MenuButton extends React.Component {
     opened: false
   };
 
-  _open() {
+  open() {
     if (this.state.opened) return;
     if (this.props.onWillOpen) this.props.onWillOpen();
     this.setState({opened: true}, this.props.onDidOpen);
   }
 
-  _close() {
+  close() {
     if (!this.state.opened) return;
     if (this.props.onWillClose) this.props.onWillClose();
     this.setState({opened: false});
   }
 
-  _toggle() {
+  toggle() {
     if (this.state.opened) {
-      this._close();
+      this.close();
     } else {
-      this._open();
+      this.open();
     }
   }
 
   _itemChosen(event: Object) {
     if (!event.defaultPrevented) {
-      this._close();
+      this.close();
     }
   }
 
@@ -60,8 +60,8 @@ export default class MenuButton extends React.Component {
           <button
             className={className}
             style={style}
-            onBlur={()=>this._close()}
-            onClick={()=>this._toggle()}
+            onBlur={()=>this.close()}
+            onClick={()=>this.toggle()}
             >
             {children}
           </button>

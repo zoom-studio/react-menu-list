@@ -7,15 +7,41 @@ import kefirStopper from 'kefir-stopper';
 import findIndex from 'array-find-index';
 import fromEventsCapture from './lib/fromEventsCapture';
 
+import type {Props as MenuListItemProps} from './MenuListItem';
+import type {MenuListInspectorContext} from './MenuListInspector';
+
+// This type of object is given to a MenuListItem to talk to the MenuList.
+export type MenuListItemHandle = {
+  setHighlighted(highlighted: boolean, scrollIntoView: boolean): void;
+  itemChosen(): void;
+  unregister(): void;
+};
+
+// This type of object is given to a MenuList to talk to a MenuListItem.
+export type MenuListItemControl = {
+  notifyHighlighted(highlighted: boolean, scrollIntoView: ?boolean): void;
+  notifyChosen(event: Object): void;
+};
+
+// This is the type of the object that MenuList gives as context to its
+// descendants.
+export type MenuListContext = {
+  registerItem(
+    props: MenuListItemProps,
+    control: MenuListItemControl
+  ): MenuListItemHandle;
+};
+
 export default class MenuList extends React.Component {
   _stopper: Object = kefirStopper();
   _listItems: Array<{
-    props: Object;
-    control: {setHighlighted(highlighted: boolean): void};
+    props: MenuListItemProps;
+    control: MenuListItemControl;
   }> = [];
   _highlightedIndex: ?number;
 
   static propTypes = {
+    onItemChosen: PropTypes.func,
     onLeftPushed: PropTypes.func,
     onRightPushed: PropTypes.func,
     onUpPushed: PropTypes.func,
@@ -24,52 +50,60 @@ export default class MenuList extends React.Component {
   };
 
   static childContextTypes = {
-    menulist: React.PropTypes.object
+    menuList: React.PropTypes.object
+  };
+
+  static contextTypes = {
+    menuListInspector: React.PropTypes.object
   };
 
   getChildContext(): Object {
-    return {
-      menulist: {
-        registerItem: (props, control) => {
-          const item = {props, control};
+    const menuList: MenuListContext = {
+      registerItem: (props, control) => {
+        const item = {props, control};
 
-          const i = props.index == null ? -1 : findIndex(
-            this._listItems,
-            item => item.props.index != null && props.index < item.props.index
-          );
-          if (i < 0) {
-            this._listItems.push(item);
-          } else {
-            this._listItems.splice(i, 0, item);
-            if (this._highlightedIndex != null && i <= this._highlightedIndex) {
-              this._highlightedIndex++;
-            }
+        const i = props.index == null ? -1 : findIndex(
+          this._listItems,
+          item => item.props.index != null && props.index < item.props.index
+        );
+        if (i < 0) {
+          this._listItems.push(item);
+        } else {
+          this._listItems.splice(i, 0, item);
+          if (this._highlightedIndex != null && i <= this._highlightedIndex) {
+            this._highlightedIndex++;
           }
-          return {
-            setHighlighted: (highlighted: boolean, scrollIntoView: boolean) => {
-              const i = this._listItems.indexOf(item);
-              if (i < 0) throw new Error('Already unregistered MenuListItem');
-              this._highlight(i, scrollIntoView);
-            },
-            unregister: () => {
-              const i = this._listItems.indexOf(item);
-              if (i < 0) throw new Error('Already unregistered MenuListItem');
-              if (i === this._highlightedIndex) {
-                this._highlight(i === 0 ? null : i-1, true);
-              } else if (this._highlightedIndex != null && i <= this._highlightedIndex) {
-                this._highlightedIndex--;
-              }
-              this._listItems.splice(i, 1);
+        }
+        return {
+          setHighlighted: (highlighted: boolean, scrollIntoView: boolean) => {
+            const i = this._listItems.indexOf(item);
+            if (i < 0) throw new Error('Already unregistered MenuListItem');
+            this._highlight(i, scrollIntoView);
+          },
+          itemChosen: () => {
+            this._itemChosen(control);
+          },
+          updateProps: (newProps: MenuListItemProps) => { // eslint-disable-line no-unused-vars
+            // TODO
+          },
+          unregister: () => {
+            const i = this._listItems.indexOf(item);
+            if (i < 0) throw new Error('Already unregistered MenuListItem');
+            if (i === this._highlightedIndex) {
+              this._highlight(i === 0 ? null : i-1, true);
+            } else if (this._highlightedIndex != null && i <= this._highlightedIndex) {
+              this._highlightedIndex--;
             }
-          };
-        },
-        // TODO for nested lists
-        onRightPushed() {},
-        onLeftPushed() {},
-        onUpPushed() {},
-        onDownPushed() {}
+            this._listItems.splice(i, 1);
+          }
+        };
       }
     };
+    return {menuList};
+  }
+
+  _parentCtx(): ?MenuListInspectorContext {
+    return this.context.menuListInspector;
   }
 
   componentDidMount() {
@@ -85,12 +119,12 @@ export default class MenuList extends React.Component {
         Kefir.fromEvents(window, 'keydown').filter(isArrowKey),
         Kefir.fromEvents(window, 'keypress').filter(isEnterKey)
       ])
-          .filter(e => el.contains(e.target)),
+        .filter(e => el.contains(e.target)),
       Kefir.merge([
         fromEventsCapture(window, 'keydown').filter(isArrowKey),
         fromEventsCapture(window, 'keypress').filter(isEnterKey)
       ])
-          .filter(e => !el.contains(e.target))
+        .filter(e => !el.contains(e.target))
     ])
       .takeUntilBy(this._stopper)
       .onValue(event => this._key(event));
@@ -99,11 +133,28 @@ export default class MenuList extends React.Component {
   _highlight(index: ?number, scrollIntoView: boolean) {
     if (index == this._highlightedIndex) return;
     if (this._highlightedIndex != null) {
-      this._listItems[this._highlightedIndex].control.setHighlighted(false);
+      this._listItems[this._highlightedIndex].control.notifyHighlighted(false);
     }
     this._highlightedIndex = index;
     if (index != null) {
-      this._listItems[index].control.setHighlighted(true, scrollIntoView);
+      this._listItems[index].control.notifyHighlighted(true, scrollIntoView);
+    }
+  }
+
+  _itemChosen(control: MenuListItemControl) {
+    const event = {
+      preventDefault() {
+        this.defaultPrevented = true;
+      },
+      defaultPrevented: false
+    };
+    control.notifyChosen(event);
+    if (this.props.onItemChosen) {
+      this.props.onItemChosen(event);
+    }
+    const parentCtx = this._parentCtx();
+    if (parentCtx) {
+      parentCtx.dispatchEvent('itemChosen', event);
     }
   }
 
@@ -118,10 +169,8 @@ export default class MenuList extends React.Component {
     switch (event.which) {
     case 13: //enter
       if (this._highlightedIndex != null) {
-        const {props} = this._listItems[this._highlightedIndex];
-        if (props.onClick) {
-          props.onClick(event);
-        }
+        const {control} = this._listItems[this._highlightedIndex];
+        this._itemChosen(control);
       }
       event.preventDefault();
       event.stopPropagation();
@@ -158,6 +207,7 @@ export default class MenuList extends React.Component {
   }
 
   render() {
+    // TODO use a MenuListInspector here so we can watch child menu events?
     return (
       <div>
         MenuList:

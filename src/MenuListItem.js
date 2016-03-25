@@ -3,6 +3,8 @@
 import React, {PropTypes} from 'react';
 import {findDOMNode} from 'react-dom';
 
+import type {MenuListContext, MenuListItemHandle} from './MenuList';
+
 type State = {
   highlighted: boolean;
 };
@@ -14,8 +16,26 @@ type Rect = {
   right: number;
 };
 
+export type Props = {
+  index?: ?number;
+
+  className?: ?string;
+  highlightedClassName?: ?string;
+  style?: ?Object;
+  highlightedStyle?: ?Object;
+
+  onItemChosen?: ?Function;
+  onHighlightChange?: ?Function;
+  onLeftPushed?: ?Function;
+  onRightPushed?: ?Function;
+  onUpPushed?: ?Function;
+  onDownPushed?: ?Function;
+
+  children: any;
+};
+
 export default class MenuListItem extends React.Component {
-  _menuListHandle: Object;
+  _menuListHandle: MenuListItemHandle;
   state: State = {
     highlighted: false
   };
@@ -27,7 +47,7 @@ export default class MenuListItem extends React.Component {
     style: PropTypes.object,
     highlightedStyle: PropTypes.object,
 
-    onClick: PropTypes.func,
+    onItemChosen: PropTypes.func,
     onHighlightChange: PropTypes.func,
     onLeftPushed: PropTypes.func,
     onRightPushed: PropTypes.func,
@@ -38,7 +58,7 @@ export default class MenuListItem extends React.Component {
   };
 
   static contextTypes = {
-    menulist: React.PropTypes.object
+    menuList: React.PropTypes.object
   };
 
   takeKeyboard() {
@@ -58,8 +78,8 @@ export default class MenuListItem extends React.Component {
   }
 
   componentDidMount() {
-    this._menuListHandle = this.context.menulist.registerItem(this.props, {
-      setHighlighted: (highlighted: boolean, scrollIntoView: ?boolean) => {
+    this._menuListHandle = (this.context.menuList:MenuListContext).registerItem(this.props, {
+      notifyHighlighted: (highlighted: boolean, scrollIntoView: ?boolean) => {
         this.setState({highlighted}, () => {
           if (highlighted && scrollIntoView) {
             const el = findDOMNode(this);
@@ -73,6 +93,11 @@ export default class MenuListItem extends React.Component {
         if (this.props.onHighlightChange) {
           this.props.onHighlightChange(highlighted);
         }
+      },
+      notifyChosen: (event: Object) => {
+        if (this.props.onItemChosen) {
+          this.props.onItemChosen(event);
+        }
       }
     });
   }
@@ -82,7 +107,6 @@ export default class MenuListItem extends React.Component {
   }
 
   render() {
-    const {onClick} = this.props;
     const {highlighted} = this.state;
 
     let style = this.props.style;
@@ -100,7 +124,7 @@ export default class MenuListItem extends React.Component {
       <div
         style={style}
         className={className}
-        onClick={onClick}
+        onClick={()=>this._menuListHandle.itemChosen()}
         onMouseEnter={() => this.setHighlighted(true, false)}
         onMouseLeave={() => this.setHighlighted(false, false)}
         >

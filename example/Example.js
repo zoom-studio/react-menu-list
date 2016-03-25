@@ -1,13 +1,19 @@
 /* @flow */
+/* eslint-disable no-console */
 
 import React, {PropTypes} from 'react';
-import {MenuList, MenuListItem, FloatAnchor, Dropdown} from '../src';
+import {MenuList, MenuListItem, MenuButton, Dropdown} from '../src';
 
 function LI(props) {
   return (
     <MenuListItem
       highlightedStyle={{background: 'gray'}}
-      onClick={() => alert(`selected ${props.children}`)}
+      onItemChosen={e => {
+        if (props.children === 'Mercury') {
+          e.preventDefault();
+        }
+        console.log(`selected ${props.children}`);
+      }}
       >
       {props.children}
     </MenuListItem>
@@ -19,11 +25,8 @@ LI.propTypes = {
 
 export default class Example extends React.Component {
   state: Object = {
-    opened: false
   };
   render() {
-    const {opened} = this.state;
-
     return (
       <div className="main">
         <div className="intro">
@@ -42,18 +45,10 @@ export default class Example extends React.Component {
           </p>
           <div>
             TODO:{' '}
-            <FloatAnchor
-              options={{position:'bottom', hAlign:'left'}}
-              anchor={
-                <input
-                  type="button"
-                  value={`Menu Button (${opened ? 'Opened' : 'Closed'})`}
-                  onClick={()=>this.setState({opened: !opened})}
-                  />
-              }
-              float={!opened ? null :
+            <MenuButton
+              menu={
                 <Dropdown>
-                  <MenuList>
+                  <MenuList onItemChosen={e=>console.log('something chosen', e)}>
                     <LI>Mercury</LI>
                     <LI>Venus</LI>
                     <div style={{
@@ -69,7 +64,9 @@ export default class Example extends React.Component {
                   </MenuList>
                 </Dropdown>
               }
-              />
+              >
+              Menu Button
+            </MenuButton>
           </div>
           <div>
             <textarea defaultValue="fooobar" />

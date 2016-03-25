@@ -61,6 +61,22 @@ export default class Example extends React.Component {
                       <LI>Uranus</LI>
                     </div>
                     <LI>Neptune</LI>
+                    <MenuListItem
+                      onItemChosen={e => e.preventDefault()}
+                      >
+                      <MenuButton
+                        menu={
+                          <Dropdown>
+                            <MenuList>
+                              <LI>Ceres</LI>
+                              <LI>Pluto</LI>
+                              <LI>Eris</LI>
+                            </MenuList>
+                          </Dropdown>
+                        }>
+                        More
+                      </MenuButton>
+                    </MenuListItem>
                   </MenuList>
                 </Dropdown>
               }

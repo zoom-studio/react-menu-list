@@ -49,7 +49,9 @@ export default class FloatAnchor extends React.Component {
         const portal = this._portal = document.createElement('div');
         portal.style.position = 'fixed';
         document.body.appendChild(portal);
-        this._portalRemoval.take(1).onValue(() => {
+        // delay(0) because React has issues with unmounting happening during
+        // event processing: https://github.com/facebook/react/issues/3298
+        this._portalRemoval.take(1).delay(0).onValue(() => {
           ReactDOM.unmountComponentAtNode(portal);
           portal.remove();
           this._portal = null;

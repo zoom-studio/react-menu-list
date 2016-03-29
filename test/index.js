@@ -50,7 +50,7 @@ describe('MenuList', function() {
       target: document.body
     });
 
-    assert.deepEqual(menuListItems[0].props.onHighlightChange.args, [[true]]);
+    assert.deepEqual(menuListItems[0].props.onHighlightChange.args, [[true, {byKeyboard: true}]]);
     assert.deepEqual(menuListItems[1].props.onHighlightChange.args, []);
     assert.deepEqual(menuListItems[2].props.onHighlightChange.args, []);
 
@@ -62,8 +62,8 @@ describe('MenuList', function() {
       target: document.body
     });
 
-    assert.deepEqual(menuListItems[0].props.onHighlightChange.args, [[true], [false]]);
-    assert.deepEqual(menuListItems[1].props.onHighlightChange.args, [[true]]);
+    assert.deepEqual(menuListItems[0].props.onHighlightChange.args, [[true, {byKeyboard: true}], [false, {byKeyboard: undefined}]]);
+    assert.deepEqual(menuListItems[1].props.onHighlightChange.args, [[true, {byKeyboard: true}]]);
     assert.deepEqual(menuListItems[2].props.onHighlightChange.args, []);
 
     keydownCaptureHandlers[0]({
@@ -74,9 +74,9 @@ describe('MenuList', function() {
       target: document.body
     });
 
-    assert.deepEqual(menuListItems[0].props.onHighlightChange.args, [[true], [false]]);
-    assert.deepEqual(menuListItems[1].props.onHighlightChange.args, [[true], [false]]);
-    assert.deepEqual(menuListItems[2].props.onHighlightChange.args, [[true]]);
+    assert.deepEqual(menuListItems[0].props.onHighlightChange.args, [[true, {byKeyboard: true}], [false, {byKeyboard: undefined}]]);
+    assert.deepEqual(menuListItems[1].props.onHighlightChange.args, [[true, {byKeyboard: true}], [false, {byKeyboard: undefined}]]);
+    assert.deepEqual(menuListItems[2].props.onHighlightChange.args, [[true, {byKeyboard: true}]]);
 
     keydownCaptureHandlers[0]({
       preventDefault: sinon.spy(),
@@ -86,9 +86,9 @@ describe('MenuList', function() {
       target: document.body
     });
 
-    assert.deepEqual(menuListItems[0].props.onHighlightChange.args, [[true], [false], [true]]);
-    assert.deepEqual(menuListItems[1].props.onHighlightChange.args, [[true], [false]]);
-    assert.deepEqual(menuListItems[2].props.onHighlightChange.args, [[true], [false]]);
+    assert.deepEqual(menuListItems[0].props.onHighlightChange.args, [[true, {byKeyboard: true}], [false, {byKeyboard: undefined}], [true, {byKeyboard: true}]]);
+    assert.deepEqual(menuListItems[1].props.onHighlightChange.args, [[true, {byKeyboard: true}], [false, {byKeyboard: undefined}]]);
+    assert.deepEqual(menuListItems[2].props.onHighlightChange.args, [[true, {byKeyboard: true}], [false, {byKeyboard: undefined}]]);
 
     // Up time
 
@@ -101,11 +101,11 @@ describe('MenuList', function() {
     });
 
     assert.deepEqual(menuListItems[0].props.onHighlightChange.args,
-      [[true], [false], [true], [false]]);
+      [[true, {byKeyboard: true}], [false, {byKeyboard: undefined}], [true, {byKeyboard: true}], [false, {byKeyboard: undefined}]]);
     assert.deepEqual(menuListItems[1].props.onHighlightChange.args,
-      [[true], [false]]);
+      [[true, {byKeyboard: true}], [false, {byKeyboard: undefined}]]);
     assert.deepEqual(menuListItems[2].props.onHighlightChange.args,
-      [[true], [false], [true]]);
+      [[true, {byKeyboard: true}], [false, {byKeyboard: undefined}], [true, {byKeyboard: true}]]);
 
     keydownCaptureHandlers[0]({
       preventDefault: sinon.spy(),
@@ -116,11 +116,11 @@ describe('MenuList', function() {
     });
 
     assert.deepEqual(menuListItems[0].props.onHighlightChange.args,
-      [[true], [false], [true], [false]]);
+      [[true, {byKeyboard: true}], [false, {byKeyboard: undefined}], [true, {byKeyboard: true}], [false, {byKeyboard: undefined}]]);
     assert.deepEqual(menuListItems[1].props.onHighlightChange.args,
-      [[true], [false], [true]]);
+      [[true, {byKeyboard: true}], [false, {byKeyboard: undefined}], [true, {byKeyboard: true}]]);
     assert.deepEqual(menuListItems[2].props.onHighlightChange.args,
-      [[true], [false], [true], [false]]);
+      [[true, {byKeyboard: true}], [false, {byKeyboard: undefined}], [true, {byKeyboard: true}], [false, {byKeyboard: undefined}]]);
 
     keydownCaptureHandlers[0]({
       preventDefault: sinon.spy(),
@@ -131,11 +131,11 @@ describe('MenuList', function() {
     });
 
     assert.deepEqual(menuListItems[0].props.onHighlightChange.args,
-      [[true], [false], [true], [false], [true]]);
+      [[true, {byKeyboard: true}], [false, {byKeyboard: undefined}], [true, {byKeyboard: true}], [false, {byKeyboard: undefined}], [true, {byKeyboard: true}]]);
     assert.deepEqual(menuListItems[1].props.onHighlightChange.args,
-      [[true], [false], [true], [false]]);
+      [[true, {byKeyboard: true}], [false, {byKeyboard: undefined}], [true, {byKeyboard: true}], [false, {byKeyboard: undefined}]]);
     assert.deepEqual(menuListItems[2].props.onHighlightChange.args,
-      [[true], [false], [true], [false]]);
+      [[true, {byKeyboard: true}], [false, {byKeyboard: undefined}], [true, {byKeyboard: true}], [false, {byKeyboard: undefined}]]);
 
   }));
 });

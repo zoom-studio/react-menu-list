@@ -12,14 +12,20 @@ import type {MenuListInspectorContext} from './MenuListInspector';
 
 // This type of object is given to a MenuListItem to talk to the MenuList.
 export type MenuListItemHandle = {
-  setHighlighted(highlighted: boolean, scrollIntoView: boolean): void;
+  highlight(byKeyboard: boolean): void;
+  unhighlight(): void;
   itemChosen(): void;
+  takeKeyboard(): void;
+  releaseKeyboard(): void;
+  lockHighlight(): void;
+  unlockHighlight(): void;
+  updateProps(props: MenuListItemProps): void;
   unregister(): void;
 };
 
 // This type of object is given to a MenuList to talk to a MenuListItem.
 export type MenuListItemControl = {
-  notifyHighlighted(highlighted: boolean, scrollIntoView: ?boolean): void;
+  notifyHighlighted(highlighted: boolean, byKeyboard: ?boolean): void;
   notifyChosen(event: Object): void;
 };
 
@@ -33,13 +39,6 @@ export type MenuListContext = {
 };
 
 export default class MenuList extends React.Component {
-  _stopper: Object = kefirStopper();
-  _listItems: Array<{
-    props: MenuListItemProps;
-    control: MenuListItemControl;
-  }> = [];
-  _highlightedIndex: ?number;
-
   static propTypes = {
     onItemChosen: PropTypes.func,
     onLeftPushed: PropTypes.func,
@@ -48,6 +47,20 @@ export default class MenuList extends React.Component {
     onDownPushed: PropTypes.func,
     children: PropTypes.node
   };
+
+  _stopper: Object = kefirStopper();
+  _listItems: Array<{
+    props: MenuListItemProps;
+    control: MenuListItemControl;
+  }> = [];
+
+  _naturalHighlightedIndex: ?number;
+  _lockedHighlightedIndex: ?number;
+
+  _getVisibleHighlightedIndex(): ?number {
+    return this._lockedHighlightedIndex != null ?
+      this._lockedHighlightedIndex : this._naturalHighlightedIndex;
+  }
 
   static childContextTypes = {
     menuList: React.PropTypes.object
@@ -62,37 +75,69 @@ export default class MenuList extends React.Component {
       registerItem: (props, control) => {
         const item = {props, control};
 
-        const i = props.index == null ? -1 : findIndex(
-          this._listItems,
-          item => item.props.index != null && props.index < item.props.index
-        );
-        if (i < 0) {
-          this._listItems.push(item);
-        } else {
-          this._listItems.splice(i, 0, item);
-          if (this._highlightedIndex != null && i <= this._highlightedIndex) {
-            this._highlightedIndex++;
+        {
+          const i = props.index == null ? -1 : findIndex(
+            this._listItems,
+            item => item.props.index != null && props.index < item.props.index
+          );
+          if (i < 0) {
+            this._listItems.push(item);
+          } else {
+            this._listItems.splice(i, 0, item);
+            if (this._naturalHighlightedIndex != null && i <= this._naturalHighlightedIndex) {
+              this._naturalHighlightedIndex++;
+            }
+            if (this._lockedHighlightedIndex != null && i <= this._lockedHighlightedIndex) {
+              this._lockedHighlightedIndex++;
+            }
           }
         }
+
         return {
-          setHighlighted: (highlighted: boolean, scrollIntoView: boolean) => {
+          highlight: (byKeyboard: boolean) => {
             const i = this._listItems.indexOf(item);
             if (i < 0) throw new Error('Already unregistered MenuListItem');
-            this._highlight(i, scrollIntoView);
+            this._naturalHighlight(i, byKeyboard);
+          },
+          unhighlight: () => {
+            const i = this._listItems.indexOf(item);
+            if (i < 0) throw new Error('Already unregistered MenuListItem');
+            if (this._naturalHighlightedIndex === i) {
+              this._naturalHighlight(null, false);
+            }
           },
           itemChosen: () => {
             this._itemChosen(control);
           },
-          updateProps: (newProps: MenuListItemProps) => { // eslint-disable-line no-unused-vars
+          takeKeyboard: () => {
             // TODO
+          },
+          releaseKeyboard: () => {
+            // TODO
+          },
+          lockHighlight: () => {
+            const i = this._listItems.indexOf(item);
+            if (i < 0) throw new Error('Already unregistered MenuListItem');
+            this._lockHightlight(i);
+          },
+          unlockHighlight: () => {
+            const i = this._listItems.indexOf(item);
+            if (i < 0) throw new Error('Already unregistered MenuListItem');
+            if (this._lockedHighlightedIndex === i) {
+              this._lockHightlight(null);
+            }
+          },
+          updateProps: (newProps: MenuListItemProps) => { // eslint-disable-line no-unused-vars
+            // TODO handle index change
           },
           unregister: () => {
             const i = this._listItems.indexOf(item);
             if (i < 0) throw new Error('Already unregistered MenuListItem');
-            if (i === this._highlightedIndex) {
-              this._highlight(i === 0 ? null : i-1, true);
-            } else if (this._highlightedIndex != null && i <= this._highlightedIndex) {
-              this._highlightedIndex--;
+            if (i === this._naturalHighlightedIndex) {
+              this._naturalHighlight(null, true);
+            }
+            if (i === this._lockedHighlightedIndex) {
+              this._lockHightlight(null);
             }
             this._listItems.splice(i, 1);
           }
@@ -130,14 +175,42 @@ export default class MenuList extends React.Component {
       .onValue(event => this._key(event));
   }
 
-  _highlight(index: ?number, scrollIntoView: boolean) {
-    if (index == this._highlightedIndex) return;
-    if (this._highlightedIndex != null) {
-      this._listItems[this._highlightedIndex].control.notifyHighlighted(false);
+  _naturalHighlight(index: ?number, byKeyboard: boolean) {
+    // Ignore unhighlight calls while a lock is in place.
+    if (index == null && this._lockedHighlightedIndex != null) {
+      return;
     }
-    this._highlightedIndex = index;
-    if (index != null) {
-      this._listItems[index].control.notifyHighlighted(true, scrollIntoView);
+
+    const visibleHighlightedIndex = this._getVisibleHighlightedIndex();
+
+    if (this._lockedHighlightedIndex != null && byKeyboard) {
+      this._lockedHighlightedIndex = null;
+    }
+    this._naturalHighlightedIndex = index;
+    if (this._lockedHighlightedIndex == null) {
+      if (index != null) {
+        this._listItems[index].control.notifyHighlighted(true, byKeyboard);
+      }
+      if (visibleHighlightedIndex != null && visibleHighlightedIndex != index) {
+        this._listItems[visibleHighlightedIndex].control.notifyHighlighted(false);
+      }
+    }
+  }
+
+  _lockHightlight(index: ?number) {
+    if (index === this._lockedHighlightedIndex) return;
+    const visibleHighlightedIndex = this._getVisibleHighlightedIndex();
+    this._lockedHighlightedIndex = index;
+    const newVisibleHighlightedIndex = this._getVisibleHighlightedIndex();
+    if (visibleHighlightedIndex != newVisibleHighlightedIndex) {
+      if (visibleHighlightedIndex != null) {
+        this._listItems[visibleHighlightedIndex].control.notifyHighlighted(false);
+      }
+      if (newVisibleHighlightedIndex != null) {
+        this._listItems[newVisibleHighlightedIndex].control.notifyHighlighted(true, true);
+      } else if (this._naturalHighlightedIndex != null) {
+        this._listItems[this._naturalHighlightedIndex].control.notifyHighlighted(true, false);
+      }
     }
   }
 
@@ -166,35 +239,42 @@ export default class MenuList extends React.Component {
     // the selection in that direction, and if those fail, try to hand the
     // event off to a parent MenuList if present.
 
+    const visibleHighlightedIndex = this._getVisibleHighlightedIndex();
+
+    // Relation between keys and highlight locking:
+    // enter, left, right activate for the current visibly selected item.
+    // up and down de-activate any locks in place, so that they act from the last
+    // naturally-selected item.
+
     switch (event.which) {
     case 13: //enter
-      if (this._highlightedIndex != null) {
-        const {control} = this._listItems[this._highlightedIndex];
+      if (visibleHighlightedIndex != null) {
+        const {control} = this._listItems[visibleHighlightedIndex];
         this._itemChosen(control);
+        event.preventDefault();
+        event.stopPropagation();
       }
-      event.preventDefault();
-      event.stopPropagation();
       break;
-      // case 37: //left
-      //   console.log('left');
-      //   break;
+    // case 37: //left
+    //   console.log('left');
+    //   break;
+    // case 39: //right
+    //   console.log('right');
+    //   break;
     case 38: //up
-      if (this._highlightedIndex == null || this._highlightedIndex == 0) {
-        this._highlight(this._listItems.length-1, true);
+      if (this._naturalHighlightedIndex == null || this._naturalHighlightedIndex == 0) {
+        this._naturalHighlight(this._listItems.length-1, true);
       } else {
-        this._highlight(this._highlightedIndex-1, true);
+        this._naturalHighlight(this._naturalHighlightedIndex-1, true);
       }
       event.preventDefault();
       event.stopPropagation();
       break;
-      // case 39: //right
-      //   console.log('right');
-      //   break;
     case 40: //down
-      if (this._highlightedIndex == null || this._highlightedIndex == this._listItems.length-1) {
-        this._highlight(0, true);
+      if (this._naturalHighlightedIndex == null || this._naturalHighlightedIndex == this._listItems.length-1) {
+        this._naturalHighlight(0, true);
       } else {
-        this._highlight(this._highlightedIndex+1, true);
+        this._naturalHighlight(this._naturalHighlightedIndex+1, true);
       }
       event.preventDefault();
       event.stopPropagation();

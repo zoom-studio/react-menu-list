@@ -62,15 +62,30 @@ export default class MenuListItem extends React.Component {
   };
 
   takeKeyboard() {
-    //TODO
+    this._menuListHandle.takeKeyboard();
   }
 
   releaseKeyboard() {
-    //TODO
+    this._menuListHandle.releaseKeyboard();
   }
 
-  setHighlighted(highlighted: boolean, scrollIntoView: boolean=true) {
-    this._menuListHandle.setHighlighted(highlighted, scrollIntoView);
+  lockHighlight() {
+    this._menuListHandle.lockHighlight();
+  }
+
+  unlockHighlight() {
+    this._menuListHandle.unlockHighlight();
+  }
+
+  // byKeyboard forces focus immediately and scrolls the item into view.
+  // With it false, the highlight might be delayed depending on mouse movement
+  // and won't cause anything to scroll.
+  highlight(byKeyboard: boolean=true) {
+    this._menuListHandle.highlight(byKeyboard);
+  }
+
+  unhighlight() {
+    this._menuListHandle.unhighlight();
   }
 
   moveCursorAway(direction: 'up'|'down'|'left'|'right', prevCursorLocation: ?Rect) { // eslint-disable-line no-unused-vars
@@ -79,9 +94,9 @@ export default class MenuListItem extends React.Component {
 
   componentDidMount() {
     this._menuListHandle = (this.context.menuList:MenuListContext).registerItem(this.props, {
-      notifyHighlighted: (highlighted: boolean, scrollIntoView: ?boolean) => {
+      notifyHighlighted: (highlighted: boolean, byKeyboard: ?boolean) => {
         this.setState({highlighted}, () => {
-          if (highlighted && scrollIntoView) {
+          if (highlighted && byKeyboard) {
             const el = findDOMNode(this);
             if (el.scrollIntoViewIfNeeded) {
               el.scrollIntoViewIfNeeded();
@@ -91,7 +106,7 @@ export default class MenuListItem extends React.Component {
           }
         });
         if (this.props.onHighlightChange) {
-          this.props.onHighlightChange(highlighted);
+          this.props.onHighlightChange(highlighted, {byKeyboard});
         }
       },
       notifyChosen: (event: Object) => {
@@ -107,6 +122,7 @@ export default class MenuListItem extends React.Component {
   }
 
   render() {
+    const {children} = this.props;
     const {highlighted} = this.state;
 
     let style = this.props.style;
@@ -125,10 +141,10 @@ export default class MenuListItem extends React.Component {
         style={style}
         className={className}
         onClick={()=>this._menuListHandle.itemChosen()}
-        onMouseEnter={() => this.setHighlighted(true, false)}
-        onMouseLeave={() => this.setHighlighted(false, false)}
+        onMouseEnter={() => this.highlight(false)}
+        onMouseLeave={() => this.unhighlight()}
         >
-        List Item: {this.props.children}
+        List Item: {children}
       </div>
     );
   }

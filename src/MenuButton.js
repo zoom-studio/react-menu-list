@@ -6,7 +6,7 @@ import MenuListInspector from './MenuListInspector';
 
 type State = {
   opened: boolean;
-}
+};
 
 export default class MenuButton extends React.Component {
   static propTypes = {
@@ -62,6 +62,13 @@ export default class MenuButton extends React.Component {
             style={style}
             onBlur={()=>this.close()}
             onClick={()=>this.toggle()}
+            onKeyDown={e=>{
+              if (e.key === 'Escape' && opened) {
+                this.close();
+                e.preventDefault();
+                e.stopPropagation();
+              }
+            }}
             >
             {children}
           </button>

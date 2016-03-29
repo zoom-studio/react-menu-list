@@ -2,7 +2,7 @@
 /* eslint-disable no-console */
 
 import React, {PropTypes} from 'react';
-import {MenuList, MenuListItem, MenuButton, Dropdown} from '../src';
+import {MenuList, MenuListItem, MenuButton, Dropdown, SubMenuItem} from '../src';
 
 function LI(props) {
   return (
@@ -61,22 +61,19 @@ export default class Example extends React.Component {
                       <LI>Uranus</LI>
                     </div>
                     <LI>Neptune</LI>
-                    <MenuListItem
-                      onItemChosen={e => e.preventDefault()}
-                      >
-                      <MenuButton
-                        menu={
-                          <Dropdown>
-                            <MenuList>
-                              <LI>Ceres</LI>
-                              <LI>Pluto</LI>
-                              <LI>Eris</LI>
-                            </MenuList>
-                          </Dropdown>
-                        }>
-                        More
-                      </MenuButton>
-                    </MenuListItem>
+                    <SubMenuItem
+                      highlightedStyle={{background: 'gray'}}
+                      menu={
+                        <Dropdown>
+                          <MenuList>
+                            <LI>Ceres</LI>
+                            <LI>Pluto</LI>
+                            <LI>Eris</LI>
+                          </MenuList>
+                        </Dropdown>
+                      }>
+                      Dwarf Planets
+                    </SubMenuItem>
                   </MenuList>
                 </Dropdown>
               }

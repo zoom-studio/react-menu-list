@@ -12,12 +12,17 @@ export default class MenuButton extends React.Component {
   static propTypes = {
     className: PropTypes.string,
     style: PropTypes.object,
+    positionOptions: PropTypes.object,
 
     children: PropTypes.node,
     menu: PropTypes.node,
     onWillOpen: PropTypes.func,
     onDidOpen: PropTypes.func,
     onWillClose: PropTypes.func
+  };
+
+  static defaultProps = {
+    positionOptions: {position:'bottom', hAlign:'left'}
   };
 
   state: State = {
@@ -51,11 +56,11 @@ export default class MenuButton extends React.Component {
   }
 
   render() {
-    const {className, style, children, menu} = this.props;
+    const {className, style, children, menu, positionOptions} = this.props;
     const {opened} = this.state;
     return (
       <FloatAnchor
-        options={{position:'bottom', hAlign:'left'}}
+        options={positionOptions}
         anchor={
           <button
             className={className}

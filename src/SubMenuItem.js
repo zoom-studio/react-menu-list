@@ -21,6 +21,8 @@ export default class SubMenuItem extends React.Component {
     style: PropTypes.object,
     highlightedStyle: PropTypes.object,
 
+    positionOptions: PropTypes.object,
+
     onItemChosen: PropTypes.func,
     onHighlightChange: PropTypes.func,
 
@@ -30,6 +32,10 @@ export default class SubMenuItem extends React.Component {
 
     children: PropTypes.node,
     menu: PropTypes.node
+  };
+
+  static defaultProps = {
+    positionOptions: {position:'right', vAlign:'top', hAlign: 'left'}
   };
 
   state: State = {
@@ -126,7 +132,8 @@ export default class SubMenuItem extends React.Component {
   render() {
     const {
       index, style, className,
-      highlightedStyle, highlightedClassName, children, menu
+      highlightedStyle, highlightedClassName, positionOptions,
+      children, menu
     } = this.props;
     const {opened} = this.state;
 
@@ -147,7 +154,7 @@ export default class SubMenuItem extends React.Component {
         }}
       >
         <FloatAnchor
-          options={{position:'right', vAlign:'top', hAlign: 'left'}}
+          options={positionOptions}
           anchor={
             <div>
               {children}

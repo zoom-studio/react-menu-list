@@ -1,5 +1,7 @@
 /* @flow */
 
+import Kefir from 'kefir';
+import kefirBus from 'kefir-bus';
 import React, {PropTypes} from 'react';
 
 // import MenuListInspector from './MenuListInspector';
@@ -34,10 +36,11 @@ export default class SubMenuItem extends React.Component {
     opened: false
   };
 
-  _lockTimeout: any;
+  _mouseEnterMenuEvents: Object = kefirBus();
+  _stopper: Object = kefirBus();
 
   componentWillUnmount() {
-    clearTimeout(this._lockTimeout);
+    this._stopper.emit(null);
   }
 
   open() {
@@ -46,17 +49,12 @@ export default class SubMenuItem extends React.Component {
     this.setState({opened: true}, this.props.onDidOpen);
     this.refs.menuListItem.takeKeyboard();
     this.refs.menuListItem.lockHighlight();
-    this._lockTimeout = setTimeout(() => {
-      this.refs.menuListItem.releaseKeyboard();
-      this.refs.menuListItem.unlockHighlight();
-    }, 5000);
   }
 
   close() {
     if (!this.state.opened) return;
     if (this.props.onWillClose) this.props.onWillClose();
     this.setState({opened: false});
-    clearTimeout(this._lockTimeout);
     this.refs.menuListItem.releaseKeyboard();
     this.refs.menuListItem.unlockHighlight();
   }
@@ -77,12 +75,52 @@ export default class SubMenuItem extends React.Component {
     }
   }
 
-  _mouseEnterMenu() {
+  _onMouseLeaveItem(event: Object) {
+    if (!this.state.opened) return;
 
+    // If the mouse isn't going toward the menu, then unhighlight ourself.
+
+    const menuRect = this.refs.menu.getBoundingClientRect();
+    const menuX = (menuRect.left+menuRect.right)/2;
+    const menuY = (menuRect.top+menuRect.bottom)/2;
+
+    const startTime = Date.now();
+    const startX = event.pageX, startY = event.pageY;
+    const startDistance = Math.sqrt(Math.pow(startX-menuX, 2) + Math.pow(startY-menuY, 2));
+    let lastCoords = {pageX: startX, pageY: startY};
+
+    const MIN_SPEED = 30; //px per second
+    const MAX_TIME = 0.75; //seconds
+
+    // Listen to mouse moves, find the first event not going towards the menu,
+    // and end it there. Or end after a timer.
+    Kefir.fromEvents(window, 'mousemove')
+      .bufferBy(Kefir.interval(100, null))
+      .map(events => {
+        if (events.length) {
+          const last = events[events.length-1];
+          lastCoords = {pageX: last.pageX, pageY: last.pageY};
+        }
+        return lastCoords;
+      })
+      .filter(({pageX, pageY}) => {
+        const distance = Math.sqrt(Math.pow(pageX-menuX, 2) + Math.pow(pageY-menuY, 2));
+        const maxDistance = startDistance - (Date.now()-startTime)/1000 * MIN_SPEED;
+        return distance > maxDistance;
+      })
+      .merge(Kefir.later(MAX_TIME*1000))
+      .take(1)
+      .takeUntilBy(this._mouseEnterMenuEvents)
+      .takeUntilBy(this._stopper)
+      .onValue(() => {
+        this.close();
+        this.refs.menuListItem.unhighlight();
+      });
   }
 
-  _mouseLeaveMenu() {
-
+  _mouseEnterMenu() {
+    this._mouseEnterMenuEvents.emit(null);
+    this.refs.menuListItem.unlockHighlight();
   }
 
   render() {
@@ -101,6 +139,7 @@ export default class SubMenuItem extends React.Component {
         highlightedStyle={highlightedStyle}
         highlightedClassName={highlightedClassName}
         onHighlightChange={(h,e) => this._onHighlightChange(h,e)}
+        onMouseLeave={e=>this._onMouseLeaveItem(e)}
         onItemChosen={e => {
           e.preventDefault();
           this.open();
@@ -117,8 +156,8 @@ export default class SubMenuItem extends React.Component {
           float={
             !opened ? null :
               <div
+                ref="menu"
                 onMouseEnter={()=>this._mouseEnterMenu()}
-                onMouseLeave={()=>this._mouseLeaveMenu()}
                 >
                 {menu}
               </div>

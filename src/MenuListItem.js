@@ -24,6 +24,8 @@ export type Props = {
   style?: ?Object;
   highlightedStyle?: ?Object;
 
+  onMouseLeave?: ?Function;
+
   onItemChosen?: ?Function;
   onHighlightChange?: ?Function;
   onLeftPushed?: ?Function;
@@ -46,6 +48,8 @@ export default class MenuListItem extends React.Component {
     highlightedClassName: PropTypes.string,
     style: PropTypes.object,
     highlightedStyle: PropTypes.object,
+
+    onMouseLeave: PropTypes.func,
 
     onItemChosen: PropTypes.func,
     onHighlightChange: PropTypes.func,
@@ -122,7 +126,7 @@ export default class MenuListItem extends React.Component {
   }
 
   render() {
-    const {children} = this.props;
+    const {children, onMouseLeave} = this.props;
     const {highlighted} = this.state;
 
     let style = this.props.style;
@@ -142,7 +146,7 @@ export default class MenuListItem extends React.Component {
         className={className}
         onClick={()=>this._menuListHandle.itemChosen()}
         onMouseEnter={() => this.highlight(false)}
-        onMouseLeave={() => this.unhighlight()}
+        onMouseLeave={onMouseLeave || (() => this.unhighlight())}
         >
         List Item: {children}
       </div>

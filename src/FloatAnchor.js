@@ -1,6 +1,7 @@
 /* @flow */
 
 import fromEventsCapture from './lib/fromEventsCapture';
+import Kefir from 'kefir';
 import kefirBus from 'kefir-bus';
 import React, {PropTypes} from 'react';
 import ReactDOM, {findDOMNode} from 'react-dom';
@@ -23,6 +24,7 @@ export default class FloatAnchor extends React.Component {
 
   _portal: ?HTMLElement;
   _portalRemoval: Object = kefirBus();
+  _stopper: Object = kefirBus();
 
   componentDidMount() {
     this._updateFloat();
@@ -36,7 +38,7 @@ export default class FloatAnchor extends React.Component {
   }
 
   componentWillUnmount() {
-    this._portalRemoval.emit(null);
+    this._stopper.emit(null);
   }
 
   _updateFloat(forceReposition: boolean=false) {
@@ -51,7 +53,10 @@ export default class FloatAnchor extends React.Component {
         document.body.appendChild(portal);
         // delay(0) because React has issues with unmounting happening during
         // event processing: https://github.com/facebook/react/issues/3298
-        this._portalRemoval.take(1).delay(0).onValue(() => {
+        Kefir.merge([
+          this._portalRemoval.delay(0),
+          this._stopper
+        ]).take(1).onValue(() => {
           ReactDOM.unmountComponentAtNode(portal);
           portal.remove();
           this._portal = null;

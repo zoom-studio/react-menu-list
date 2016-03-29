@@ -56,6 +56,7 @@ export default class MenuList extends React.Component {
 
   _naturalHighlightedIndex: ?number;
   _lockedHighlightedIndex: ?number;
+  _keyboardTakenByIndex: ?number;
 
   _getVisibleHighlightedIndex(): ?number {
     return this._lockedHighlightedIndex != null ?
@@ -90,6 +91,9 @@ export default class MenuList extends React.Component {
             if (this._lockedHighlightedIndex != null && i <= this._lockedHighlightedIndex) {
               this._lockedHighlightedIndex++;
             }
+            if (this._keyboardTakenByIndex != null && i <= this._keyboardTakenByIndex) {
+              this._keyboardTakenByIndex++;
+            }
           }
         }
 
@@ -110,10 +114,16 @@ export default class MenuList extends React.Component {
             this._itemChosen(control);
           },
           takeKeyboard: () => {
-            // TODO
+            const i = this._listItems.indexOf(item);
+            if (i < 0) throw new Error('Already unregistered MenuListItem');
+            this._keyboardTakenByIndex = i;
           },
           releaseKeyboard: () => {
-            // TODO
+            const i = this._listItems.indexOf(item);
+            if (i < 0) throw new Error('Already unregistered MenuListItem');
+            if (this._keyboardTakenByIndex === i) {
+              this._keyboardTakenByIndex = null;
+            }
           },
           lockHighlight: () => {
             const i = this._listItems.indexOf(item);
@@ -138,6 +148,11 @@ export default class MenuList extends React.Component {
             }
             if (i === this._lockedHighlightedIndex) {
               this._lockHightlight(null);
+            }
+            if (i === this._keyboardTakenByIndex) {
+              this._keyboardTakenByIndex = null;
+            } else if (this._keyboardTakenByIndex != null && i < this._keyboardTakenByIndex) {
+              this._keyboardTakenByIndex--;
             }
             this._listItems.splice(i, 1);
           }
@@ -176,11 +191,6 @@ export default class MenuList extends React.Component {
   }
 
   _naturalHighlight(index: ?number, byKeyboard: boolean) {
-    // Ignore unhighlight calls while a lock is in place.
-    if (index == null && this._lockedHighlightedIndex != null) {
-      return;
-    }
-
     const visibleHighlightedIndex = this._getVisibleHighlightedIndex();
 
     if (this._lockedHighlightedIndex != null && byKeyboard) {
@@ -202,7 +212,11 @@ export default class MenuList extends React.Component {
     const visibleHighlightedIndex = this._getVisibleHighlightedIndex();
     this._lockedHighlightedIndex = index;
     const newVisibleHighlightedIndex = this._getVisibleHighlightedIndex();
-    if (visibleHighlightedIndex != newVisibleHighlightedIndex) {
+    if (visibleHighlightedIndex != null && newVisibleHighlightedIndex == null) {
+      // When unlocking, prefer to keep the current selection over de-selecting
+      // everything.
+      this._naturalHighlightedIndex = visibleHighlightedIndex;
+    } else if (visibleHighlightedIndex != newVisibleHighlightedIndex) {
       if (visibleHighlightedIndex != null) {
         this._listItems[visibleHighlightedIndex].control.notifyHighlighted(false);
       }
@@ -232,6 +246,10 @@ export default class MenuList extends React.Component {
   }
 
   _key(event: Object) {
+    if (this._keyboardTakenByIndex != null) {
+      return;
+    }
+
     const {onLeftPushed, onRightPushed, onUpPushed, onDownPushed} = this.props; // eslint-disable-line no-unused-vars
 
     // TODO When an arrow is pressed and something is highlighted, first check

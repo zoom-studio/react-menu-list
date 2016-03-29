@@ -128,13 +128,13 @@ export default class MenuList extends React.Component {
           lockHighlight: () => {
             const i = this._listItems.indexOf(item);
             if (i < 0) throw new Error('Already unregistered MenuListItem');
-            this._lockHightlight(i);
+            this._lockHighlight(i);
           },
           unlockHighlight: () => {
             const i = this._listItems.indexOf(item);
             if (i < 0) throw new Error('Already unregistered MenuListItem');
             if (this._lockedHighlightedIndex === i) {
-              this._lockHightlight(null);
+              this._lockHighlight(null);
             }
           },
           updateProps: (newProps: MenuListItemProps) => { // eslint-disable-line no-unused-vars
@@ -147,7 +147,7 @@ export default class MenuList extends React.Component {
               this._naturalHighlight(null, true);
             }
             if (i === this._lockedHighlightedIndex) {
-              this._lockHightlight(null);
+              this._lockHighlight(null);
             }
             if (i === this._keyboardTakenByIndex) {
               this._keyboardTakenByIndex = null;
@@ -207,7 +207,7 @@ export default class MenuList extends React.Component {
     }
   }
 
-  _lockHightlight(index: ?number) {
+  _lockHighlight(index: ?number) {
     if (index === this._lockedHighlightedIndex) return;
     const visibleHighlightedIndex = this._getVisibleHighlightedIndex();
     this._lockedHighlightedIndex = index;
@@ -221,7 +221,7 @@ export default class MenuList extends React.Component {
         this._listItems[visibleHighlightedIndex].control.notifyHighlighted(false);
       }
       if (newVisibleHighlightedIndex != null) {
-        this._listItems[newVisibleHighlightedIndex].control.notifyHighlighted(true, true);
+        this._listItems[newVisibleHighlightedIndex].control.notifyHighlighted(true, false);
       } else if (this._naturalHighlightedIndex != null) {
         this._listItems[this._naturalHighlightedIndex].control.notifyHighlighted(true, false);
       }

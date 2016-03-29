@@ -65,6 +65,7 @@ export default class FloatAnchor extends React.Component {
         fromEventsCapture(window, 'scroll')
           .filter(event => event.target.contains(el))
           .takeUntilBy(this._portalRemoval)
+          .takeUntilBy(this._stopper)
           .onValue(() => {
             this.reposition();
           });

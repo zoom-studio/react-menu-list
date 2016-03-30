@@ -9,10 +9,7 @@ function LI(props) {
     <MenuListItem
       highlightedStyle={{background: 'gray'}}
       onItemChosen={e => {
-        if (props.children === 'Mercury') {
-          e.preventDefault();
-        }
-        console.log(`selected ${props.children}`);
+        console.log(`selected ${props.children}, byKeyboard: ${e.byKeyboard}`);
       }}
       >
       {props.children}
@@ -48,7 +45,7 @@ export default class Example extends React.Component {
             <MenuButton
               menu={
                 <Dropdown>
-                  <MenuList onItemChosen={e=>console.log('something chosen', e)}>
+                  <MenuList>
                     <LI>Mercury</LI>
                     <LI>Venus</LI>
                     <div style={{
@@ -72,7 +69,7 @@ export default class Example extends React.Component {
                           </MenuList>
                         </Dropdown>
                       }>
-                      Dwarf Planets
+                      Dwarf Planets ►
                     </SubMenuItem>
                   </MenuList>
                 </Dropdown>

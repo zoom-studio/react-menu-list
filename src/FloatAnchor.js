@@ -8,6 +8,10 @@ import containByScreen from 'contain-by-screen';
 import type {Options} from 'contain-by-screen';
 import isEqual from 'lodash/isEqual';
 
+export type FloatAnchorContext = {
+  repositionEvents: Object;
+};
+
 type Props = {
   options?: ?Options;
   anchor: React.Element;
@@ -25,9 +29,37 @@ export default class FloatAnchor extends React.Component {
   _isRenderingFloat: boolean = false;
   _shouldRepositionOnFloatRender: boolean = false;
   _portalRemoval: Object = kefirBus();
+  _unmount: Object = kefirBus();
+  _repositionEvents: Object = kefirBus();
+
+  static childContextTypes = {
+    floatanchor: React.PropTypes.object
+  };
+
+  static contextTypes = {
+    floatanchor: React.PropTypes.object
+  };
+
+  getChildContext(): Object {
+    const floatanchor: FloatAnchorContext = {
+      repositionEvents: this._repositionEvents
+    };
+    return {floatanchor};
+  }
+
+  _parentCtx(): ?FloatAnchorContext {
+    return this.context.floatanchor;
+  }
 
   componentDidMount() {
     this._updateFloat(this.props);
+    const parentCtx = this._parentCtx();
+    if (parentCtx) {
+      parentCtx.repositionEvents
+        .takeUntilBy(this._unmount)
+        .onValue(() => this.reposition());
+      this._repositionEvents.plug(parentCtx.repositionEvents);
+    }
   }
 
   componentWillReceiveProps(newProps: Props) {
@@ -39,6 +71,8 @@ export default class FloatAnchor extends React.Component {
 
   componentWillUnmount() {
     this._portalRemoval.emit(null);
+    this._unmount.emit(null);
+    this._repositionEvents.end();
   }
 
   _updateFloat(props: Props, forceReposition: boolean=false) {
@@ -93,6 +127,7 @@ export default class FloatAnchor extends React.Component {
     const portal = this._portal;
     if (portal) {
       containByScreen(portal, findDOMNode(this), this.props.options || {});
+      this._repositionEvents.emit(null);
     }
   }
 

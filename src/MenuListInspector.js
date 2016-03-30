@@ -1,9 +1,13 @@
 /* @flow */
 
 import React, {PropTypes} from 'react';
-import type MenuEvent from './MenuEvent';
+import type MenuList from './MenuList';
+import type MenuEvent from './events/MenuEvent';
+import type {Direction, Rect} from './types';
 
 export type MenuListInspectorContext = {
+  registerMenuList(menuList: MenuList): void;
+  unregisterMenuList(menuList: MenuList): void;
   dispatchEvent(event: MenuEvent): void;
 };
 
@@ -26,12 +30,22 @@ export default class MenuListInspector extends React.Component {
     menuListInspector: React.PropTypes.object
   };
 
+  _descendantMenuLists: Array<MenuList> = [];
+
   _parentCtx(): ?MenuListInspectorContext {
     return this.context.menuListInspector;
   }
 
   getChildContext(): Object {
     const menuListInspector: MenuListInspectorContext = {
+      registerMenuList: (menuList: MenuList) => {
+        this._descendantMenuLists.push(menuList);
+      },
+      unregisterMenuList: (menuList: MenuList) => {
+        const i = this._descendantMenuLists.indexOf(menuList);
+        if (i < 0) throw new Error('MenuList not registered');
+        this._descendantMenuLists.splice(i, 1);
+      },
       dispatchEvent: (event: MenuEvent) => {
         switch (event.type) {
         case 'chosen':
@@ -58,6 +72,14 @@ export default class MenuListInspector extends React.Component {
       }
     };
     return {menuListInspector};
+  }
+
+  moveCursor(direction: Direction, prevCursorLocation: ?Rect) {
+    const menuList = this._descendantMenuLists[0];
+    if (!menuList) {
+      throw new Error('No descendant menu lists!');
+    }
+    menuList.moveCursor(direction, prevCursorLocation);
   }
 
   render(): ?React.Element {

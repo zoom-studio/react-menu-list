@@ -3,18 +3,12 @@
 import React, {PropTypes} from 'react';
 import {findDOMNode} from 'react-dom';
 
-import type MenuEvent from './MenuEvent';
+import type MenuEvent from './events/MenuEvent';
 import type {MenuListContext, MenuListItemHandle} from './MenuList';
+import type {Direction, Rect} from './types';
 
 type State = {
   highlighted: boolean;
-};
-
-type Rect = {
-  top: number;
-  bottom: number;
-  left: number;
-  right: number;
 };
 
 export type Props = {
@@ -93,8 +87,8 @@ export default class MenuListItem extends React.Component {
     this._menuListHandle.unhighlight();
   }
 
-  moveCursorAway(direction: 'up'|'down'|'left'|'right', prevCursorLocation: ?Rect) { // eslint-disable-line no-unused-vars
-    //TODO
+  moveCursor(direction: Direction, prevCursorLocation: ?Rect) {
+    this._menuListHandle.moveCursor(direction, prevCursorLocation);
   }
 
   componentDidMount() {
@@ -138,6 +132,10 @@ export default class MenuListItem extends React.Component {
 
   componentWillUnmount() {
     this._menuListHandle.unregister();
+  }
+
+  componentWillReceiveProps(newProps: Props) {
+    this._menuListHandle.updateProps(newProps);
   }
 
   render() {

@@ -7,14 +7,17 @@ import kefirStopper from 'kefir-stopper';
 import findIndex from 'array-find-index';
 import fromEventsCapture from './lib/fromEventsCapture';
 
-import MenuEvent from './MenuEvent';
+import MenuEvent from './events/MenuEvent';
+import ChosenEvent from './events/ChosenEvent';
 import type {Props as MenuListItemProps} from './MenuListItem';
 import type {MenuListInspectorContext} from './MenuListInspector';
+import type {Direction, Rect} from './types';
 
 // This type of object is given to a MenuListItem to talk to the MenuList.
 export type MenuListItemHandle = {
   highlight(byKeyboard: boolean): void;
   unhighlight(): void;
+  moveCursor(direction: Direction, prevCursorLocation: ?Rect): void;
   itemChosen(): void;
   takeKeyboard(): void;
   releaseKeyboard(): void;
@@ -77,10 +80,10 @@ export default class MenuList extends React.Component {
       registerItem: (props, control) => {
         const item = {props, control};
 
-        {
-          const i = props.index == null ? -1 : findIndex(
+        const register = () => {
+          const i = item.props.index == null ? -1 : findIndex(
             this._listItems,
-            item => item.props.index != null && props.index < item.props.index
+            _item => _item.props.index != null && item.props.index < _item.props.index
           );
           if (i < 0) {
             this._listItems.push(item);
@@ -96,9 +99,11 @@ export default class MenuList extends React.Component {
               this._keyboardTakenByIndex++;
             }
           }
-        }
+        };
 
-        return {
+        register();
+
+        const menuListItemHandle: MenuListItemHandle = {
           highlight: (byKeyboard: boolean) => {
             const i = this._listItems.indexOf(item);
             if (i < 0) throw new Error('Already unregistered MenuListItem');
@@ -112,7 +117,7 @@ export default class MenuList extends React.Component {
             }
           },
           itemChosen: () => {
-            this._dispatchEvent(control, new MenuEvent('chosen'));
+            this._dispatchEvent(control, new ChosenEvent('chosen', false));
           },
           takeKeyboard: () => {
             const i = this._listItems.indexOf(item);
@@ -138,8 +143,19 @@ export default class MenuList extends React.Component {
               this._lockHighlight(null);
             }
           },
-          updateProps: (newProps: MenuListItemProps) => { // eslint-disable-line no-unused-vars
-            // TODO handle index change
+          moveCursor: (direction: Direction, prevCursorLocation: ?Rect) => {
+            this.moveCursor(direction, prevCursorLocation);
+          },
+          updateProps: (newProps: MenuListItemProps) => {
+            if (item.props.index !== newProps.index) {
+              menuListItemHandle.unregister();
+              props = newProps;
+              item.props = newProps;
+              register();
+            } else {
+              props = newProps;
+              item.props = newProps;
+            }
           },
           unregister: () => {
             const i = this._listItems.indexOf(item);
@@ -158,6 +174,7 @@ export default class MenuList extends React.Component {
             this._listItems.splice(i, 1);
           }
         };
+        return menuListItemHandle;
       }
     };
     return {menuList};
@@ -189,6 +206,20 @@ export default class MenuList extends React.Component {
     ])
       .takeUntilBy(this._stopper)
       .onValue(event => this._key(event));
+
+    const parentCtx = this._parentCtx();
+    if (parentCtx) {
+      parentCtx.registerMenuList(this);
+    }
+  }
+
+  componentWillUnmount() {
+    this._stopper.destroy();
+
+    const parentCtx = this._parentCtx();
+    if (parentCtx) {
+      parentCtx.unregisterMenuList(this);
+    }
   }
 
   _naturalHighlight(index: ?number, byKeyboard: boolean) {
@@ -279,7 +310,7 @@ export default class MenuList extends React.Component {
 
     switch (event.which) {
     case 13: //enter
-      mEvent = new MenuEvent('chosen');
+      mEvent = new ChosenEvent('chosen', true);
       event.preventDefault();
       event.stopPropagation();
       break;
@@ -292,20 +323,12 @@ export default class MenuList extends React.Component {
     case 38: //up
       event.preventDefault();
       event.stopPropagation();
-      if (this._naturalHighlightedIndex == null || this._naturalHighlightedIndex == 0) {
-        this._naturalHighlight(this._listItems.length-1, true);
-      } else {
-        this._naturalHighlight(this._naturalHighlightedIndex-1, true);
-      }
+      this.moveCursor('up');
       break;
     case 40: //down
       event.preventDefault();
       event.stopPropagation();
-      if (this._naturalHighlightedIndex == null || this._naturalHighlightedIndex == this._listItems.length-1) {
-        this._naturalHighlight(0, true);
-      } else {
-        this._naturalHighlight(this._naturalHighlightedIndex+1, true);
-      }
+      this.moveCursor('down');
       break;
     }
 
@@ -318,8 +341,24 @@ export default class MenuList extends React.Component {
     }
   }
 
-  componentWillUnmount() {
-    this._stopper.destroy();
+  moveCursor(direction: Direction, prevCursorLocation: ?Rect) { //eslint-disable-line no-unused-vars
+    // TODO pass prevCursorLocation to item's onHighlightChange callback's event
+    switch (direction) {
+    case 'up':
+      if (this._naturalHighlightedIndex == null || this._naturalHighlightedIndex == 0) {
+        this._naturalHighlight(this._listItems.length-1, true);
+      } else {
+        this._naturalHighlight(this._naturalHighlightedIndex-1, true);
+      }
+      break;
+    case 'down':
+      if (this._naturalHighlightedIndex == null || this._naturalHighlightedIndex == this._listItems.length-1) {
+        this._naturalHighlight(0, true);
+      } else {
+        this._naturalHighlight(this._naturalHighlightedIndex+1, true);
+      }
+      break;
+    }
   }
 
   render() {

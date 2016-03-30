@@ -9,6 +9,9 @@ import MenuListInspector from './MenuListInspector';
 import FloatAnchor from './FloatAnchor';
 import MenuListItem from './MenuListItem';
 
+import type MenuEvent from './events/MenuEvent';
+import type ChosenEvent from './events/ChosenEvent';
+
 type State = {
   opened: boolean;
 };
@@ -89,7 +92,7 @@ export default class SubMenuItem extends React.Component {
 
     // If the mouse isn't going toward the menu, then unhighlight ourself.
 
-    const menuRect = this.refs.menu.getBoundingClientRect();
+    const menuRect = this.refs.menuContainer.getBoundingClientRect();
 
     const startTime = Date.now();
     const startX = event.pageX, startY = event.pageY;
@@ -162,17 +165,21 @@ export default class SubMenuItem extends React.Component {
         highlightedClassName={highlightedClassName}
         onHighlightChange={(h,e) => this._onHighlightChange(h,e)}
         onMouseLeave={e => this._onMouseLeaveItem(e)}
-        onRightPushed={e => {
+        onRightPushed={(e: MenuEvent) => {
           if (!this.state.opened) {
             e.stopPropagation();
+            e.preventDefault();
             this.open();
-            // TODO highlight first item of submenu
+            this.refs.menuInspector.moveCursor('down');
           }
         }}
-        onItemChosen={e => {
+        onItemChosen={(e: ChosenEvent) => {
           e.stopPropagation();
+          e.preventDefault();
           this.open();
-          // TODO highlight first item of submenu if by keyboard
+          if (e.byKeyboard) {
+            this.refs.menuInspector.moveCursor('down');
+          }
         }}
       >
         <FloatAnchor
@@ -185,15 +192,15 @@ export default class SubMenuItem extends React.Component {
           float={
             !opened ? null :
               <MenuListInspector
+                ref="menuInspector"
                 onLeftPushed={e => {
-                  console.log('left pushed', e);
                   e.stopPropagation();
                   e.preventDefault();
                   this.close();
                 }}
               >
                 <div
-                  ref="menu"
+                  ref="menuContainer"
                   onMouseEnter={()=>this._mouseEnterMenu()}
                   >
                   {menu}

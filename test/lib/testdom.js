@@ -4,6 +4,7 @@ function init() {
   global.document = jsdom('');
   global.window = document.defaultView;
   global.navigator = window.navigator;
+  global.Node = window.Node;
   global.HTMLElement = window.HTMLElement;
 }
 

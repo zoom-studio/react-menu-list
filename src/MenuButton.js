@@ -15,7 +15,7 @@ export default class MenuButton extends React.Component {
     positionOptions: PropTypes.object,
 
     children: PropTypes.node,
-    menu: PropTypes.node,
+    menu: PropTypes.element,
     onWillOpen: PropTypes.func,
     onDidOpen: PropTypes.func,
     onWillClose: PropTypes.func
@@ -49,10 +49,8 @@ export default class MenuButton extends React.Component {
     }
   }
 
-  _itemChosen(event: Object) {
-    if (!event.defaultPrevented) {
-      this.close();
-    }
+  _itemChosen() {
+    this.close();
   }
 
   render() {
@@ -80,10 +78,8 @@ export default class MenuButton extends React.Component {
         }
         float={
           !opened ? null :
-            <MenuListInspector onItemChosen={e => this._itemChosen(e)}>
-              <div onMouseDown={e=>e.preventDefault()}>
-                {menu}
-              </div>
+            <MenuListInspector onItemChosen={() => this._itemChosen()}>
+              {menu}
             </MenuListInspector>
         }
       />

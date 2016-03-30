@@ -7,6 +7,7 @@ import kefirStopper from 'kefir-stopper';
 import findIndex from 'array-find-index';
 import fromEventsCapture from './lib/fromEventsCapture';
 
+import MenuEvent from './MenuEvent';
 import type {Props as MenuListItemProps} from './MenuListItem';
 import type {MenuListInspectorContext} from './MenuListInspector';
 
@@ -26,7 +27,7 @@ export type MenuListItemHandle = {
 // This type of object is given to a MenuList to talk to a MenuListItem.
 export type MenuListItemControl = {
   notifyHighlighted(highlighted: boolean, byKeyboard: ?boolean): void;
-  notifyChosen(event: Object): void;
+  notifyEvent(event: MenuEvent): void;
 };
 
 // This is the type of the object that MenuList gives as context to its
@@ -111,7 +112,7 @@ export default class MenuList extends React.Component {
             }
           },
           itemChosen: () => {
-            this._itemChosen(control);
+            this._dispatchEvent(control, new MenuEvent('chosen'));
           },
           takeKeyboard: () => {
             const i = this._listItems.indexOf(item);
@@ -228,24 +229,34 @@ export default class MenuList extends React.Component {
     }
   }
 
-  _itemChosen(control: MenuListItemControl) {
-    const event = {
-      preventDefault() {
-        this.defaultPrevented = true;
-      },
-      defaultPrevented: false
-    };
-    control.notifyChosen(event);
-    if (this.props.onItemChosen) {
-      this.props.onItemChosen(event);
+  _dispatchEvent(control: ?MenuListItemControl, event: MenuEvent) {
+    if (control) {
+      control.notifyEvent(event);
+      if (event.cancelBubble) return;
     }
+    switch (event.type) {
+    case 'chosen':
+      if (this.props.onItemChosen) this.props.onItemChosen(event);
+      break;
+    // case 'up':
+    //   break;
+    // case 'down':
+    //   break;
+    case 'left':
+      if (this.props.onLeftPushed) this.props.onLeftPushed(event);
+      break;
+    case 'right':
+      if (this.props.onRightPushed) this.props.onRightPushed(event);
+      break;
+    }
+    if (event.cancelBubble) return;
     const parentCtx = this._parentCtx();
     if (parentCtx) {
-      parentCtx.dispatchEvent('itemChosen', event);
+      parentCtx.dispatchEvent(event);
     }
   }
 
-  _key(event: Object) {
+  _key(event: KeyboardEvent) {
     if (this._keyboardTakenByIndex != null) {
       return;
     }
@@ -264,39 +275,46 @@ export default class MenuList extends React.Component {
     // up and down de-activate any locks in place, so that they act from the last
     // naturally-selected item.
 
+    let mEvent = null;
+
     switch (event.which) {
     case 13: //enter
-      if (visibleHighlightedIndex != null) {
-        const {control} = this._listItems[visibleHighlightedIndex];
-        this._itemChosen(control);
-        event.preventDefault();
-        event.stopPropagation();
-      }
+      mEvent = new MenuEvent('chosen');
+      event.preventDefault();
+      event.stopPropagation();
       break;
-    // case 37: //left
-    //   console.log('left');
-    //   break;
-    // case 39: //right
-    //   console.log('right');
-    //   break;
+    case 37: //left
+      mEvent = new MenuEvent('left');
+      break;
+    case 39: //right
+      mEvent = new MenuEvent('right');
+      break;
     case 38: //up
+      event.preventDefault();
+      event.stopPropagation();
       if (this._naturalHighlightedIndex == null || this._naturalHighlightedIndex == 0) {
         this._naturalHighlight(this._listItems.length-1, true);
       } else {
         this._naturalHighlight(this._naturalHighlightedIndex-1, true);
       }
-      event.preventDefault();
-      event.stopPropagation();
       break;
     case 40: //down
+      event.preventDefault();
+      event.stopPropagation();
       if (this._naturalHighlightedIndex == null || this._naturalHighlightedIndex == this._listItems.length-1) {
         this._naturalHighlight(0, true);
       } else {
         this._naturalHighlight(this._naturalHighlightedIndex+1, true);
       }
-      event.preventDefault();
-      event.stopPropagation();
       break;
+    }
+
+    if (mEvent) {
+      const control = visibleHighlightedIndex == null ? null :
+        this._listItems[visibleHighlightedIndex].control;
+      this._dispatchEvent(control, mEvent);
+      if (mEvent.defaultPrevented) event.preventDefault();
+      if (mEvent.defaultPrevented || mEvent.cancelBubble) event.stopPropagation();
     }
   }
 
@@ -305,11 +323,11 @@ export default class MenuList extends React.Component {
   }
 
   render() {
-    // TODO use a MenuListInspector here so we can watch child menu events?
     return (
-      <div>
-        MenuList:
-        <div>{this.props.children}</div>
+      <div
+        onMouseDown={e=>e.preventDefault()}
+      >
+        {this.props.children}
       </div>
     );
   }

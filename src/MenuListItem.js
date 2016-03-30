@@ -3,6 +3,7 @@
 import React, {PropTypes} from 'react';
 import {findDOMNode} from 'react-dom';
 
+import type MenuEvent from './MenuEvent';
 import type {MenuListContext, MenuListItemHandle} from './MenuList';
 
 type State = {
@@ -113,9 +114,23 @@ export default class MenuListItem extends React.Component {
           this.props.onHighlightChange(highlighted, {byKeyboard});
         }
       },
-      notifyChosen: (event: Object) => {
-        if (this.props.onItemChosen) {
-          this.props.onItemChosen(event);
+      notifyEvent: (event: MenuEvent) => {
+        switch (event.type) {
+        case 'chosen':
+          if (this.props.onItemChosen) this.props.onItemChosen(event);
+          break;
+        case 'up':
+          if (this.props.onUpPushed) this.props.onUpPushed(event);
+          break;
+        case 'down':
+          if (this.props.onDownPushed) this.props.onDownPushed(event);
+          break;
+        case 'left':
+          if (this.props.onLeftPushed) this.props.onLeftPushed(event);
+          break;
+        case 'right':
+          if (this.props.onRightPushed) this.props.onRightPushed(event);
+          break;
         }
       }
     });
@@ -148,7 +163,7 @@ export default class MenuListItem extends React.Component {
         onMouseEnter={() => this.highlight(false)}
         onMouseLeave={onMouseLeave || (() => this.unhighlight())}
         >
-        List Item: {children}
+        {children}
       </div>
     );
   }

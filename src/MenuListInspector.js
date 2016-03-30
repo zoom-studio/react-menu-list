@@ -1,9 +1,10 @@
 /* @flow */
 
 import React, {PropTypes} from 'react';
+import type MenuEvent from './MenuEvent';
 
 export type MenuListInspectorContext = {
-  dispatchEvent(type: string, event: Object): void;
+  dispatchEvent(event: MenuEvent): void;
 };
 
 export default class MenuListInspector extends React.Component {
@@ -31,26 +32,28 @@ export default class MenuListInspector extends React.Component {
 
   getChildContext(): Object {
     const menuListInspector: MenuListInspectorContext = {
-      dispatchEvent: (type: string, event: Object) => {
-        switch (type) {
-        case 'itemChosen':
-          if (this.props.onItemChosen) {
-            this.props.onItemChosen(event);
-          }
+      dispatchEvent: (event: MenuEvent) => {
+        switch (event.type) {
+        case 'chosen':
+          if (this.props.onItemChosen) this.props.onItemChosen(event);
           break;
-        // TODO
-        // case 'onRightPushed':
-        //   break;
-        // case 'onLeftPushed':
-        //   break;
-        // case 'onUpPushed':
-        //   break;
-        // case 'onDownPushed':
-        //   break;
+        case 'up':
+          if (this.props.onUpPushed) this.props.onUpPushed(event);
+          break;
+        case 'down':
+          if (this.props.onDownPushed) this.props.onDownPushed(event);
+          break;
+        case 'left':
+          if (this.props.onLeftPushed) this.props.onLeftPushed(event);
+          break;
+        case 'right':
+          if (this.props.onRightPushed) this.props.onRightPushed(event);
+          break;
         }
+        if (event.cancelBubble) return;
         const parentCtx = this._parentCtx();
         if (parentCtx) {
-          parentCtx.dispatchEvent(type, event);
+          parentCtx.dispatchEvent(event);
         }
       }
     };

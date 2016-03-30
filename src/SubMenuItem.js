@@ -5,7 +5,7 @@ import kefirBus from 'kefir-bus';
 import React, {PropTypes} from 'react';
 import pointRectDistance from './lib/pointRectDistance';
 
-// import MenuListInspector from './MenuListInspector';
+import MenuListInspector from './MenuListInspector';
 import FloatAnchor from './FloatAnchor';
 import MenuListItem from './MenuListItem';
 
@@ -161,9 +161,16 @@ export default class SubMenuItem extends React.Component {
         highlightedStyle={highlightedStyle}
         highlightedClassName={highlightedClassName}
         onHighlightChange={(h,e) => this._onHighlightChange(h,e)}
-        onMouseLeave={e=>this._onMouseLeaveItem(e)}
+        onMouseLeave={e => this._onMouseLeaveItem(e)}
+        onRightPushed={e => {
+          if (!this.state.opened) {
+            e.stopPropagation();
+            this.open();
+            // TODO highlight first item of submenu
+          }
+        }}
         onItemChosen={e => {
-          e.preventDefault();
+          e.stopPropagation();
           this.open();
           // TODO highlight first item of submenu if by keyboard
         }}
@@ -177,12 +184,21 @@ export default class SubMenuItem extends React.Component {
           }
           float={
             !opened ? null :
-              <div
-                ref="menu"
-                onMouseEnter={()=>this._mouseEnterMenu()}
-                >
-                {menu}
-              </div>
+              <MenuListInspector
+                onLeftPushed={e => {
+                  console.log('left pushed', e);
+                  e.stopPropagation();
+                  e.preventDefault();
+                  this.close();
+                }}
+              >
+                <div
+                  ref="menu"
+                  onMouseEnter={()=>this._mouseEnterMenu()}
+                  >
+                  {menu}
+                </div>
+              </MenuListInspector>
           }
           />
       </MenuListItem>

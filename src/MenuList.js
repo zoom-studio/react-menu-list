@@ -363,9 +363,7 @@ export default class MenuList extends React.Component {
 
   render() {
     return (
-      <div
-        onMouseDown={e=>e.preventDefault()}
-      >
+      <div onMouseDown={e=>e.preventDefault()}>
         {this.props.children}
       </div>
     );

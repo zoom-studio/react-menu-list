@@ -42,7 +42,7 @@ export default class Example extends React.Component {
             same part of the screen.
           </p>
           <div>
-            TODO:{' '}
+            MenuButton example<br/>
             <MenuButton
               menu={
                 <Dropdown>
@@ -80,11 +80,13 @@ export default class Example extends React.Component {
             </MenuButton>
           </div>
           <div>
+            AutoComplete example<br/>
             <AutoComplete
               defaultValue="M"
               items={[
                 'Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn',
-                'Uranus', 'Neptune', 'Ceres', 'Pluto', 'Eris'
+                'Uranus', 'Neptune',
+                {title: 'Dwarf Planets', items: ['Ceres', 'Pluto', 'Eris']}
               ]}
             />
           </div>

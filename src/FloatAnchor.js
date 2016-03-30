@@ -23,17 +23,19 @@ export default class FloatAnchor extends React.Component {
   };
 
   _portal: ?HTMLElement;
+  _isRenderingFloat: boolean = false;
+  _shouldRepositionOnFloatRender: boolean = false;
   _portalRemoval: Object = kefirBus();
   _stopper: Object = kefirBus();
 
   componentDidMount() {
-    this._updateFloat();
+    this._updateFloat(this.props);
   }
 
-  componentDidUpdate(prevProps: Props) {
-    let forceReposition = !isEqual(prevProps.options, this.props.options);
-    if (forceReposition || prevProps.float !== this.props.float) {
-      this._updateFloat(forceReposition);
+  componentWillReceiveProps(newProps: Props) {
+    let forceReposition = !isEqual(newProps.options, this.props.options);
+    if (forceReposition || newProps.float !== this.props.float) {
+      this._updateFloat(newProps, forceReposition);
     }
   }
 
@@ -41,8 +43,8 @@ export default class FloatAnchor extends React.Component {
     this._stopper.emit(null);
   }
 
-  _updateFloat(forceReposition: boolean=false) {
-    const {float} = this.props;
+  _updateFloat(props: Props, forceReposition: boolean=false) {
+    const {float} = props;
 
     if (float) {
       let shouldReposition = forceReposition;
@@ -70,14 +72,19 @@ export default class FloatAnchor extends React.Component {
             this.reposition();
           });
       }
+
+      this._isRenderingFloat = true;
       (ReactDOM:any).unstable_renderSubtreeIntoContainer(
         this,
         float,
         this._portal,
-        shouldReposition ?
-          () => {
+        () => {
+          this._isRenderingFloat = false;
+          if (this._shouldRepositionOnFloatRender || shouldReposition) {
+            this._shouldRepositionOnFloatRender = false;
             this.reposition();
-          } : null
+          }
+        }
       );
     } else {
       if (this._portal) {
@@ -87,6 +94,10 @@ export default class FloatAnchor extends React.Component {
   }
 
   reposition() {
+    if (this._isRenderingFloat) {
+      this._shouldRepositionOnFloatRender = true;
+      return;
+    }
     const portal = this._portal;
     if (portal) {
       containByScreen(portal, findDOMNode(this), this.props.options || {});

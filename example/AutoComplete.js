@@ -7,12 +7,14 @@ import {
 } from '../src';
 import type {Options as PositionOptions} from 'contain-by-screen';
 
+type Item = string|{title:string,items:Array<Item>};
+
 type Props = {
   className?: ?string;
   style?: ?Object;
   positionOptions: PositionOptions;
   defaultValue: string;
-  items: Array<string>;
+  items: Array<Item>;
 };
 
 type State = {
@@ -67,15 +69,63 @@ export default class AutoComplete extends React.Component {
     this.close();
   }
 
+  componentDidUpdate(prevProps: Props, prevState: State) {
+    if (prevState.value !== this.state.value) {
+      this.refs.floatanchor.reposition();
+    }
+  }
+
   render() {
     const {className, style, positionOptions, items} = this.props;
     const {value, opened} = this.state;
+
+    function filterItems(items: Array<Item>): Array<Item> {
+      return items.map(item => {
+        if (typeof item === 'string') {
+          return item.toLowerCase().startsWith(value.toLowerCase()) ? item : (null:any);
+        } else {
+          const subItems = filterItems(item.items);
+          return subItems.length ? {title: item.title, items: subItems} : (null:any);
+        }
+      }).filter(Boolean);
+    }
+
+    const makeElements = item => (
+      typeof item === 'string' ?
+        <MenuListItem
+          highlightedStyle={{background: 'gray'}}
+          onItemChosen={() => this.setState({value: (item: any)})}
+          key={item}
+        >
+          {item}
+        </MenuListItem>
+      :
+        <SubMenuItem
+          highlightedStyle={{background: 'gray'}}
+          key={item.title}
+          menu={
+            <Dropdown>
+              <MenuList>
+                {item.items.map(makeElements)}
+              </MenuList>
+            </Dropdown>
+          }
+        >
+          {item.title} ►
+        </SubMenuItem>
+    );
+
+    const filteredItems = filterItems(items);
+    const itemElements = filteredItems.map(makeElements);
+
     return (
       <FloatAnchor
+        ref="floatanchor"
         options={positionOptions}
         anchor={
           <input
             type="text"
+            ref="text"
             className={className}
             style={style}
             value={value}
@@ -83,48 +133,26 @@ export default class AutoComplete extends React.Component {
             onBlur={()=>this.close()}
             onFocus={()=>this.open()}
             onKeyDown={e=>{
-              if (e.key === 'Escape' && opened) {
-                this.close();
-                e.preventDefault();
-                e.stopPropagation();
+              if (opened) {
+                if (e.key === 'Escape') {
+                  this.close();
+                  e.preventDefault();
+                  e.stopPropagation();
+                }
+              } else {
+                this.open();
               }
             }}
           />
         }
         float={
-          !opened ? null :
+          !(opened && filteredItems.length) ? null :
             <MenuListInspector
               onItemChosen={() => this.close()}
             >
               <Dropdown>
                 <MenuList>
-                  {items.map(item =>
-                    <MenuListItem
-                      highlightedStyle={{background: 'gray'}}
-                      key={item}
-                    >
-                      {item}
-                    </MenuListItem>
-                  )}
-                  <SubMenuItem
-                    highlightedStyle={{background: 'gray'}}
-                    menu={
-                      <Dropdown>
-                        <MenuList>
-                          <MenuListItem
-                            highlightedStyle={{background: 'gray'}}>
-                            a
-                          </MenuListItem>
-                          <MenuListItem
-                            highlightedStyle={{background: 'gray'}}>
-                            b
-                          </MenuListItem>
-                        </MenuList>
-                      </Dropdown>
-                    }
-                    >
-                    More ►
-                  </SubMenuItem>
+                  {itemElements}
                 </MenuList>
               </Dropdown>
             </MenuListInspector>

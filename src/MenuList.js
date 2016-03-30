@@ -171,10 +171,14 @@ export default class MenuList extends React.Component {
             const i = this._listItems.indexOf(item);
             if (i < 0) throw new Error('Already unregistered MenuListItem');
             if (i === this._naturalHighlightedIndex) {
-              this._naturalHighlight(null, true);
+              this._naturalHighlightedIndex = null;
+            } else if (this._naturalHighlightedIndex != null && i < this._naturalHighlightedIndex) {
+              this._naturalHighlightedIndex--;
             }
             if (i === this._lockedHighlightedIndex) {
-              this._lockHighlight(null);
+              this._lockedHighlightedIndex = null;
+            } else if (this._lockedHighlightedIndex != null && i < this._lockedHighlightedIndex) {
+              this._lockedHighlightedIndex--;
             }
             if (i === this._keyboardTakenByIndex) {
               this._keyboardTakenByIndex = null;

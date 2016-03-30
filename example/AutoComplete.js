@@ -140,7 +140,9 @@ export default class AutoComplete extends React.Component {
                   e.stopPropagation();
                 }
               } else {
-                this.open();
+                if (e.key !== 'Enter') {
+                  this.open();
+                }
               }
             }}
           />

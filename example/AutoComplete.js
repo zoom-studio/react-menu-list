@@ -1,7 +1,10 @@
 /* @flow */
 
 import React, {PropTypes} from 'react';
-import {Dropdown, FloatAnchor, MenuList, MenuListItem} from '../src';
+import {
+  Dropdown, FloatAnchor, MenuList, MenuListItem, MenuListInspector,
+  SubMenuItem
+} from '../src';
 import type {Options as PositionOptions} from 'contain-by-screen';
 
 type Props = {
@@ -90,20 +93,41 @@ export default class AutoComplete extends React.Component {
         }
         float={
           !opened ? null :
-            <Dropdown>
-              <MenuList
-                onItemChosen={() => this.close()}
-              >
-                {items.map(item =>
-                  <MenuListItem
+            <MenuListInspector
+              onItemChosen={() => this.close()}
+            >
+              <Dropdown>
+                <MenuList>
+                  {items.map(item =>
+                    <MenuListItem
+                      highlightedStyle={{background: 'gray'}}
+                      key={item}
+                    >
+                      {item}
+                    </MenuListItem>
+                  )}
+                  <SubMenuItem
                     highlightedStyle={{background: 'gray'}}
-                    key={item}
-                  >
-                    {item}
-                  </MenuListItem>
-                )}
-              </MenuList>
-            </Dropdown>
+                    menu={
+                      <Dropdown>
+                        <MenuList>
+                          <MenuListItem
+                            highlightedStyle={{background: 'gray'}}>
+                            a
+                          </MenuListItem>
+                          <MenuListItem
+                            highlightedStyle={{background: 'gray'}}>
+                            b
+                          </MenuListItem>
+                        </MenuList>
+                      </Dropdown>
+                    }
+                    >
+                    More ►
+                  </SubMenuItem>
+                </MenuList>
+              </Dropdown>
+            </MenuListInspector>
         }
       />
     );

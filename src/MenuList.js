@@ -38,7 +38,8 @@ export type MenuListItemControl = {
 export type MenuListContext = {
   registerItem(
     props: MenuListItemProps,
-    control: MenuListItemControl
+    control: MenuListItemControl,
+    el: HTMLElement
   ): MenuListItemHandle;
 };
 
@@ -77,14 +78,23 @@ export default class MenuList extends React.Component {
 
   getChildContext(): Object {
     const menuList: MenuListContext = {
-      registerItem: (props, control) => {
-        const item = {props, control};
+      registerItem: (props, control, el) => {
+        const item = {props, control, el};
 
         const register = () => {
-          const i = item.props.index == null ? -1 : findIndex(
-            this._listItems,
-            _item => _item.props.index != null && item.props.index < _item.props.index
-          );
+          let i = -1;
+          if (item.props.index == null) {
+            i = findIndex(
+              this._listItems,
+              _item =>
+                (item.el.compareDocumentPosition(_item.el)&Node.DOCUMENT_POSITION_PRECEDING) === 0
+            );
+          } else {
+            i = findIndex(
+              this._listItems,
+              _item => _item.props.index != null && item.props.index < _item.props.index
+            );
+          }
           if (i < 0) {
             this._listItems.push(item);
           } else {

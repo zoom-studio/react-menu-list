@@ -127,7 +127,7 @@ export default class MenuListItem extends React.Component {
           break;
         }
       }
-    });
+    }, findDOMNode(this));
   }
 
   componentWillUnmount() {

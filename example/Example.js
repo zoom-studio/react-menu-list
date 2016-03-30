@@ -3,6 +3,7 @@
 
 import React, {PropTypes} from 'react';
 import {MenuList, MenuListItem, MenuButton, Dropdown, SubMenuItem} from '../src';
+import AutoComplete from './AutoComplete';
 
 function LI(props) {
   return (
@@ -79,7 +80,13 @@ export default class Example extends React.Component {
             </MenuButton>
           </div>
           <div>
-            <textarea defaultValue="fooobar" />
+            <AutoComplete
+              defaultValue="M"
+              items={[
+                'Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn',
+                'Uranus', 'Neptune', 'Ceres', 'Pluto', 'Eris'
+              ]}
+            />
           </div>
         </div>
       </div>

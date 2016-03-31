@@ -2,9 +2,10 @@
 
 import React, {PropTypes} from 'react';
 import {
-  Dropdown, FloatAnchor, MenuList, MenuListItem, MenuListInspector,
+  Dropdown, MenuList, MenuListItem, MenuListInspector,
   SubMenuItem
 } from '../src';
+import FloatAnchor from 'react-float-anchor';
 import type {Options as PositionOptions} from 'contain-by-screen';
 
 type Item = string|{title:string,items:Array<Item>};

@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {PropTypes} from 'react';
-import FloatAnchor from './FloatAnchor';
+import FloatAnchor from 'react-float-anchor';
 import MenuListInspector from './MenuListInspector';
 
 type State = {

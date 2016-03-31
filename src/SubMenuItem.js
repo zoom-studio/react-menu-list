@@ -6,7 +6,7 @@ import React, {PropTypes} from 'react';
 import pointRectDistance from './lib/pointRectDistance';
 
 import MenuListInspector from './MenuListInspector';
-import FloatAnchor from './FloatAnchor';
+import FloatAnchor from 'react-float-anchor';
 import MenuListItem from './MenuListItem';
 
 import type MenuEvent from './events/MenuEvent';

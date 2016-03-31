@@ -48,10 +48,10 @@ export default class Example extends React.Component {
                 <Dropdown>
                   <MenuList>
                     <LI>Mercury</LI>
-                    <LI>Venus</LI>
                     <div style={{
-                      height: '40px', overflowY: 'scroll', border: '1px solid gray'
+                      height: '50px', overflowY: 'scroll', border: '1px solid gray'
                     }}>
+                      <LI>Venus</LI>
                       <LI>Earth</LI>
                       <LI>Mars</LI>
                       <LI>Jupiter</LI>
@@ -59,6 +59,7 @@ export default class Example extends React.Component {
                       <LI>Uranus</LI>
                     </div>
                     <LI>Neptune</LI>
+                    <hr/>
                     <SubMenuItem
                       highlightedStyle={{background: 'gray'}}
                       menu={

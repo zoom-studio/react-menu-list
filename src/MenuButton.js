@@ -72,7 +72,9 @@ export default class MenuButton extends React.Component {
                 e.stopPropagation();
               }
             }}
-            >
+            aria-haspopup={true}
+            aria-expanded={opened}
+          >
             {children}
           </button>
         }

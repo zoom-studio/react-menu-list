@@ -181,6 +181,8 @@ export default class SubMenuItem extends React.Component {
             this.refs.menuInspector.moveCursor('down');
           }
         }}
+        aria-haspopup={true}
+        aria-expanded={opened}
       >
         <FloatAnchor
           options={positionOptions}

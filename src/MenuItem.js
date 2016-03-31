@@ -53,7 +53,10 @@ export default class MenuItem extends React.Component {
     onUpPushed: PropTypes.func,
     onDownPushed: PropTypes.func,
 
-    children: PropTypes.node
+    children: PropTypes.node,
+
+    'aria-haspopup': PropTypes.bool,
+    'aria-expanded': PropTypes.bool
   };
 
   static contextTypes = {
@@ -160,6 +163,9 @@ export default class MenuItem extends React.Component {
         onClick={()=>this._menuListHandle.itemChosen()}
         onMouseEnter={() => this.highlight(false)}
         onMouseLeave={onMouseLeave || (() => this.unhighlight())}
+        role="menuitem"
+        aria-haspopup={this.props['aria-haspopup']}
+        aria-expanded={this.props['aria-expanded']}
         >
         {children}
       </div>

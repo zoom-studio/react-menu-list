@@ -29,14 +29,15 @@ export default class Example extends React.Component {
             This is a demonstration of the <a href="https://github.com/StreakYC/react-menu-list">react-menu-list</a> library.
           </p>
           <p>
-            Each item has a drag handle visible when the user hovers over them.
-            The items may have any height, and can each define their own height
-            to use while being dragged.
+            The MenuButton dropdown can have arbitrary elements inside of it.
+            Here, the dropdown contains some menu items nested inside of a
+            scrollable section.
           </p>
           <p>
-            When the list is reordered, the page will
-            be scrolled if possible to keep the moved item visible and on the
-            same part of the screen.
+            The autocomplete example here shows a dropdown while it's focused,
+            and it filters the dropdown options based on what's typed. The
+            dropdown is usable by mouse or arrow keys. The autocomplete
+            dropdown has a submenu to show that they still work here.
           </p>
           <div>
             MenuButton example<br/>

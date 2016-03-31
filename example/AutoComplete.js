@@ -2,7 +2,7 @@
 
 import React, {PropTypes} from 'react';
 import {
-  Dropdown, MenuList, MenuListItem, MenuListInspector,
+  Dropdown, MenuList, MenuItem, MenuListInspector,
   SubMenuItem
 } from '../src';
 import FloatAnchor from 'react-float-anchor';
@@ -23,6 +23,9 @@ type State = {
   value: string;
 };
 
+// This is an example autocomplete widget built using the library. It's not
+// very generic; you might want to copy this into your application and
+// customize it for your uses and to match your application's styling.
 export default class AutoComplete extends React.Component {
   static propTypes = {
     className: PropTypes.string,
@@ -93,13 +96,13 @@ export default class AutoComplete extends React.Component {
 
     const makeElements = item => (
       typeof item === 'string' ?
-        <MenuListItem
+        <MenuItem
           highlightedStyle={{background: 'gray'}}
           onItemChosen={() => this.setState({value: (item: any)})}
           key={item}
         >
           {item}
-        </MenuListItem>
+        </MenuItem>
       :
         <SubMenuItem
           highlightedStyle={{background: 'gray'}}

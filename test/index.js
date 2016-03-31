@@ -6,7 +6,7 @@ import sinon from 'sinon';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
-import {MenuList, MenuListItem} from '../src';
+import {MenuList, MenuItem} from '../src';
 
 describe('MenuList', function() {
   it('cursor movement works', sinon.test(function() {
@@ -17,16 +17,16 @@ describe('MenuList', function() {
     const mountPoint = document.createElement('div');
     const root: MenuList = (ReactDOM.render(
       <MenuList>
-        <MenuListItem onHighlightChange={sinon.spy()}>A</MenuListItem>
+        <MenuItem onHighlightChange={sinon.spy()}>A</MenuItem>
         <div>
-          <MenuListItem onHighlightChange={sinon.spy()}>B</MenuListItem>
+          <MenuItem onHighlightChange={sinon.spy()}>B</MenuItem>
         </div>
-        <MenuListItem onHighlightChange={sinon.spy()}>C</MenuListItem>
+        <MenuItem onHighlightChange={sinon.spy()}>C</MenuItem>
       </MenuList>,
       mountPoint
     ): any);
 
-    const menuListItems = TestUtils.scryRenderedComponentsWithType(root, MenuListItem);
+    const menuListItems = TestUtils.scryRenderedComponentsWithType(root, MenuItem);
 
     assert.deepEqual(
       menuListItems.map(c=>c.props.children),

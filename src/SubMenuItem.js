@@ -7,7 +7,7 @@ import pointRectDistance from './lib/pointRectDistance';
 
 import MenuListInspector from './MenuListInspector';
 import FloatAnchor from 'react-float-anchor';
-import MenuListItem from './MenuListItem';
+import MenuItem from './MenuItem';
 
 import type MenuEvent from './events/MenuEvent';
 import type ChosenEvent from './events/ChosenEvent';
@@ -54,19 +54,19 @@ export default class SubMenuItem extends React.Component {
   }
 
   open() {
-    this.refs.menuListItem.lockHighlight();
+    this.refs.menuItem.lockHighlight();
     if (this.state.opened) return;
     if (this.props.onWillOpen) this.props.onWillOpen();
     this.setState({opened: true}, this.props.onDidOpen);
-    this.refs.menuListItem.takeKeyboard();
+    this.refs.menuItem.takeKeyboard();
   }
 
   close() {
     if (!this.state.opened) return;
     if (this.props.onWillClose) this.props.onWillClose();
     this.setState({opened: false});
-    this.refs.menuListItem.releaseKeyboard();
-    this.refs.menuListItem.unlockHighlight();
+    this.refs.menuItem.releaseKeyboard();
+    this.refs.menuItem.unlockHighlight();
   }
 
   toggle() {
@@ -138,13 +138,13 @@ export default class SubMenuItem extends React.Component {
       .takeUntilBy(this._stopper)
       .onValue(() => {
         this.close();
-        this.refs.menuListItem.unhighlight();
+        this.refs.menuItem.unhighlight();
       });
   }
 
   _mouseEnterMenu() {
     this._resetMouseLeaveWatcher.emit(null);
-    this.refs.menuListItem.unlockHighlight();
+    this.refs.menuItem.unlockHighlight();
   }
 
   render() {
@@ -156,8 +156,8 @@ export default class SubMenuItem extends React.Component {
     const {opened} = this.state;
 
     return (
-      <MenuListItem
-        ref="menuListItem"
+      <MenuItem
+        ref="menuItem"
         index={index}
         style={style}
         className={className}
@@ -208,7 +208,7 @@ export default class SubMenuItem extends React.Component {
               </MenuListInspector>
           }
           />
-      </MenuListItem>
+      </MenuItem>
     );
   }
 }

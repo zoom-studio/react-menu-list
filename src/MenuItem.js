@@ -4,7 +4,7 @@ import React, {PropTypes} from 'react';
 import {findDOMNode} from 'react-dom';
 
 import type MenuEvent from './events/MenuEvent';
-import type {MenuListContext, MenuListItemHandle} from './MenuList';
+import type {MenuListContext, MenuListHandle} from './MenuList';
 import type {Direction, Rect} from './types';
 
 type State = {
@@ -31,8 +31,8 @@ export type Props = {
   children: any;
 };
 
-export default class MenuListItem extends React.Component {
-  _menuListHandle: MenuListItemHandle;
+export default class MenuItem extends React.Component {
+  _menuListHandle: MenuListHandle;
   state: State = {
     highlighted: false
   };

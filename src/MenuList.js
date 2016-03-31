@@ -9,12 +9,12 @@ import fromEventsCapture from './lib/fromEventsCapture';
 
 import MenuEvent from './events/MenuEvent';
 import ChosenEvent from './events/ChosenEvent';
-import type {Props as MenuListItemProps} from './MenuListItem';
+import type {Props as MenuItemProps} from './MenuItem';
 import type {MenuListInspectorContext} from './MenuListInspector';
 import type {Direction, Rect} from './types';
 
-// This type of object is given to a MenuListItem to talk to the MenuList.
-export type MenuListItemHandle = {
+// This type of object is given to a MenuItem to talk to the MenuList.
+export type MenuListHandle = {
   highlight(byKeyboard: boolean): void;
   unhighlight(): void;
   moveCursor(direction: Direction, prevCursorLocation: ?Rect): void;
@@ -23,12 +23,12 @@ export type MenuListItemHandle = {
   releaseKeyboard(): void;
   lockHighlight(): void;
   unlockHighlight(): void;
-  updateProps(props: MenuListItemProps): void;
+  updateProps(props: MenuItemProps): void;
   unregister(): void;
 };
 
-// This type of object is given to a MenuList to talk to a MenuListItem.
-export type MenuListItemControl = {
+// This type of object is given to a MenuList to talk to a MenuItem.
+export type MenuItemControl = {
   notifyHighlighted(highlighted: boolean, byKeyboard: ?boolean): void;
   notifyEvent(event: MenuEvent): void;
 };
@@ -37,10 +37,10 @@ export type MenuListItemControl = {
 // descendants.
 export type MenuListContext = {
   registerItem(
-    props: MenuListItemProps,
-    control: MenuListItemControl,
+    props: MenuItemProps,
+    control: MenuItemControl,
     el: HTMLElement
-  ): MenuListItemHandle;
+  ): MenuListHandle;
 };
 
 export default class MenuList extends React.Component {
@@ -55,8 +55,8 @@ export default class MenuList extends React.Component {
 
   _stopper: Object = kefirStopper();
   _listItems: Array<{
-    props: MenuListItemProps;
-    control: MenuListItemControl;
+    props: MenuItemProps;
+    control: MenuItemControl;
   }> = [];
 
   _naturalHighlightedIndex: ?number;
@@ -113,15 +113,15 @@ export default class MenuList extends React.Component {
 
         register();
 
-        const menuListItemHandle: MenuListItemHandle = {
+        const menuListHandle: MenuListHandle = {
           highlight: (byKeyboard: boolean) => {
             const i = this._listItems.indexOf(item);
-            if (i < 0) throw new Error('Already unregistered MenuListItem');
+            if (i < 0) throw new Error('Already unregistered MenuItem');
             this._naturalHighlight(i, byKeyboard);
           },
           unhighlight: () => {
             const i = this._listItems.indexOf(item);
-            if (i < 0) throw new Error('Already unregistered MenuListItem');
+            if (i < 0) throw new Error('Already unregistered MenuItem');
             if (this._naturalHighlightedIndex === i) {
               this._naturalHighlight(null, false);
             }
@@ -131,24 +131,24 @@ export default class MenuList extends React.Component {
           },
           takeKeyboard: () => {
             const i = this._listItems.indexOf(item);
-            if (i < 0) throw new Error('Already unregistered MenuListItem');
+            if (i < 0) throw new Error('Already unregistered MenuItem');
             this._keyboardTakenByIndex = i;
           },
           releaseKeyboard: () => {
             const i = this._listItems.indexOf(item);
-            if (i < 0) throw new Error('Already unregistered MenuListItem');
+            if (i < 0) throw new Error('Already unregistered MenuItem');
             if (this._keyboardTakenByIndex === i) {
               this._keyboardTakenByIndex = null;
             }
           },
           lockHighlight: () => {
             const i = this._listItems.indexOf(item);
-            if (i < 0) throw new Error('Already unregistered MenuListItem');
+            if (i < 0) throw new Error('Already unregistered MenuItem');
             this._lockHighlight(i);
           },
           unlockHighlight: () => {
             const i = this._listItems.indexOf(item);
-            if (i < 0) throw new Error('Already unregistered MenuListItem');
+            if (i < 0) throw new Error('Already unregistered MenuItem');
             if (this._lockedHighlightedIndex === i) {
               this._lockHighlight(null);
             }
@@ -156,9 +156,9 @@ export default class MenuList extends React.Component {
           moveCursor: (direction: Direction, prevCursorLocation: ?Rect) => {
             this.moveCursor(direction, prevCursorLocation);
           },
-          updateProps: (newProps: MenuListItemProps) => {
+          updateProps: (newProps: MenuItemProps) => {
             if (item.props.index !== newProps.index) {
-              menuListItemHandle.unregister();
+              menuListHandle.unregister();
               props = newProps;
               item.props = newProps;
               register();
@@ -169,7 +169,7 @@ export default class MenuList extends React.Component {
           },
           unregister: () => {
             const i = this._listItems.indexOf(item);
-            if (i < 0) throw new Error('Already unregistered MenuListItem');
+            if (i < 0) throw new Error('Already unregistered MenuItem');
             if (i === this._naturalHighlightedIndex) {
               this._naturalHighlightedIndex = null;
             } else if (this._naturalHighlightedIndex != null && i < this._naturalHighlightedIndex) {
@@ -188,7 +188,7 @@ export default class MenuList extends React.Component {
             this._listItems.splice(i, 1);
           }
         };
-        return menuListItemHandle;
+        return menuListHandle;
       }
     };
     return {menuList};
@@ -204,7 +204,7 @@ export default class MenuList extends React.Component {
     const el = findDOMNode(this);
 
     // The only things that should receive keydown/keypress events before us
-    // are our children. This allows a MenuListItem to contain a text input
+    // are our children. This allows a MenuItem to contain a text input
     // which selectively stops propagation on key events for example.
     Kefir.merge([
       Kefir.merge([
@@ -274,7 +274,7 @@ export default class MenuList extends React.Component {
     }
   }
 
-  _dispatchEvent(control: ?MenuListItemControl, event: MenuEvent) {
+  _dispatchEvent(control: ?MenuItemControl, event: MenuEvent) {
     if (control) {
       control.notifyEvent(event);
       if (event.cancelBubble) return;
@@ -309,7 +309,7 @@ export default class MenuList extends React.Component {
     const {onLeftPushed, onRightPushed, onUpPushed, onDownPushed} = this.props; // eslint-disable-line no-unused-vars
 
     // TODO When an arrow is pressed and something is highlighted, first check
-    // the MenuListItem for the appropriate callback, check whether we can move
+    // the MenuItem for the appropriate callback, check whether we can move
     // the selection in that direction, and if those fail, try to hand the
     // event off to a parent MenuList if present.
 

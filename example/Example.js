@@ -1,29 +1,26 @@
 /* @flow */
-/* eslint-disable no-console */
+/* eslint-disable no-console, react/prop-types */
 
-import React, {PropTypes} from 'react';
-import {MenuList, MenuListItem, MenuButton, Dropdown, SubMenuItem} from '../src';
+import React from 'react';
+import {MenuList, MenuItem, MenuButton, Dropdown, SubMenuItem} from '../src';
 import AutoComplete from './AutoComplete';
 
+// MenuItems don't come with any styling by default! You'll probably want to
+// make your own component which wraps them and adds your own application's
+// style to them like this.
 function LI(props) {
   return (
-    <MenuListItem
+    <MenuItem
       highlightedStyle={{background: 'gray'}}
       onItemChosen={e => {
         console.log(`selected ${props.children}, byKeyboard: ${e.byKeyboard}`);
       }}
-      >
-      {props.children}
-    </MenuListItem>
+      {...props}
+    />
   );
 }
-LI.propTypes = {
-  children: PropTypes.node
-};
 
 export default class Example extends React.Component {
-  state: Object = {
-  };
   render() {
     return (
       <div className="main">

@@ -157,8 +157,9 @@ A SubMenuItem has the following public methods:
 ### MenuListInspector
 
 This component lets you manipulate and listen to events from descendant
-MenuList elements. The primary use of this component is to allow a MenuButton
-to detect when a MenuList provided to it has been clicked on.
+MenuList elements. See the Events section for more information. This component
+is used by MenuButton to detect when a MenuList provided to it has been clicked
+on, and by SubMenuItem to trigger highlighting its submenu.
 
 A MenuListInspector supports the following props:
 
@@ -195,10 +196,9 @@ the underlying div.
 
 ## Events
 
-Many callback props are called with a `MenuEvent` object. Additionally,
-MenuEvents bubble between components. A MenuEvent is first emitted on the
-originating MenuItem, then the parent MenuList, and then on each
-MenuListInspector going upwards.
+Many callback props are called with a `MenuEvent` object. MenuEvents bubble
+between components. A MenuEvent is first emitted on the originating MenuItem,
+then the parent MenuList, and then on each MenuListInspector going upwards.
 
 A MenuEvent object has a `type` string property, and `preventDefault` and
 `stopPropagation` methods. Calling the `preventDefault` or `stopPropagation`

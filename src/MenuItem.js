@@ -12,21 +12,20 @@ type State = {
 };
 
 export type Props = {
-  index?: ?number;
-
-  className?: ?string;
-  highlightedClassName?: ?string;
-  style?: ?Object;
-  highlightedStyle?: ?Object;
-
-  onMouseLeave?: ?Function;
-
   onItemChosen?: ?Function;
   onHighlightChange?: ?Function;
   onLeftPushed?: ?Function;
   onRightPushed?: ?Function;
-  onUpPushed?: ?Function;
-  onDownPushed?: ?Function;
+  // onUpPushed?: ?Function;
+  // onDownPushed?: ?Function;
+
+  className?: ?string;
+  style?: ?Object;
+  highlightedClassName?: ?string;
+  highlightedStyle?: ?Object;
+
+  index?: ?number;
+  onMouseLeave?: ?Function;
 
   children: any;
 };
@@ -37,21 +36,20 @@ export default class MenuItem extends React.Component {
     highlighted: false
   };
   static propTypes = {
-    index: PropTypes.number,
-
-    className: PropTypes.string,
-    highlightedClassName: PropTypes.string,
-    style: PropTypes.object,
-    highlightedStyle: PropTypes.object,
-
-    onMouseLeave: PropTypes.func,
-
     onItemChosen: PropTypes.func,
     onHighlightChange: PropTypes.func,
     onLeftPushed: PropTypes.func,
     onRightPushed: PropTypes.func,
-    onUpPushed: PropTypes.func,
-    onDownPushed: PropTypes.func,
+    // onUpPushed: PropTypes.func,
+    // onDownPushed: PropTypes.func,
+
+    className: PropTypes.string,
+    style: PropTypes.object,
+    highlightedClassName: PropTypes.string,
+    highlightedStyle: PropTypes.object,
+
+    index: PropTypes.number,
+    onMouseLeave: PropTypes.func,
 
     children: PropTypes.node,
 
@@ -116,12 +114,12 @@ export default class MenuItem extends React.Component {
         case 'chosen':
           if (this.props.onItemChosen) this.props.onItemChosen(event);
           break;
-        case 'up':
-          if (this.props.onUpPushed) this.props.onUpPushed(event);
-          break;
-        case 'down':
-          if (this.props.onDownPushed) this.props.onDownPushed(event);
-          break;
+        // case 'up':
+        //   if (this.props.onUpPushed) this.props.onUpPushed(event);
+        //   break;
+        // case 'down':
+        //   if (this.props.onDownPushed) this.props.onDownPushed(event);
+        //   break;
         case 'left':
           if (this.props.onLeftPushed) this.props.onLeftPushed(event);
           break;

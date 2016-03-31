@@ -48,8 +48,8 @@ export default class MenuList extends React.Component {
     onItemChosen: PropTypes.func,
     onLeftPushed: PropTypes.func,
     onRightPushed: PropTypes.func,
-    onUpPushed: PropTypes.func,
-    onDownPushed: PropTypes.func,
+    // onUpPushed: PropTypes.func,
+    // onDownPushed: PropTypes.func,
     children: PropTypes.node
   };
 
@@ -306,16 +306,8 @@ export default class MenuList extends React.Component {
       return;
     }
 
-    const {onLeftPushed, onRightPushed, onUpPushed, onDownPushed} = this.props; // eslint-disable-line no-unused-vars
-
-    // TODO When an arrow is pressed and something is highlighted, first check
-    // the MenuItem for the appropriate callback, check whether we can move
-    // the selection in that direction, and if those fail, try to hand the
-    // event off to a parent MenuList if present.
-
     const visibleHighlightedIndex = this._getVisibleHighlightedIndex();
 
-    // Relation between keys and highlight locking:
     // enter, left, right activate for the current visibly selected item.
     // up and down de-activate any locks in place, so that they act from the last
     // naturally-selected item.

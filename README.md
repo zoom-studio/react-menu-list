@@ -44,30 +44,175 @@ You can build the example with live editing enabled (using
 npm run example-watch
 ```
 
-## Component Overview
+## Components
 
 This project exports the following components:
 
-Core
-* `MenuList`
-* `MenuItem`
-* `SubMenuItem`
-* `MenuListInspector`: This component lets you manipulate and listen to events
- from descendant MenuList elements. The primary use of this component is to
- allow a MenuButton to detect when a MenuList provided to it has been clicked
- on.
+### MenuList
 
-Application
-* `MenuButton`
-* `Dropdown`
+This component defines a menu suitable for a dropdown. Whenever a MenuList is
+rendered on the page, it will listen for keyboard button presses such as enter,
+up, and down.
 
-## MenuList
+A MenuList supports the following props:
 
-*TODO*
+* `onItemChosen`: This is an optional function which is called when an item in
+ the menu is chosen by the user. The callback is passed a `ChosenEvent` object.
+ This event object does not identify which item was chosen by the user. Use the
+ MenuItem's `onItemChosen` prop instead if you want to know which item was
+ picked.
+* `onLeftPushed`, `onRightPushed`: These are optional functions which are
+ called when the user presses the left or right arrow key while the menu is
+ open. The callback is passed a `MenuEvent` object.
 
-## MenuList
+A MenuList has the following public methods:
 
-*TODO*
+* `moveCursor(direction: Direction, prevCursorLocation: ?Rect)`: Move the
+ cursor in the menu. `direction` must be the the string "up", "down", "left",
+ or "right". `prevCursorLocation` may be an object with `top`, `bottom`,
+ `left`, and `right` number properties, and it will be passed in the resulting
+ HighlightEvent.
+
+### MenuItem
+
+This component defines a selectable item in a MenuList. It should only be used
+as a descendant of a MenuList. It does not need to be a direct child of the
+MenuList component.
+
+A MenuItem supports the following props:
+
+* `onItemChosen`: This is an optional function which is called when the item is
+ chosen by the user. The callback is passed a `ChosenEvent` object.
+* `onHighlightChange`: This is an optional function which is called when the
+ item is highlighted or unhighlighted by the user. The callback is passed a
+ boolean representing whether the item is highlighted now, and an object with
+ `byKeyboard` boolean property.
+* `onLeftPushed`, `onRightPushed`: These are optional functions which are
+ called when the user presses the left or right arrow key while the menu item
+ is highlighted. The callback is passed a `MenuEvent` object.
+
+* `className`, `style`: These are optional and are passed as props to the
+ MenuItem's underlying div.
+* `highlightedClassName`, `highlightedStyle`: These are optional and are
+ combined with the className and style props and passed to the underlying div
+ when the item is highlighted.
+
+* `index`: This an optional number which overrides the menu item's index in the
+ MenuList for keyboard control purposes. The order of menu items is normally
+ determined by their position in the DOM when mounted. This property should be
+ unnecessary unless you're reordering mounted menu items.
+* `onMouseLeave`: This is an optional function which overrides the MenuItem's
+ default onMouseLeave event handler, which is in charge of unhighlighting the
+ menu item. Unless you're reimplementing SubMenuItem, you probably won't need
+ this.
+
+A MenuItem has the following public methods:
+
+* `takeKeyboard()`: This causes the parent MenuList to stop listening for
+ keyboard events until `releaseKeyboard()` is called or this menu item is
+ removed. Used by SubMenuItem when a dropdown menu is opened.
+* `releaseKeyboard()`: Cancels a previous `takeKeyboard()` call on this item.
+* `lockHighlight()`: This prevents other items in the MenuList from becoming
+ highlighted by the mouse until `unlockHighlight()` is called or this menu item
+ is removed. Used by SubMenuItem to provide a grace period before it becomes
+ unhighlighted and closes its dropdown.
+* `unlockHighlight()`: Cancels a previous `lockHighlight()` call on this item.
+* `highlight(byKeyboard: boolean=true)`: Attempt to highlight the menu item.
+ If byKeyboard is false, then the attempt may not be successful if a highlight
+ lock is in place.
+* `unhighlight()`: Attempt to unhighlight the menu item.
+* `moveCursor(direction: Direction, prevCursorLocation: ?Rect)`: See
+ menuList.moveCursor.
+
+### SubMenuItem
+
+This component is similar to MenuItem, except that it defines a menu item that
+displays a dropdown when selected. The dropdown can have a nested MenuList.
+SubMenuItem automatically keeps the item selected and the dropdown open for a
+short grace period when the user moves the mouse off of the menu item if
+they're moving the mouse toward the dropdown.
+
+A SubMenuItem supports the following props:
+
+* `menu`: This is the React element to show as the dropdown when the submenu is
+ open.
+* `positionOptions`: This an optional object of options to control how the
+ dropdown is aligned to the menu item. The options are the same as those
+ supported by
+ [contain-by-screen (version ^1.0)](https://github.com/AgentME/contain-by-screen#readme).
+ This defaults to `{position:'right', vAlign:'top', hAlign: 'left'}`.
+* `onWillOpen`: This is an optional function called before the submenu opens.
+* `onDidOpen`: This is an optional function called after the submenu opened.
+* `onWillClose`: This is an optional function called before the submenu closes.
+* `className`, `style`, `highlightedClassName`, `highlightedStyle`, `index`,
+ `onItemChosen`, `onHighlightChange`: These props are all passed through to the
+ underlying MenuItem element.
+
+A SubMenuItem has the following public methods:
+
+* `open()`
+* `close()`
+* `toggle()`
+
+### MenuListInspector
+
+This component lets you manipulate and listen to events from descendant
+MenuList elements. The primary use of this component is to allow a MenuButton
+to detect when a MenuList provided to it has been clicked on.
+
+A MenuListInspector supports the following props:
+
+* `onItemChosen`, `onLeftPushed`, `onRightPushed`: These work the same as on
+ MenuList.
+
+A MenuListInspector has the following public methods:
+
+* `moveCursor(direction: Direction, prevCursorLocation: ?Rect)`: This calls
+ moveCursor on the first descendant MenuList, or throws an error if none are
+ found.
+
+### MenuButton
+
+This is a button which shows a dropdown when pressed. You can put a MenuList
+into the dropdown, and the MenuButton will close the dropdown once a menu item
+is chosen.
+
+A MenuButton supports the following props:
+
+* `menu`, `positionOptions`, `onWillOpen`, `onDidOpen`, `onWillClose`: These
+ work the same as the props on SubMenuItem.
+* `className`, `style`: These are passed to the button element.
+
+### Dropdown
+
+This is just a div with a bit of CSS on it to form the container for dropdown
+contents. It's provided for convenience for use with SubMenuItem and
+MenuButton. This component doesn't have any logic, so feel free to substitute
+it with a component with styling more specific to your application.
+
+This component supports no props besides `children`, which is passed through to
+the underlying div.
+
+## Events
+
+Many callback props are called with a `MenuEvent` object. Additionally,
+MenuEvents bubble between components. A MenuEvent is first emitted on the
+originating MenuItem, then the parent MenuList, and then on each
+MenuListInspector going upwards.
+
+A MenuEvent object has a `type` string property, and `preventDefault` and
+`stopPropagation` methods. Calling the `preventDefault` or `stopPropagation`
+methods will cause the same method to be triggered on the source DOM event
+object. Additionally, then `stopPropagation` method will stop the MenuEvent
+from bubbling up to the parent menu components.
+
+Some callback props are passed a `ChosenEvent` object, which extends the
+`MenuEvent` class with a `byKeyboard` boolean property.
+
+Some callback props are passed a `HighlightEvent` object, which extends the
+`MenuEvent` class with a `byKeyboard` boolean property and a
+`prevCursorLocation` property, which may be set to an
+`{top:number, bottom:number, left:number, right:number}` object.
 
 ## Types
 

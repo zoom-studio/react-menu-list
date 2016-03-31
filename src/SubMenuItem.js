@@ -18,24 +18,23 @@ type State = {
 
 export default class SubMenuItem extends React.Component {
   static propTypes = {
-    index: PropTypes.number,
-
-    className: PropTypes.string,
-    highlightedClassName: PropTypes.string,
-    style: PropTypes.object,
-    highlightedStyle: PropTypes.object,
-
+    menu: PropTypes.node,
     positionOptions: PropTypes.object,
-
-    onItemChosen: PropTypes.func,
-    onHighlightChange: PropTypes.func,
 
     onWillOpen: PropTypes.func,
     onDidOpen: PropTypes.func,
     onWillClose: PropTypes.func,
 
-    children: PropTypes.node,
-    menu: PropTypes.node
+    className: PropTypes.string,
+    style: PropTypes.object,
+    highlightedClassName: PropTypes.string,
+    highlightedStyle: PropTypes.object,
+    index: PropTypes.number,
+
+    onItemChosen: PropTypes.func,
+    onHighlightChange: PropTypes.func,
+
+    children: PropTypes.node
   };
 
   static defaultProps = {

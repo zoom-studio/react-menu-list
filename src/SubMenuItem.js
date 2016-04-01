@@ -80,14 +80,24 @@ export default class SubMenuItem extends React.Component {
     this._resetMouseLeaveWatcher.emit(null);
 
     if (highlighted && !event.byKeyboard) {
-      this.open();
+      const OPEN_DELAY = 200;
+
+      Kefir.later(OPEN_DELAY)
+        .takeUntilBy(this._resetMouseLeaveWatcher)
+        .takeUntilBy(this._stopper)
+        .onValue(() => {
+          this.open();
+        });
     } else if (!highlighted) {
       this.close();
     }
   }
 
   _onMouseLeaveItem(event: Object) {
-    if (!this.state.opened) return;
+    if (!this.state.opened) {
+      this.refs.menuItem.unhighlight();
+      return;
+    }
 
     // If the mouse isn't going toward the menu, then unhighlight ourself.
 

@@ -58,7 +58,7 @@ export default class Example extends React.Component {
                       <LI>Uranus</LI>
                     </div>
                     <LI>Neptune</LI>
-                    <hr/>
+                    <hr style={{margin: '1px 0'}} />
                     <SubMenuItem
                       style={{cursor: 'pointer', userSelect: 'none'}}
                       highlightedStyle={{background: 'gray'}}

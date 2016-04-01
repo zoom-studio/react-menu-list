@@ -11,6 +11,7 @@ import AutoComplete from './AutoComplete';
 function LI(props) {
   return (
     <MenuItem
+      style={{cursor: 'pointer', userSelect: 'none'}}
       highlightedStyle={{background: 'gray'}}
       onItemChosen={e => {
         console.log(`selected ${props.children}, byKeyboard: ${e.byKeyboard}`);
@@ -59,6 +60,7 @@ export default class Example extends React.Component {
                     <LI>Neptune</LI>
                     <hr/>
                     <SubMenuItem
+                      style={{cursor: 'pointer', userSelect: 'none'}}
                       highlightedStyle={{background: 'gray'}}
                       menu={
                         <Dropdown>

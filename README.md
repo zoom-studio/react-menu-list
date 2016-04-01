@@ -70,8 +70,8 @@ A MenuList has the following public methods:
 * `moveCursor(direction: Direction, prevCursorLocation: ?Rect)`: Move the
  cursor in the menu. `direction` must be the the string "up", "down", "left",
  or "right". `prevCursorLocation` may be an object with `top`, `bottom`,
- `left`, and `right` number properties, and it will be passed in the resulting
- HighlightEvent.
+ `left`, and `right` number properties, and it will be passed to the
+ onHighlightChange callback of the newly selected MenuItem.
 
 ### MenuItem
 
@@ -85,18 +85,17 @@ A MenuItem supports the following props:
  chosen by the user. The callback is passed a `ChosenEvent` object.
 * `onHighlightChange`: This is an optional function which is called when the
  item is highlighted or unhighlighted by the user. The callback is passed a
- boolean representing whether the item is highlighted now, and an object with
- `byKeyboard` boolean property.
+ boolean representing whether the item is highlighted now, and if the item is
+ highlighted, the second argument is an object with  `byKeyboard` boolean
+ property and `prevCursorLocation` optional property (see MenuList.moveCursor).
 * `onLeftPushed`, `onRightPushed`: These are optional functions which are
  called when the user presses the left or right arrow key while the menu item
  is highlighted. The callback is passed a `MenuEvent` object.
-
 * `className`, `style`: These are optional and are passed as props to the
  MenuItem's underlying div.
 * `highlightedClassName`, `highlightedStyle`: These are optional and are
  combined with the className and style props and passed to the underlying div
  when the item is highlighted.
-
 * `index`: This an optional number which overrides the menu item's index in the
  MenuList for keyboard control purposes. The order of menu items is normally
  determined by their position in the DOM when mounted. This property should be
@@ -208,11 +207,6 @@ from bubbling up to the parent menu components.
 
 Some callback props are passed a `ChosenEvent` object, which extends the
 `MenuEvent` class with a `byKeyboard` boolean property.
-
-Some callback props are passed a `HighlightEvent` object, which extends the
-`MenuEvent` class with a `byKeyboard` boolean property and a
-`prevCursorLocation` property, which may be set to an
-`{top:number, bottom:number, left:number, right:number}` object.
 
 ## Types
 

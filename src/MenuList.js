@@ -29,7 +29,7 @@ export type MenuListHandle = {
 
 // This type of object is given to a MenuList to talk to a MenuItem.
 export type MenuItemControl = {
-  notifyHighlighted(highlighted: boolean, byKeyboard: ?boolean): void;
+  notifyHighlighted(highlighted: boolean, byKeyboard: ?boolean, prevCursorLocation: ?Rect): void;
   notifyEvent(event: MenuEvent): void;
 };
 
@@ -236,7 +236,7 @@ export default class MenuList extends React.Component {
     }
   }
 
-  _naturalHighlight(index: ?number, byKeyboard: boolean) {
+  _naturalHighlight(index: ?number, byKeyboard: boolean, prevCursorLocation: ?Rect) {
     const visibleHighlightedIndex = this._getVisibleHighlightedIndex();
 
     if (this._lockedHighlightedIndex != null && byKeyboard) {
@@ -245,7 +245,7 @@ export default class MenuList extends React.Component {
     this._naturalHighlightedIndex = index;
     if (this._lockedHighlightedIndex == null) {
       if (index != null) {
-        this._listItems[index].control.notifyHighlighted(true, byKeyboard);
+        this._listItems[index].control.notifyHighlighted(true, byKeyboard, prevCursorLocation);
       }
       if (visibleHighlightedIndex != null && visibleHighlightedIndex != index) {
         this._listItems[visibleHighlightedIndex].control.notifyHighlighted(false);
@@ -347,21 +347,20 @@ export default class MenuList extends React.Component {
     }
   }
 
-  moveCursor(direction: Direction, prevCursorLocation: ?Rect) { //eslint-disable-line no-unused-vars
-    // TODO pass prevCursorLocation to item's onHighlightChange callback's event
+  moveCursor(direction: Direction, prevCursorLocation: ?Rect) {
     switch (direction) {
     case 'up':
       if (this._naturalHighlightedIndex == null || this._naturalHighlightedIndex == 0) {
-        this._naturalHighlight(this._listItems.length-1, true);
+        this._naturalHighlight(this._listItems.length-1, true, prevCursorLocation);
       } else {
-        this._naturalHighlight(this._naturalHighlightedIndex-1, true);
+        this._naturalHighlight(this._naturalHighlightedIndex-1, true, prevCursorLocation);
       }
       break;
     case 'down':
       if (this._naturalHighlightedIndex == null || this._naturalHighlightedIndex == this._listItems.length-1) {
-        this._naturalHighlight(0, true);
+        this._naturalHighlight(0, true, prevCursorLocation);
       } else {
-        this._naturalHighlight(this._naturalHighlightedIndex+1, true);
+        this._naturalHighlight(this._naturalHighlightedIndex+1, true, prevCursorLocation);
       }
       break;
     }

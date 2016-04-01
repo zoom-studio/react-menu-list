@@ -16,8 +16,6 @@ export type Props = {
   onHighlightChange?: ?Function;
   onLeftPushed?: ?Function;
   onRightPushed?: ?Function;
-  // onUpPushed?: ?Function;
-  // onDownPushed?: ?Function;
 
   className?: ?string;
   style?: ?Object;
@@ -40,8 +38,6 @@ export default class MenuItem extends React.Component {
     onHighlightChange: PropTypes.func,
     onLeftPushed: PropTypes.func,
     onRightPushed: PropTypes.func,
-    // onUpPushed: PropTypes.func,
-    // onDownPushed: PropTypes.func,
 
     className: PropTypes.string,
     style: PropTypes.object,
@@ -114,12 +110,6 @@ export default class MenuItem extends React.Component {
         case 'chosen':
           if (this.props.onItemChosen) this.props.onItemChosen(event);
           break;
-        // case 'up':
-        //   if (this.props.onUpPushed) this.props.onUpPushed(event);
-        //   break;
-        // case 'down':
-        //   if (this.props.onDownPushed) this.props.onDownPushed(event);
-        //   break;
         case 'left':
           if (this.props.onLeftPushed) this.props.onLeftPushed(event);
           break;

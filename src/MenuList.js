@@ -48,8 +48,6 @@ export default class MenuList extends React.Component {
     onItemChosen: PropTypes.func,
     onLeftPushed: PropTypes.func,
     onRightPushed: PropTypes.func,
-    // onUpPushed: PropTypes.func,
-    // onDownPushed: PropTypes.func,
     children: PropTypes.node
   };
 

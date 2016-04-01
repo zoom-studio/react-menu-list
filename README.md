@@ -165,9 +165,9 @@ A MenuListInspector supports the following props:
 
 A MenuListInspector has the following public methods:
 
-* `moveCursor(direction: Direction, prevCursorLocation: ?Rect)`: This calls
- moveCursor on the first descendant MenuList, or throws an error if none are
- found.
+* `moveCursor(direction: Direction, prevCursorLocation: ?Rect): boolean`: This
+ calls moveCursor on the first descendant MenuList and returns true, or returns
+ false if no descendant MenuLists were found.
 
 ### MenuButton
 

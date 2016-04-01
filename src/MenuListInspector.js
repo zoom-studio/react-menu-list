@@ -66,12 +66,13 @@ export default class MenuListInspector extends React.Component {
     return {menuListInspector};
   }
 
-  moveCursor(direction: Direction, prevCursorLocation: ?Rect) {
+  moveCursor(direction: Direction, prevCursorLocation: ?Rect): boolean {
     const menuList = this._descendantMenuLists[0];
     if (!menuList) {
-      throw new Error('No descendant menu lists!');
+      return false;
     }
     menuList.moveCursor(direction, prevCursorLocation);
+    return true;
   }
 
   render(): ?React.Element {

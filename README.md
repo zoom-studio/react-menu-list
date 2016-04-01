@@ -66,10 +66,12 @@ A MenuList supports the following props:
 A MenuList has the following public methods:
 
 * `moveCursor(direction: Direction, prevCursorLocation: ?Rect)`: Move the
- cursor in the menu. `direction` must be the the string "up", "down", "left",
- or "right". `prevCursorLocation` may be an object with `top`, `bottom`,
- `left`, and `right` number properties, and it will be passed to the
- onHighlightChange callback of the newly selected MenuItem.
+ cursor in the menu. `direction` must be the the string "up" or "down".
+ `prevCursorLocation` may be an object with `top`, `bottom`, `left`, and
+ `right` number properties, and it will be passed to the  onHighlightChange
+ callback of the newly selected MenuItem. (This property is only useful for
+ when the cursor moves between two menu items which each implement their own
+ cursor over their own subitems.)
 
 ### MenuItem
 
@@ -85,7 +87,9 @@ A MenuItem supports the following props:
  item is highlighted or unhighlighted by the user. The callback is passed a
  boolean representing whether the item is highlighted now, and if the item is
  highlighted, the second argument is an object with  `byKeyboard` boolean
- property and `prevCursorLocation` optional property (see MenuList.moveCursor).
+ property, `prevCursorLocation` optional property (see MenuList.moveCursor),
+ and an optional `direction` string of "up" or "down" describing which key the
+ user pressed to highlight the item.
 * `onLeftPushed`, `onRightPushed`: These are optional functions which are
  called when the user presses the left or right arrow key while the menu item
  is highlighted. The callback is passed a `MenuEvent` object.

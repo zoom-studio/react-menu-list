@@ -90,7 +90,7 @@ export default class MenuItem extends React.Component {
 
   componentDidMount() {
     this._menuListHandle = (this.context.menuList:MenuListContext).registerItem(this.props, {
-      notifyHighlighted: (highlighted: boolean, byKeyboard: ?boolean, prevCursorLocation: ?Rect) => {
+      notifyHighlighted: (highlighted: boolean, byKeyboard: ?boolean, direction: ?Direction, prevCursorLocation: ?Rect) => {
         this.setState({highlighted}, () => {
           if (highlighted && byKeyboard) {
             const el = findDOMNode(this);
@@ -102,7 +102,7 @@ export default class MenuItem extends React.Component {
           }
         });
         if (this.props.onHighlightChange) {
-          this.props.onHighlightChange(highlighted, {byKeyboard, prevCursorLocation});
+          this.props.onHighlightChange(highlighted, {byKeyboard, prevCursorLocation, direction});
         }
       },
       notifyEvent: (event: MenuEvent) => {

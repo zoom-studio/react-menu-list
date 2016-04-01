@@ -51,7 +51,7 @@ describe('MenuList', function() {
     });
 
     assert.deepEqual(menuListItems[0].props.onHighlightChange.args, [
-      [true, {byKeyboard: true, prevCursorLocation: undefined}]]);
+      [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}]]);
     assert.deepEqual(menuListItems[1].props.onHighlightChange.args, []);
     assert.deepEqual(menuListItems[2].props.onHighlightChange.args, []);
 
@@ -64,10 +64,10 @@ describe('MenuList', function() {
     });
 
     assert.deepEqual(menuListItems[0].props.onHighlightChange.args, [
-      [true, {byKeyboard: true, prevCursorLocation: undefined}],
-      [false, {byKeyboard: undefined, prevCursorLocation: undefined}]]);
+      [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
+      [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]]);
     assert.deepEqual(menuListItems[1].props.onHighlightChange.args, [
-      [true, {byKeyboard: true, prevCursorLocation: undefined}]]);
+      [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}]]);
     assert.deepEqual(menuListItems[2].props.onHighlightChange.args, []);
 
     keydownCaptureHandlers[0]({
@@ -79,13 +79,13 @@ describe('MenuList', function() {
     });
 
     assert.deepEqual(menuListItems[0].props.onHighlightChange.args, [
-      [true, {byKeyboard: true, prevCursorLocation: undefined}],
-      [false, {byKeyboard: undefined, prevCursorLocation: undefined}]]);
+      [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
+      [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]]);
     assert.deepEqual(menuListItems[1].props.onHighlightChange.args, [
-      [true, {byKeyboard: true, prevCursorLocation: undefined}],
-      [false, {byKeyboard: undefined, prevCursorLocation: undefined}]]);
+      [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
+      [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]]);
     assert.deepEqual(menuListItems[2].props.onHighlightChange.args, [
-      [true, {byKeyboard: true, prevCursorLocation: undefined}]]);
+      [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}]]);
 
     keydownCaptureHandlers[0]({
       preventDefault: sinon.spy(),
@@ -96,15 +96,15 @@ describe('MenuList', function() {
     });
 
     assert.deepEqual(menuListItems[0].props.onHighlightChange.args, [
-      [true, {byKeyboard: true, prevCursorLocation: undefined}],
-      [false, {byKeyboard: undefined, prevCursorLocation: undefined}],
-      [true, {byKeyboard: true, prevCursorLocation: undefined}]]);
+      [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
+      [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}],
+      [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}]]);
     assert.deepEqual(menuListItems[1].props.onHighlightChange.args, [
-      [true, {byKeyboard: true, prevCursorLocation: undefined}],
-      [false, {byKeyboard: undefined, prevCursorLocation: undefined}]]);
+      [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
+      [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]]);
     assert.deepEqual(menuListItems[2].props.onHighlightChange.args, [
-      [true, {byKeyboard: true, prevCursorLocation: undefined}],
-      [false, {byKeyboard: undefined, prevCursorLocation: undefined}]]);
+      [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
+      [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]]);
 
     // Up time
 
@@ -117,17 +117,17 @@ describe('MenuList', function() {
     });
 
     assert.deepEqual(menuListItems[0].props.onHighlightChange.args, [
-      [true, {byKeyboard: true, prevCursorLocation: undefined}],
-      [false, {byKeyboard: undefined, prevCursorLocation: undefined}],
-      [true, {byKeyboard: true, prevCursorLocation: undefined}],
-      [false, {byKeyboard: undefined, prevCursorLocation: undefined}]]);
+      [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
+      [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}],
+      [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
+      [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]]);
     assert.deepEqual(menuListItems[1].props.onHighlightChange.args, [
-      [true, {byKeyboard: true, prevCursorLocation: undefined}],
-      [false, {byKeyboard: undefined, prevCursorLocation: undefined}]]);
+      [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
+      [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]]);
     assert.deepEqual(menuListItems[2].props.onHighlightChange.args, [
-      [true, {byKeyboard: true, prevCursorLocation: undefined}],
-      [false, {byKeyboard: undefined, prevCursorLocation: undefined}],
-      [true, {byKeyboard: true, prevCursorLocation: undefined}]]);
+      [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
+      [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}],
+      [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'up'}]]);
 
     keydownCaptureHandlers[0]({
       preventDefault: sinon.spy(),
@@ -138,37 +138,37 @@ describe('MenuList', function() {
     });
 
     assert.deepEqual(menuListItems[0].props.onHighlightChange.args, [
-      [true, {byKeyboard: true, prevCursorLocation: undefined}],
-      [false, {byKeyboard: undefined, prevCursorLocation: undefined}],
-      [true, {byKeyboard: true, prevCursorLocation: undefined}],
-      [false, {byKeyboard: undefined, prevCursorLocation: undefined}]]);
+      [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
+      [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}],
+      [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
+      [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]]);
     assert.deepEqual(menuListItems[1].props.onHighlightChange.args, [
-      [true, {byKeyboard: true, prevCursorLocation: undefined}],
-      [false, {byKeyboard: undefined, prevCursorLocation: undefined}],
-      [true, {byKeyboard: true, prevCursorLocation: undefined}]]);
+      [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
+      [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}],
+      [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'up'}]]);
     assert.deepEqual(menuListItems[2].props.onHighlightChange.args, [
-      [true, {byKeyboard: true, prevCursorLocation: undefined}],
-      [false, {byKeyboard: undefined, prevCursorLocation: undefined}],
-      [true, {byKeyboard: true, prevCursorLocation: undefined}],
-      [false, {byKeyboard: undefined, prevCursorLocation: undefined}]]);
+      [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
+      [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}],
+      [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'up'}],
+      [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]]);
 
     root.moveCursor('up', {top: 5, bottom: 6, left: 7, right: 8});
 
     assert.deepEqual(menuListItems[0].props.onHighlightChange.args, [
-      [true, {byKeyboard: true, prevCursorLocation: undefined}],
-      [false, {byKeyboard: undefined, prevCursorLocation: undefined}],
-      [true, {byKeyboard: true, prevCursorLocation: undefined}],
-      [false, {byKeyboard: undefined, prevCursorLocation: undefined}],
-      [true, {byKeyboard: true, prevCursorLocation: {top: 5, bottom: 6, left: 7, right: 8}}]]);
+      [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
+      [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}],
+      [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
+      [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}],
+      [true, {byKeyboard: true, prevCursorLocation: {top: 5, bottom: 6, left: 7, right: 8}, direction: 'up'}]]);
     assert.deepEqual(menuListItems[1].props.onHighlightChange.args, [
-      [true, {byKeyboard: true, prevCursorLocation: undefined}],
-      [false, {byKeyboard: undefined, prevCursorLocation: undefined}],
-      [true, {byKeyboard: true, prevCursorLocation: undefined}],
-      [false, {byKeyboard: undefined, prevCursorLocation: undefined}]]);
+      [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
+      [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}],
+      [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'up'}],
+      [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]]);
     assert.deepEqual(menuListItems[2].props.onHighlightChange.args, [
-      [true, {byKeyboard: true, prevCursorLocation: undefined}],
-      [false, {byKeyboard: undefined, prevCursorLocation: undefined}],
-      [true, {byKeyboard: true, prevCursorLocation: undefined}],
-      [false, {byKeyboard: undefined, prevCursorLocation: undefined}]]);
+      [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
+      [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}],
+      [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'up'}],
+      [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]]);
   }));
 });

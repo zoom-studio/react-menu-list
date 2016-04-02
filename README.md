@@ -183,7 +183,8 @@ A MenuButton supports the following props:
 
 * `menu`, `positionOptions`, `onWillOpen`, `onDidOpen`, `onWillClose`: These
  work the same as the props on SubMenuItem.
-* `className`, `style`: These are passed to the button element.
+* `className`, `style`, `disabled`, `title`: These are passed to the button
+ element.
 
 ### Dropdown
 

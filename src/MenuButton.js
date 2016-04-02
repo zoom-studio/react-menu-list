@@ -12,6 +12,9 @@ export default class MenuButton extends React.Component {
   static propTypes = {
     className: PropTypes.string,
     style: PropTypes.object,
+    disabled: PropTypes.bool,
+    title: PropTypes.string,
+
     positionOptions: PropTypes.object,
 
     children: PropTypes.node,
@@ -54,13 +57,16 @@ export default class MenuButton extends React.Component {
   }
 
   render() {
-    const {className, style, children, menu, positionOptions} = this.props;
+    const {
+      className, style, children, menu, positionOptions, disabled, title
+    } = this.props;
     const {opened} = this.state;
     return (
       <FloatAnchor
         options={positionOptions}
         anchor={
           <button
+            type="button"
             className={className}
             style={style}
             onBlur={()=>this.close()}
@@ -74,6 +80,8 @@ export default class MenuButton extends React.Component {
             }}
             aria-haspopup={true}
             aria-expanded={opened}
+            disabled={disabled}
+            title={title}
           >
             {children}
           </button>

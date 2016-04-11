@@ -16,6 +16,7 @@ export default class MenuButton extends React.Component {
     title: PropTypes.string,
 
     positionOptions: PropTypes.object,
+    zIndex: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 
     children: PropTypes.node,
     menu: PropTypes.element,
@@ -58,12 +59,15 @@ export default class MenuButton extends React.Component {
 
   render() {
     const {
-      className, style, children, menu, positionOptions, disabled, title
+      className, style, children, menu,
+      positionOptions, zIndex,
+      disabled, title
     } = this.props;
     const {opened} = this.state;
     return (
       <FloatAnchor
         options={positionOptions}
+        zIndex={zIndex}
         anchor={
           <button
             type="button"

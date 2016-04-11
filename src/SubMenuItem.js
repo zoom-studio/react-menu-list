@@ -20,6 +20,7 @@ export default class SubMenuItem extends React.Component {
   static propTypes = {
     menu: PropTypes.node,
     positionOptions: PropTypes.object,
+    zIndex: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 
     onWillOpen: PropTypes.func,
     onDidOpen: PropTypes.func,
@@ -159,7 +160,7 @@ export default class SubMenuItem extends React.Component {
   render() {
     const {
       index, style, className,
-      highlightedStyle, highlightedClassName, positionOptions,
+      highlightedStyle, highlightedClassName, positionOptions, zIndex,
       children, menu
     } = this.props;
     const {opened} = this.state;
@@ -195,6 +196,7 @@ export default class SubMenuItem extends React.Component {
       >
         <FloatAnchor
           options={positionOptions}
+          zIndex={zIndex}
           anchor={
             <div>
               {children}

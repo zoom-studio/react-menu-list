@@ -188,6 +188,12 @@ A MenuButton supports the following props:
 * `className`, `style`, `disabled`, `title`: These are passed to the button
  element.
 
+A MenuButton has the following public methods:
+
+* `open()`
+* `close()`
+* `toggle()`
+
 ### Dropdown
 
 This is just a div with a bit of CSS on it to form the container for dropdown

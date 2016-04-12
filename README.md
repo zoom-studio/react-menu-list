@@ -150,6 +150,9 @@ A SubMenuItem supports the following props:
 * `className`, `style`, `highlightedClassName`, `highlightedStyle`, `index`,
  `onItemChosen`, `onHighlightChange`: These props are all passed through to the
  underlying MenuItem element.
+* `openedClassName`, `openedStyle`: These are optional and are combined with
+ the className and style props and passed to the underlying div when the item
+ is opened.
 
 A SubMenuItem has the following public methods:
 
@@ -183,10 +186,10 @@ is chosen.
 
 A MenuButton supports the following props:
 
-* `menu`, `positionOptions`, `zIndex`, `onWillOpen`, `onDidOpen`, `onWillClose`:
+* `menu`, `positionOptions`, `zIndex`, `onWillOpen`, `onDidOpen`, `onWillClose`,
+ `className`, `style`, `openedClassName`, `openedStyle`:
  These work the same as the props on SubMenuItem.
-* `className`, `style`, `disabled`, `title`: These are passed to the button
- element.
+* `disabled`, `title`: These are passed to the button element.
 
 A MenuButton has the following public methods:
 

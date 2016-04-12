@@ -32,6 +32,9 @@ export default class SubMenuItem extends React.Component {
     highlightedStyle: PropTypes.object,
     index: PropTypes.number,
 
+    openedClassName: PropTypes.string,
+    openedStyle: PropTypes.object,
+
     onItemChosen: PropTypes.func,
     onHighlightChange: PropTypes.func,
 
@@ -159,11 +162,21 @@ export default class SubMenuItem extends React.Component {
 
   render() {
     const {
-      index, style, className,
-      highlightedStyle, highlightedClassName, positionOptions, zIndex,
-      children, menu
+      index, highlightedStyle, highlightedClassName,
+      positionOptions, zIndex, children, menu
     } = this.props;
     const {opened} = this.state;
+
+    let style = this.props.style;
+    let className = this.props.className;
+    if (opened) {
+      if (this.props.openedStyle) {
+        style = {...style, ...this.props.openedStyle};
+      }
+      if (this.props.openedClassName) {
+        className = `${className||''} ${this.props.openedClassName}`;
+      }
+    }
 
     return (
       <MenuItem

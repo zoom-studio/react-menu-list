@@ -88,9 +88,11 @@ export default class MenuButton extends React.Component {
             className={className}
             style={style}
             onBlur={()=>this.close()}
-            onClick={()=>this.toggle()}
+            onMouseDown={()=>this.toggle()}
             onKeyDown={e=>{
-              if (e.key === 'Escape' && opened) {
+              if (e.key === 'Enter' || e.key === ' ') {
+                this.toggle();
+              } else if (e.key === 'Escape' && opened) {
                 this.close();
                 e.preventDefault();
                 e.stopPropagation();

@@ -1,6 +1,6 @@
 {
   "name": "react-menu-list",
-  "version": "1.2.2",
+  "version": "1.3.0",
   "description": "React component for menu lists and submenus",
   "main": "js/index.js",
   "scripts": {

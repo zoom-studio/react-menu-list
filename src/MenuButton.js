@@ -35,6 +35,15 @@ export default class MenuButton extends React.Component {
     opened: false
   };
 
+  // Safari and Firefox on OS X don't focus the button on mousedown, so on
+  // mousedown we do a quick setTimeout and focus a dummy child element if the
+  // button wasn't focused.
+  _focusFixerTimeout: any = null;
+
+  // Set to true after mousedown until the focus event happens. When it's true,
+  // blur events on the dummy child element should not cause the menu to close.
+  _focusing: boolean = false;
+
   open() {
     if (this.state.opened) return;
     if (this.props.onWillOpen) this.props.onWillOpen();
@@ -57,6 +66,10 @@ export default class MenuButton extends React.Component {
 
   _itemChosen() {
     this.close();
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this._focusFixerTimeout);
   }
 
   render() {
@@ -85,14 +98,36 @@ export default class MenuButton extends React.Component {
         anchor={
           <button
             type="button"
+            ref="button"
             className={className}
             style={style}
-            onBlur={()=>this.close()}
-            onMouseDown={()=>this.toggle()}
-            onKeyDown={e=>{
+            onFocus={()=>{
+              this._focusing = false;
+              clearTimeout(this._focusFixerTimeout);
+            }}
+            onBlur={()=>{
+              clearTimeout(this._focusFixerTimeout);
+              this.close();
+            }}
+            onMouseDown={()=>{
+              clearTimeout(this._focusFixerTimeout);
+              if (!opened) {
+                this._focusing = true;
+                this._focusFixerTimeout = setTimeout(() => {
+                  if (document.activeElement !== this.refs.button) {
+                    this.refs.focusHolder.focus();
+                  }
+                }, 0);
+              }
+              this.toggle();
+            }}
+            onKeyPress={e=>{
               if (e.key === 'Enter' || e.key === ' ') {
                 this.toggle();
-              } else if (e.key === 'Escape' && opened) {
+              }
+            }}
+            onKeyDown={e=>{
+              if (e.key === 'Escape' && opened) {
                 this.close();
                 e.preventDefault();
                 e.stopPropagation();
@@ -103,6 +138,23 @@ export default class MenuButton extends React.Component {
             disabled={disabled}
             title={title}
           >
+            <div
+              ref="focusHolder"
+              tabIndex="-1"
+              aria-hidden={true}
+              style={{
+                opacity: '0',
+                outline: 'none',
+                width: '0px',
+                height: '0px',
+                overflow: 'hidden'
+              }}
+              onBlur={e=>{
+                if (this._focusing) {
+                  e.stopPropagation();
+                }
+              }}
+            />
             {children}
           </button>
         }

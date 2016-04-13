@@ -170,5 +170,7 @@ describe('MenuList', function() {
       [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}],
       [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'up'}],
       [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]]);
+
+    ReactDOM.unmountComponentAtNode(mountPoint);
   }));
 });

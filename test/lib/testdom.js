@@ -6,6 +6,9 @@ function init() {
   global.navigator = window.navigator;
   global.Node = window.Node;
   global.HTMLElement = window.HTMLElement;
+  window.requestAnimationFrame = (fn) => {
+    setTimeout(fn, 0);
+  };
 }
 
 init();

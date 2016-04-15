@@ -29,6 +29,8 @@ describe('MenuButton', function() {
       mountPoint
     ): any);
 
+    root.reposition(); // just check this doesn't throw
+
     const button = TestUtils.findRenderedDOMComponentWithTag(root, 'button');
     const floatAnchor: FloatAnchor = TestUtils.findRenderedComponentWithType(root, FloatAnchor);
 
@@ -42,6 +44,8 @@ describe('MenuButton', function() {
       menuListItems.map(c=>c.props.children),
       ['A', 'B']
     );
+
+    root.reposition(); // just check this doesn't throw
 
     TestUtils.Simulate.mouseDown(button);
 

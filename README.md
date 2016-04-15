@@ -159,6 +159,8 @@ A SubMenuItem has the following public methods:
 * `open()`
 * `close()`
 * `toggle()`
+* `reposition()`: Repositions the floating submenu. Call this if you change the
+ size of the menu.
 
 ### MenuListInspector
 
@@ -196,6 +198,8 @@ A MenuButton has the following public methods:
 * `open()`
 * `close()`
 * `toggle()`
+* `reposition()`: Repositions the floating submenu. Call this if you change the
+ size of the menu.
 
 ### Dropdown
 

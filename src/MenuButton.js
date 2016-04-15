@@ -64,6 +64,10 @@ export default class MenuButton extends React.Component {
     }
   }
 
+  reposition() {
+    this.refs.floatAnchor.reposition();
+  }
+
   _itemChosen() {
     this.close();
   }
@@ -93,6 +97,7 @@ export default class MenuButton extends React.Component {
 
     return (
       <FloatAnchor
+        ref="floatAnchor"
         options={positionOptions}
         zIndex={zIndex}
         anchor={

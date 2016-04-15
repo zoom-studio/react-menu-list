@@ -80,6 +80,10 @@ export default class SubMenuItem extends React.Component {
     }
   }
 
+  reposition() {
+    this.refs.floatAnchor.reposition();
+  }
+
   _onHighlightChange(highlighted: boolean, event: Object) {
     this._resetMouseLeaveWatcher.emit(null);
 
@@ -208,6 +212,7 @@ export default class SubMenuItem extends React.Component {
         aria-expanded={opened}
       >
         <FloatAnchor
+          ref="floatAnchor"
           options={positionOptions}
           zIndex={zIndex}
           anchor={

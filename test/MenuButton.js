@@ -36,7 +36,7 @@ describe('MenuButton', function() {
 
     assert.strictEqual(TestUtils.scryRenderedComponentsWithType(floatAnchor.portal, MenuItem).length, 0);
 
-    TestUtils.Simulate.mouseDown(button);
+    TestUtils.Simulate.mouseDown(button, {button: 0});
 
     const menuListItems = TestUtils.scryRenderedComponentsWithType(floatAnchor.portal, MenuItem);
 
@@ -47,7 +47,7 @@ describe('MenuButton', function() {
 
     root.reposition(); // just check this doesn't throw
 
-    TestUtils.Simulate.mouseDown(button);
+    TestUtils.Simulate.mouseDown(button, {button: 0});
 
     assert.strictEqual(TestUtils.scryRenderedComponentsWithType(floatAnchor.portal, MenuItem).length, 0);
 
@@ -79,7 +79,7 @@ describe('MenuButton', function() {
 
     assert.strictEqual(TestUtils.scryRenderedComponentsWithType(floatAnchor.portal, MenuItem).length, 0);
 
-    TestUtils.Simulate.mouseDown(button);
+    TestUtils.Simulate.mouseDown(button, {button: 0});
     TestUtils.Simulate.focus(button);
 
     const menuListItems = TestUtils.scryRenderedComponentsWithType(floatAnchor.portal, MenuItem);

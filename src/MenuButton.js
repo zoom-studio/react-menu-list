@@ -114,7 +114,8 @@ export default class MenuButton extends React.Component {
               clearTimeout(this._focusFixerTimeout);
               this.close();
             }}
-            onMouseDown={()=>{
+            onMouseDown={e => {
+              if (e.button !== 0) return;
               clearTimeout(this._focusFixerTimeout);
               if (!opened) {
                 this._focusing = true;

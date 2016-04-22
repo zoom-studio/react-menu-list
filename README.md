@@ -142,8 +142,8 @@ A SubMenuItem supports the following props:
  supported by
  [contain-by-screen (version ^1.0)](https://github.com/AgentME/contain-by-screen#readme).
  This defaults to `{position:'right', vAlign:'top', hAlign: 'left'}`.
-* `zIndex`: This an optional number controlling the z-index CSS property of the
- menu's container.
+* `menuZIndex`: This an optional number controlling the z-index CSS property of
+ the menu's container.
 * `onWillOpen`: This is an optional function called before the submenu opens.
 * `onDidOpen`: This is an optional function called after the submenu opened.
 * `onWillClose`: This is an optional function called before the submenu closes.
@@ -188,8 +188,8 @@ is chosen.
 
 A MenuButton supports the following props:
 
-* `menu`, `positionOptions`, `zIndex`, `onWillOpen`, `onDidOpen`, `onWillClose`,
- `className`, `style`, `openedClassName`, `openedStyle`:
+* `menu`, `positionOptions`, `menuZIndex`, `onWillOpen`, `onDidOpen`,
+ `onWillClose`, `className`, `style`, `openedClassName`, `openedStyle`:
  These work the same as the props on SubMenuItem.
 * `disabled`, `title`: These are passed to the button element.
 

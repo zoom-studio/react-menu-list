@@ -150,18 +150,31 @@ type MenuProps = {
 class AutoCompleteMenu extends React.Component {
   props: MenuProps;
 
+  componentDidMount() {
+    if (this.refs.firstItem) {
+      this.refs.firstItem.highlight();
+    }
+  }
+
   componentDidUpdate(prevProps: MenuProps) {
     if (prevProps.value !== this.props.value) {
       this.props.reposition();
+
+      if (this.refs.firstItem) {
+        this.refs.firstItem.highlight();
+      }
     }
   }
 
   render() {
     const {filteredItems} = this.props;
 
-    const makeElements = item => (
-      typeof item === 'string' ?
+    const makeElements = nested => (item, i) => {
+      const ref = !nested && i === 0 ? 'firstItem' : null;
+
+      return typeof item === 'string' ?
         <MenuItem
+          ref={ref}
           highlightedStyle={{background: 'gray'}}
           onItemChosen={() => this.props.onValueChosen((item: any))}
           key={item}
@@ -170,21 +183,22 @@ class AutoCompleteMenu extends React.Component {
         </MenuItem>
       :
         <SubMenuItem
+          ref={ref}
           highlightedStyle={{background: 'gray'}}
           key={item.title}
           menu={
             <Dropdown>
               <MenuList>
-                {item.items.map(makeElements)}
+                {item.items.map(makeElements(true))}
               </MenuList>
             </Dropdown>
           }
         >
           {item.title} ►
-        </SubMenuItem>
-    );
+        </SubMenuItem>;
+    };
 
-    const itemElements = filteredItems.map(makeElements);
+    const itemElements = filteredItems.map(makeElements(false));
 
     return (
       <Dropdown>

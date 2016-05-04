@@ -164,6 +164,13 @@ A SubMenuItem has the following public methods:
 * `toggle()`
 * `reposition()`: Repositions the floating submenu. Call this if you change the
  size of the menu.
+* `highlight(byKeyboard: boolean=true)`: Attempt to highlight the menu item.
+ If byKeyboard is false, then the attempt may not be successful if a highlight
+ lock is in place. If byKeyboard is false, then the highlight will trigger the
+ submenu to display.
+* `unhighlight()`: Attempt to unhighlight the menu item.
+* `moveCursor(direction: Direction, prevCursorLocation: ?Rect)`: See
+ menuList.moveCursor.
 * `hasHighlight()`: Returns true if the item is currently highlighted.
 
 ### MenuListInspector

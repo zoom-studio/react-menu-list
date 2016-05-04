@@ -9,6 +9,7 @@ import MenuListInspector from './MenuListInspector';
 import FloatAnchor from 'react-float-anchor';
 import MenuItem from './MenuItem';
 
+import type {Direction, Rect} from './types';
 import type MenuEvent from './events/MenuEvent';
 import type ChosenEvent from './events/ChosenEvent';
 
@@ -86,6 +87,18 @@ export default class SubMenuItem extends React.Component {
 
   hasHighlight(): boolean {
     return this.refs.menuItem.hasHighlight();
+  }
+
+  highlight(byKeyboard: boolean=true) {
+    this.refs.menuItem.highlight(byKeyboard);
+  }
+
+  unhighlight() {
+    this.refs.menuItem.unhighlight();
+  }
+
+  moveCursor(direction: Direction, prevCursorLocation: ?Rect) {
+    this.refs.menuItem.moveCursor(direction, prevCursorLocation);
   }
 
   _onHighlightChange(highlighted: boolean, event: Object) {

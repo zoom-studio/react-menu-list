@@ -2,8 +2,7 @@
 
 import React, {PropTypes} from 'react';
 import {
-  Dropdown, MenuList, MenuItem, MenuListInspector,
-  SubMenuItem
+  Dropdown, MenuList, MenuItem, SubMenuItem
 } from '../src';
 import FloatAnchor from 'react-float-anchor';
 import type {Options as PositionOptions} from 'contain-by-screen';
@@ -73,12 +72,6 @@ export default class AutoComplete extends React.Component {
     this.close();
   }
 
-  componentDidUpdate(prevProps: Props, prevState: State) {
-    if (prevState.value !== this.state.value) {
-      this.refs.floatanchor.reposition();
-    }
-  }
-
   render() {
     const {className, style, positionOptions, items} = this.props;
     const {value, opened} = this.state;
@@ -94,37 +87,11 @@ export default class AutoComplete extends React.Component {
       }).filter(Boolean);
     }
 
-    const makeElements = item => (
-      typeof item === 'string' ?
-        <MenuItem
-          highlightedStyle={{background: 'gray'}}
-          onItemChosen={() => this.setState({value: (item: any)})}
-          key={item}
-        >
-          {item}
-        </MenuItem>
-      :
-        <SubMenuItem
-          highlightedStyle={{background: 'gray'}}
-          key={item.title}
-          menu={
-            <Dropdown>
-              <MenuList>
-                {item.items.map(makeElements)}
-              </MenuList>
-            </Dropdown>
-          }
-        >
-          {item.title} ►
-        </SubMenuItem>
-    );
-
     const filteredItems = filterItems(items);
-    const itemElements = filteredItems.map(makeElements);
 
     return (
       <FloatAnchor
-        ref="floatanchor"
+        ref="floatAnchor"
         options={positionOptions}
         anchor={
           <input
@@ -153,17 +120,78 @@ export default class AutoComplete extends React.Component {
         }
         float={
           !(opened && filteredItems.length) ? null :
-            <MenuListInspector
-              onItemChosen={() => this.close()}
-            >
-              <Dropdown>
-                <MenuList>
-                  {itemElements}
-                </MenuList>
-              </Dropdown>
-            </MenuListInspector>
+            <AutoCompleteMenu
+              value={value}
+              filteredItems={filteredItems}
+              onValueChosen={value => {
+                this.setState({value});
+                this.close();
+              }}
+              reposition={() => {
+                this.refs.floatAnchor.reposition();
+              }}
+              />
         }
       />
+    );
+  }
+}
+
+type MenuProps = {
+  value: string;
+  filteredItems: Array<Item>;
+  onValueChosen: (value: string) => void;
+  reposition: () => void;
+};
+
+// This component is separate so that its componentDidUpdate method gets called
+// at the right time. AutoComplete's componentDidUpdate method may get called
+// before the FloatAnchor's floated elements have been updated.
+class AutoCompleteMenu extends React.Component {
+  props: MenuProps;
+
+  componentDidUpdate(prevProps: MenuProps) {
+    if (prevProps.value !== this.props.value) {
+      this.props.reposition();
+    }
+  }
+
+  render() {
+    const {filteredItems} = this.props;
+
+    const makeElements = item => (
+      typeof item === 'string' ?
+        <MenuItem
+          highlightedStyle={{background: 'gray'}}
+          onItemChosen={() => this.props.onValueChosen((item: any))}
+          key={item}
+        >
+          {item}
+        </MenuItem>
+      :
+        <SubMenuItem
+          highlightedStyle={{background: 'gray'}}
+          key={item.title}
+          menu={
+            <Dropdown>
+              <MenuList>
+                {item.items.map(makeElements)}
+              </MenuList>
+            </Dropdown>
+          }
+        >
+          {item.title} ►
+        </SubMenuItem>
+    );
+
+    const itemElements = filteredItems.map(makeElements);
+
+    return (
+      <Dropdown>
+        <MenuList>
+          {itemElements}
+        </MenuList>
+      </Dropdown>
     );
   }
 }

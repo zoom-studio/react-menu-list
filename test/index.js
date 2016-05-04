@@ -173,4 +173,18 @@ describe('MenuList', function() {
 
     ReactDOM.unmountComponentAtNode(mountPoint);
   }));
+
+  it('empty list works', function() {
+    this.slow();
+
+    const mountPoint = document.createElement('div');
+    const root: MenuList = (ReactDOM.render(
+      <MenuList>
+      </MenuList>,
+      mountPoint
+    ): any);
+
+    root.moveCursor('up');
+    root.moveCursor('down');
+  });
 });

@@ -345,6 +345,8 @@ export default class MenuList extends React.Component {
   }
 
   moveCursor(direction: Direction, prevCursorLocation: ?Rect) {
+    if (this._listItems.length == 0) return;
+
     switch (direction) {
     case 'up':
       if (this._naturalHighlightedIndex == null || this._naturalHighlightedIndex == 0) {

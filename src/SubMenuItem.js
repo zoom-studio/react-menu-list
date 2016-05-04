@@ -84,6 +84,10 @@ export default class SubMenuItem extends React.Component {
     this.refs.floatAnchor.reposition();
   }
 
+  hasHighlight(): boolean {
+    return this.refs.menuItem.hasHighlight();
+  }
+
   _onHighlightChange(highlighted: boolean, event: Object) {
     this._resetMouseLeaveWatcher.emit(null);
 

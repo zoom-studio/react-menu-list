@@ -164,6 +164,7 @@ A SubMenuItem has the following public methods:
 * `toggle()`
 * `reposition()`: Repositions the floating submenu. Call this if you change the
  size of the menu.
+* `hasHighlight()`: Returns true if the item is currently highlighted.
 
 ### MenuListInspector
 

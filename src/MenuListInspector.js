@@ -75,6 +75,15 @@ export default class MenuListInspector extends React.Component {
     return true;
   }
 
+  hasHighlight(): boolean {
+    for (let i=0, len=this._descendantMenuLists.length; i<len; i++) {
+      if (this._descendantMenuLists[i].hasHighlight()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   render(): ?React.Element {
     return this.props.children;
   }

@@ -372,6 +372,10 @@ export default class MenuList extends React.Component {
     }
   }
 
+  hasHighlight(): boolean {
+    return this._getVisibleHighlightedIndex() != null;
+  }
+
   render() {
     return (
       <div

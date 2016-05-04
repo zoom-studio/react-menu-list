@@ -57,6 +57,10 @@ export default class MenuItem extends React.Component {
     menuList: React.PropTypes.object
   };
 
+  hasHighlight(): boolean {
+    return this.state.highlighted;
+  }
+
   takeKeyboard() {
     this._menuListHandle.takeKeyboard();
   }

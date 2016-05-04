@@ -211,8 +211,9 @@ describe('MenuList', function() {
     ).map(args => args[1]);
     assert.strictEqual(keydownCaptureHandlers.length, 1);
 
-    assert.deepEqual(menuListItems[0].props.onItemChosen.args, []);
-    assert.deepEqual(menuListItems[1].props.onItemChosen.args, []);
+    assert(root.props.onItemChosen.notCalled);
+    assert(menuListItems[0].props.onItemChosen.notCalled);
+    assert(menuListItems[1].props.onItemChosen.notCalled);
 
     {
       const event = {
@@ -227,6 +228,7 @@ describe('MenuList', function() {
       assert(event.stopPropagation.notCalled);
     }
 
+    assert(!root.hasHighlight());
     assert(root.props.onItemChosen.notCalled);
     assert(menuListItems[0].props.onItemChosen.notCalled);
     assert(menuListItems[1].props.onItemChosen.notCalled);
@@ -238,6 +240,8 @@ describe('MenuList', function() {
       which: 40,
       target: document.body
     });
+
+    assert(root.hasHighlight());
 
     {
       const event = {
@@ -252,6 +256,7 @@ describe('MenuList', function() {
       assert(event.stopPropagation.calledOnce);
     }
 
+    assert(root.hasHighlight());
     assert(root.props.onItemChosen.calledOnce);
     assert(menuListItems[0].props.onItemChosen.calledOnce);
     assert(menuListItems[1].props.onItemChosen.notCalled);

@@ -72,6 +72,8 @@ A MenuList has the following public methods:
  callback of the newly selected MenuItem. (This property is only useful for
  when the cursor moves between two menu items which each implement their own
  cursor over their own subitems.)
+* `hasHighlight()`: Returns true if any items in the list are currently
+ highlighted.
 
 ### MenuItem
 
@@ -124,6 +126,7 @@ A MenuItem has the following public methods:
 * `unhighlight()`: Attempt to unhighlight the menu item.
 * `moveCursor(direction: Direction, prevCursorLocation: ?Rect)`: See
  menuList.moveCursor.
+* `hasHighlight()`: Returns true if the item is currently highlighted.
 
 ### SubMenuItem
 
@@ -179,6 +182,8 @@ A MenuListInspector has the following public methods:
 * `moveCursor(direction: Direction, prevCursorLocation: ?Rect): boolean`: This
  calls moveCursor on the first descendant MenuList and returns true, or returns
  false if no descendant MenuLists were found.
+* `hasHighlight()`: Returns true if any descendant lists currently have a
+ highlighted item.
 
 ### MenuButton
 
@@ -229,7 +234,7 @@ Some callback props are passed a `ChosenEvent` object, which extends the
 ## Types
 
 [Flow Type](http://flowtype.org/) declarations for this module are included! As
-of Flow v0.22, you must add the following entries to your `.flowconfig` file's
+of Flow v0.23, you must add the following entries to your `.flowconfig` file's
 options section for them to work:
 
 ```

@@ -186,5 +186,76 @@ describe('MenuList', function() {
 
     root.moveCursor('up');
     root.moveCursor('down');
+
+    ReactDOM.unmountComponentAtNode(mountPoint);
   });
+
+  it('does not emit ChosenEvents on enter if nothing was chosen', sinon.test(function() {
+    this.slow();
+    this.spy(window, 'addEventListener');
+    this.spy(window, 'removeEventListener');
+
+    const mountPoint = document.createElement('div');
+    const root: MenuList = (ReactDOM.render(
+      <MenuList onItemChosen={sinon.spy()}>
+        <MenuItem onItemChosen={sinon.spy()}>A</MenuItem>
+        <MenuItem onItemChosen={sinon.spy()}>B</MenuItem>
+      </MenuList>,
+      mountPoint
+    ): any);
+
+    const menuListItems = TestUtils.scryRenderedComponentsWithType(root, MenuItem);
+
+    const keydownCaptureHandlers = window.addEventListener.args.filter(args =>
+      args[0] === 'keydown' && args[2]
+    ).map(args => args[1]);
+    assert.strictEqual(keydownCaptureHandlers.length, 1);
+
+    assert.deepEqual(menuListItems[0].props.onItemChosen.args, []);
+    assert.deepEqual(menuListItems[1].props.onItemChosen.args, []);
+
+    {
+      const event = {
+        preventDefault: sinon.spy(),
+        stopPropagation: sinon.spy(),
+        key: 'Enter',
+        which: 13,
+        target: document.body
+      };
+      keydownCaptureHandlers[0](event);
+      assert(event.preventDefault.notCalled);
+      assert(event.stopPropagation.notCalled);
+    }
+
+    assert(root.props.onItemChosen.notCalled);
+    assert(menuListItems[0].props.onItemChosen.notCalled);
+    assert(menuListItems[1].props.onItemChosen.notCalled);
+
+    keydownCaptureHandlers[0]({
+      preventDefault: sinon.spy(),
+      stopPropagation: sinon.spy(),
+      key: 'ArrowDown',
+      which: 40,
+      target: document.body
+    });
+
+    {
+      const event = {
+        preventDefault: sinon.spy(),
+        stopPropagation: sinon.spy(),
+        key: 'Enter',
+        which: 13,
+        target: document.body
+      };
+      keydownCaptureHandlers[0](event);
+      assert(event.preventDefault.calledOnce);
+      assert(event.stopPropagation.calledOnce);
+    }
+
+    assert(root.props.onItemChosen.calledOnce);
+    assert(menuListItems[0].props.onItemChosen.calledOnce);
+    assert(menuListItems[1].props.onItemChosen.notCalled);
+
+    ReactDOM.unmountComponentAtNode(mountPoint);
+  }));
 });

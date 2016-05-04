@@ -62,6 +62,7 @@ export default class MenuList extends React.Component {
     control: MenuItemControl;
   }> = [];
 
+  // The natural highlight is where the highlight would be if no lock is active.
   _naturalHighlightedIndex: ?number;
   _lockedHighlightedIndex: ?number;
   _keyboardTakenByIndex: ?number;
@@ -299,7 +300,7 @@ export default class MenuList extends React.Component {
   }
 
   _key(event: KeyboardEvent) {
-    if (this._keyboardTakenByIndex != null) {
+    if (this._keyboardTakenByIndex != null || this._listItems.length === 0) {
       return;
     }
 
@@ -313,15 +314,21 @@ export default class MenuList extends React.Component {
 
     switch (event.which) {
     case 13: //enter
-      mEvent = new ChosenEvent('chosen', true);
-      event.preventDefault();
-      event.stopPropagation();
+      if (visibleHighlightedIndex != null) {
+        mEvent = new ChosenEvent('chosen', true);
+        event.preventDefault();
+        event.stopPropagation();
+      }
       break;
     case 37: //left
-      mEvent = new MenuEvent('left');
+      if (visibleHighlightedIndex != null) {
+        mEvent = new MenuEvent('left');
+      }
       break;
     case 39: //right
-      mEvent = new MenuEvent('right');
+      if (visibleHighlightedIndex != null) {
+        mEvent = new MenuEvent('right');
+      }
       break;
     case 38: //up
       event.preventDefault();

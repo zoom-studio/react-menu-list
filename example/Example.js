@@ -34,14 +34,7 @@ export default class Example extends React.Component {
             Here, the dropdown contains some menu items nested inside of a
             scrollable section.
           </p>
-          <p>
-            The autocomplete example here shows a dropdown while it's focused,
-            and it filters the dropdown options based on what's typed. The
-            dropdown is usable by mouse or arrow keys. The autocomplete
-            dropdown has a submenu to show that they still work here.
-          </p>
           <div>
-            MenuButton example<br/>
             <MenuButton
               menu={
                 <Dropdown>
@@ -80,9 +73,37 @@ export default class Example extends React.Component {
               Menu Button
             </MenuButton>
           </div>
+          <p>
+            The autocomplete example here shows a dropdown while it's focused,
+            and it filters the dropdown options based on what's typed. The
+            dropdown is usable by mouse or arrow keys. The autocomplete
+            dropdown has a submenu to show that they still work here.
+          </p>
+          <p>
+            The autocomplete widget here isn't something provided as a generic
+            component by the react-menu-list library; it's an example of how to
+            use react-menu-list.
+          </p>
           <div>
-            AutoComplete example<br/>
             <AutoComplete
+              defaultValue="M"
+              items={[
+                'Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn',
+                'Uranus', 'Neptune',
+                {title: 'Dwarf Planets', items: ['Ceres', 'Pluto', 'Eris']}
+              ]}
+            />
+          </div>
+          <p>
+            Different applications have different needs, which are often easy
+            to accomplish with react-menu-list.
+            Here's a variation of the autocomplete widget which keeps the first
+            item highlighted whenever the text changes, so that the user can
+            immediately pick the first item by hitting enter.
+          </p>
+          <div>
+            <AutoComplete
+              autoHighlight={true}
               defaultValue="M"
               items={[
                 'Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn',

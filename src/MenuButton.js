@@ -1,7 +1,11 @@
 /* @flow */
 
 import React, {PropTypes} from 'react';
+import {findDOMNode} from 'react-dom';
 import FloatAnchor from 'react-float-anchor';
+import kefirBus from 'kefir-bus';
+import Kefir from 'kefir';
+import fromEventsCapture from './lib/fromEventsCapture';
 import MenuListInspector from './MenuListInspector';
 
 type State = {
@@ -35,25 +39,42 @@ export default class MenuButton extends React.Component {
     opened: false
   };
 
-  // Safari and Firefox on OS X don't focus the button on mousedown, so on
-  // mousedown we do a quick setTimeout and focus a dummy child element if the
-  // button wasn't focused.
-  _focusFixerTimeout: any = null;
-
-  // Set to true after mousedown until the focus event happens. When it's true,
-  // blur events on the dummy child element should not cause the menu to close.
-  _focusing: boolean = false;
+  _onClose: Object = kefirBus();
 
   open() {
     if (this.state.opened) return;
     if (this.props.onWillOpen) this.props.onWillOpen();
     this.setState({opened: true}, this.props.onDidOpen);
+
+    // Clicking outside of the dropdown or pressing escape should close the
+    // dropdown.
+    Kefir.merge([
+      fromEventsCapture(window, 'click')
+        .filter(e => {
+          const el = findDOMNode(this);
+          for (let node of FloatAnchor.parentNodes(e.target)) {
+            if (node === el) return false;
+          }
+          return true;
+        }),
+      Kefir.fromEvents(window, 'keydown')
+        .filter(e => e.key ? e.key === 'Escape' : e.which === 27)
+        .map(e => {
+          e.preventDefault();
+          e.stopPropagation();
+        })
+    ])
+      .takeUntilBy(this._onClose)
+      .onValue(() => {
+        this.close();
+      });
   }
 
   close() {
     if (!this.state.opened) return;
     if (this.props.onWillClose) this.props.onWillClose();
     this.setState({opened: false});
+    this._onClose.emit();
   }
 
   toggle() {
@@ -73,7 +94,7 @@ export default class MenuButton extends React.Component {
   }
 
   componentWillUnmount() {
-    clearTimeout(this._focusFixerTimeout);
+    this._onClose.emit();
   }
 
   render() {
@@ -106,25 +127,8 @@ export default class MenuButton extends React.Component {
             ref="button"
             className={className}
             style={style}
-            onFocus={()=>{
-              this._focusing = false;
-              clearTimeout(this._focusFixerTimeout);
-            }}
-            onBlur={()=>{
-              clearTimeout(this._focusFixerTimeout);
-              this.close();
-            }}
             onMouseDown={e => {
               if (e.button !== 0) return;
-              clearTimeout(this._focusFixerTimeout);
-              if (!opened) {
-                this._focusing = true;
-                this._focusFixerTimeout = setTimeout(() => {
-                  if (document.activeElement !== this.refs.button) {
-                    this.refs.focusHolder.focus();
-                  }
-                }, 0);
-              }
               this.toggle();
             }}
             onKeyPress={e=>{
@@ -132,35 +136,11 @@ export default class MenuButton extends React.Component {
                 this.toggle();
               }
             }}
-            onKeyDown={e=>{
-              if (e.key === 'Escape' && opened) {
-                this.close();
-                e.preventDefault();
-                e.stopPropagation();
-              }
-            }}
             aria-haspopup={true}
             aria-expanded={opened}
             disabled={disabled}
             title={title}
           >
-            <div
-              ref="focusHolder"
-              tabIndex="-1"
-              aria-hidden={true}
-              style={{
-                opacity: '0',
-                outline: 'none',
-                width: '0px',
-                height: '0px',
-                overflow: 'hidden'
-              }}
-              onBlur={e=>{
-                if (this._focusing) {
-                  e.stopPropagation();
-                }
-              }}
-            />
             {children}
           </button>
         }

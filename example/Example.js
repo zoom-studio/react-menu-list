@@ -32,7 +32,8 @@ export default class Example extends React.Component {
           <p>
             The MenuButton dropdown can have arbitrary elements inside of it.
             Here, the dropdown contains some menu items nested inside of a
-            scrollable section.
+            scrollable section. Inside a submenu, there's a textbox in order to
+            demonstrate that the contents can be focused.
           </p>
           <div>
             <MenuButton
@@ -61,6 +62,11 @@ export default class Example extends React.Component {
                             <LI>Ceres</LI>
                             <LI>Pluto</LI>
                             <LI>Eris</LI>
+                            <hr style={{margin: '1px 0'}} />
+                            <div>
+                              Test textbox:{' '}
+                              <input type="text" />
+                            </div>
                           </MenuList>
                         </Dropdown>
                       }>

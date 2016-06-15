@@ -49,7 +49,10 @@ export default class MenuButton extends React.Component {
     // Clicking outside of the dropdown or pressing escape should close the
     // dropdown.
     Kefir.merge([
-      fromEventsCapture(window, 'click')
+      Kefir.merge([
+          fromEventsCapture(window, 'click'),
+          fromEventsCapture(window, 'focus')
+        ])
         .filter(e => {
           const el = findDOMNode(this);
           for (let node of FloatAnchor.parentNodes(e.target)) {

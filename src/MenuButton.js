@@ -50,9 +50,9 @@ export default class MenuButton extends React.Component {
     // dropdown.
     Kefir.merge([
       Kefir.merge([
-          fromEventsCapture(window, 'click'),
-          fromEventsCapture(window, 'focus')
-        ])
+        fromEventsCapture(window, 'click'),
+        fromEventsCapture(window, 'focus')
+      ])
         .filter(e => {
           const el = findDOMNode(this);
           for (let node of FloatAnchor.parentNodes(e.target)) {

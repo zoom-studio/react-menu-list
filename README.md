@@ -205,6 +205,8 @@ A MenuButton supports the following props:
  `onWillClose`, `className`, `style`, `openedClassName`, `openedStyle`:
  These work the same as the props on SubMenuItem.
 * `disabled`, `title`: These are passed to the button element.
+* `ButtonComponent`: Optional prop that allows a different component to be used
+ instead of an html `<button>`.
 
 A MenuButton has the following public methods:
 

@@ -23,6 +23,7 @@ export default class MenuButton extends React.Component {
 
     positionOptions: PropTypes.object,
     menuZIndex: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    ButtonComponent: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
 
     children: PropTypes.node,
     menu: PropTypes.element,
@@ -32,7 +33,8 @@ export default class MenuButton extends React.Component {
   };
 
   static defaultProps = {
-    positionOptions: {position:'bottom', hAlign:'left'}
+    positionOptions: {position:'bottom', hAlign:'left'},
+    ButtonComponent: 'button'
   };
 
   state: State = {
@@ -104,7 +106,7 @@ export default class MenuButton extends React.Component {
     const {
       children, menu,
       positionOptions, menuZIndex,
-      disabled, title
+      disabled, title, ButtonComponent
     } = this.props;
     const {opened} = this.state;
 
@@ -125,9 +127,8 @@ export default class MenuButton extends React.Component {
         options={positionOptions}
         zIndex={menuZIndex}
         anchor={
-          <button
+          <ButtonComponent
             type="button"
-            ref="button"
             className={className}
             style={style}
             onMouseDown={e => {
@@ -145,7 +146,7 @@ export default class MenuButton extends React.Component {
             title={title}
           >
             {children}
-          </button>
+          </ButtonComponent>
         }
         float={
           !opened ? null :

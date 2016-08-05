@@ -5,7 +5,7 @@ import {
   Dropdown, MenuList, MenuItem, SubMenuItem
 } from '../src';
 import FloatAnchor from 'react-float-anchor';
-import type {Options as PositionOptions} from 'contain-by-screen';
+import type {Options as PositionOptions} from 'react-float-anchor';
 
 type Item = string|{title:string,items:Array<Item>};
 

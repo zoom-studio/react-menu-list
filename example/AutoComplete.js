@@ -70,14 +70,15 @@ export default class AutoComplete extends React.Component {
     const {value, opened} = this.state;
 
     function filterItems(items: Array<Item>): Array<Item> {
-      return items.map(item => {
+      return (items.map(item => {
         if (typeof item === 'string') {
-          return item.toLowerCase().startsWith(value.toLowerCase()) ? item : (null:any);
+          return item.toLowerCase().startsWith(value.toLowerCase()) ? item : null;
         } else {
           const subItems = filterItems(item.items);
-          return subItems.length ? {title: item.title, items: subItems} : (null:any);
+          return subItems.length ? {title: item.title, items: subItems} : null;
         }
-      }).filter(Boolean);
+      }).filter(Boolean): any);
+      // any-cast because of https://github.com/facebook/flow/issues/2199
     }
 
     const filteredItems = filterItems(items);

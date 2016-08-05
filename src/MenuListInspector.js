@@ -84,7 +84,7 @@ export default class MenuListInspector extends React.Component {
     return false;
   }
 
-  render(): ?React.Element {
+  render() {
     return this.props.children;
   }
 }

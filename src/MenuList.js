@@ -56,7 +56,7 @@ export default class MenuList extends React.Component {
     children: PropTypes.node
   };
 
-  _stopper: Object = kefirStopper();
+  _stopper = kefirStopper();
   _listItems: Array<{
     props: MenuItemProps;
     control: MenuItemControl;

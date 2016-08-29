@@ -2,12 +2,7 @@
 
 import Kefir from 'kefir';
 
-type Emitter = {
-  addEventListener: Function;
-  removeEventListener: Function;
-};
-
-export default function fromEventsCapture(target: Emitter, eventName: string): Object {
+export default function fromEventsCapture(target: EventTarget, eventName: string): Kefir.Observable<Object> {
   return Kefir.stream(emitter => {
     target.addEventListener(eventName, emitter.emit, true);
     return () => {

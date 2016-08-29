@@ -243,7 +243,7 @@ Some callback props are passed a `ChosenEvent` object, which extends the
 
 ## Types
 
-[Flow Type](http://flowtype.org/) declarations for this module are included! As
+[Flow](http://flowtype.org/) type declarations for this module are included! As
 of Flow v0.23, you must add the following entries to your `.flowconfig` file's
 options section for them to work:
 

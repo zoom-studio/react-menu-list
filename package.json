@@ -44,7 +44,7 @@
     "browserify-hmr": "^0.3.1",
     "eslint": "^3.2.2",
     "eslint-plugin-react": "^6.0.0",
-    "flow-bin": "^0.30.0",
+    "flow-bin": "^0.31.1",
     "flow-copy-source": "^1.0.1",
     "jsdom": "^9.2.1",
     "mocha": "^3.0.1",
@@ -56,10 +56,10 @@
   },
   "dependencies": {
     "array-find-index": "1.0.1",
-    "babel-runtime": "^6.6.1",
-    "kefir": "^3.2.1",
-    "kefir-bus": "^2.1.0",
-    "kefir-stopper": "^2.0.0",
+    "babel-runtime": "^6.11.6",
+    "kefir": "^3.5.1",
+    "kefir-bus": "^2.2.0",
+    "kefir-stopper": "^2.1.0",
     "react-float-anchor": "^1.3.2"
   },
   "peerDependencies": {

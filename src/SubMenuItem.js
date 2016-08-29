@@ -2,6 +2,8 @@
 
 import Kefir from 'kefir';
 import kefirBus from 'kefir-bus';
+import type {Bus} from 'kefir-bus';
+import kefirStopper from 'kefir-stopper';
 import React, {PropTypes} from 'react';
 import pointRectDistance from './lib/pointRectDistance';
 
@@ -50,11 +52,11 @@ export default class SubMenuItem extends React.Component {
     opened: false
   };
 
-  _resetMouseLeaveWatcher: Object = kefirBus();
-  _stopper: Object = kefirBus();
+  _resetMouseLeaveWatcher: Bus<null> = kefirBus();
+  _stopper = kefirStopper();
 
   componentWillUnmount() {
-    this._stopper.emit(null);
+    this._stopper.destroy();
   }
 
   open() {

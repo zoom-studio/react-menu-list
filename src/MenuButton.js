@@ -3,8 +3,9 @@
 import React, {PropTypes} from 'react';
 import {findDOMNode} from 'react-dom';
 import FloatAnchor from 'react-float-anchor';
-import kefirBus from 'kefir-bus';
 import Kefir from 'kefir';
+import kefirBus from 'kefir-bus';
+import type {Bus} from 'kefir-bus';
 import fromEventsCapture from './lib/fromEventsCapture';
 import MenuListInspector from './MenuListInspector';
 
@@ -41,7 +42,7 @@ export default class MenuButton extends React.Component {
     opened: false
   };
 
-  _onClose: Object = kefirBus();
+  _onClose: Bus<void> = kefirBus();
 
   open() {
     if (this.state.opened) return;

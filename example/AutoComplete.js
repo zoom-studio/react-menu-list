@@ -174,7 +174,6 @@ class AutoCompleteMenu extends React.Component {
           highlightedStyle={{background: 'gray'}}
           onItemChosen={() => this.props.onValueChosen((item: any))}
           key={item}
-          index={i}
         >
           {item}
         </MenuItem>

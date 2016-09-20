@@ -162,10 +162,22 @@ export default class MenuList extends React.Component {
           },
           updateProps: (newProps: MenuItemProps) => {
             if (item.props.index !== newProps.index) {
+              const oldIndex = this._listItems.indexOf(item);
+              const isNaturalHighlightIndex = this._naturalHighlightedIndex === oldIndex;
+              const isLockedHighlightIndex = this._lockedHighlightedIndex === oldIndex;
+              const isKeyboardTakenByIndex = this._keyboardTakenByIndex === oldIndex;
+
               menuListHandle.unregister();
               props = newProps;
               item.props = newProps;
               register();
+
+              if (isNaturalHighlightIndex || isLockedHighlightIndex || isKeyboardTakenByIndex) {
+                const newIndex = this._listItems.indexOf(item);
+                if (isNaturalHighlightIndex) this._naturalHighlightedIndex = newIndex;
+                if (isLockedHighlightIndex) this._lockedHighlightedIndex = newIndex;
+                if (isKeyboardTakenByIndex) this._keyboardTakenByIndex = newIndex;
+              }
             } else {
               props = newProps;
               item.props = newProps;

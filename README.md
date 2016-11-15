@@ -197,7 +197,9 @@ A MenuListInspector has the following public methods:
 
 This is a button which shows a dropdown when pressed. You can put a MenuList
 into the dropdown, and the MenuButton will close the dropdown once a menu item
-is chosen.
+is chosen. You can avoid having the MenuButton close when an item is chosen by
+calling the `stopPropagation` method on the ChosenEvent object passed to the
+MenuItem's onItemChosen callback.
 
 A MenuButton supports the following props:
 

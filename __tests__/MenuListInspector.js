@@ -1,6 +1,5 @@
 /* @flow */
 
-import './lib/testdom';
 import assert from 'assert';
 import sinon from 'sinon';
 import React from 'react';
@@ -10,8 +9,6 @@ import {MenuListInspector, MenuList, MenuItem} from '../src';
 
 describe('MenuListInspector', function() {
   it('cursor movement works', function() {
-    this.slow();
-
     const mountPoint = document.createElement('div');
     const root: MenuListInspector = (ReactDOM.render(
       <MenuListInspector>
@@ -61,8 +58,6 @@ describe('MenuListInspector', function() {
   });
 
   it('hasHighlight works', function() {
-    this.slow();
-
     const mountPoint = document.createElement('div');
     const root: MenuListInspector = (ReactDOM.render(
       <MenuListInspector>
@@ -84,8 +79,6 @@ describe('MenuListInspector', function() {
   });
 
   it('empty list works', function() {
-    this.slow();
-
     const mountPoint = document.createElement('div');
     const root: MenuListInspector = (ReactDOM.render(
       <MenuListInspector>
@@ -103,8 +96,6 @@ describe('MenuListInspector', function() {
   });
 
   it('no lists works', function() {
-    this.slow();
-
     const mountPoint = document.createElement('div');
     const root: MenuListInspector = (ReactDOM.render(
       <MenuListInspector>

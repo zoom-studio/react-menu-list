@@ -1,6 +1,5 @@
 /* @flow */
 
-import './lib/testdom';
 import assert from 'assert';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -11,8 +10,6 @@ import {MenuButton, Dropdown, MenuList, MenuItem} from '../src';
 
 describe('MenuButton', function() {
   it('opens and closes on click', function() {
-    this.slow();
-
     const mountPoint = document.createElement('div');
     const root: MenuButton = (ReactDOM.render(
       <MenuButton
@@ -56,7 +53,6 @@ describe('MenuButton', function() {
   });
 
   it('closes on outside click', sinon.test(function() {
-    this.slow();
     this.spy(window, 'addEventListener');
     this.spy(window, 'removeEventListener');
 

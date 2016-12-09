@@ -103,7 +103,8 @@ A MenuItem supports the following props:
 * `index`: This an optional number which overrides the menu item's index in the
  MenuList for keyboard control purposes. The order of menu items is normally
  determined by their position in the DOM when mounted. This property should be
- unnecessary unless you're reordering mounted menu items.
+ unnecessary unless you're reordering mounted menu items. If any MenuItems
+ within a MenuList use this prop, then all of them should.
 * `onMouseLeave`: This is an optional function which overrides the MenuItem's
  default onMouseLeave event handler, which is in charge of unhighlighting the
  menu item. Unless you're reimplementing SubMenuItem, you probably won't need

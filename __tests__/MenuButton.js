@@ -1,6 +1,5 @@
 /* @flow */
 
-import assert from 'assert';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
@@ -35,14 +34,13 @@ test('opens and closes on click', () => {
   const button = TestUtils.findRenderedDOMComponentWithTag(root, 'button');
   const floatAnchor: FloatAnchor = TestUtils.findRenderedComponentWithType(root, FloatAnchor);
 
-  assert.strictEqual(TestUtils.scryRenderedComponentsWithType(floatAnchor.portal, MenuItem).length, 0);
+  expect(TestUtils.scryRenderedComponentsWithType(floatAnchor.portal, MenuItem).length).toBe(0);
 
   TestUtils.Simulate.mouseDown(button, {button: 0});
 
   const menuListItems = TestUtils.scryRenderedComponentsWithType(floatAnchor.portal, MenuItem);
 
-  assert.deepEqual(
-    menuListItems.map(c=>c.props.children),
+  expect(menuListItems.map(c=>c.props.children)).toEqual(
     ['A', 'B']
   );
 
@@ -50,7 +48,7 @@ test('opens and closes on click', () => {
 
   TestUtils.Simulate.mouseDown(button, {button: 0});
 
-  assert.strictEqual(TestUtils.scryRenderedComponentsWithType(floatAnchor.portal, MenuItem).length, 0);
+  expect(TestUtils.scryRenderedComponentsWithType(floatAnchor.portal, MenuItem).length).toBe(0);
 
   ReactDOM.unmountComponentAtNode(mountPoint);
 });
@@ -79,21 +77,20 @@ test('closes on outside click', () => {
   const button = TestUtils.findRenderedDOMComponentWithTag(root, 'button');
   const floatAnchor: FloatAnchor = TestUtils.findRenderedComponentWithType(root, FloatAnchor);
 
-  assert.strictEqual(TestUtils.scryRenderedComponentsWithType(floatAnchor.portal, MenuItem).length, 0);
-  assert.strictEqual(window.addEventListener.mock.calls.filter(c => c[0] === 'click').length, 0);
+  expect(TestUtils.scryRenderedComponentsWithType(floatAnchor.portal, MenuItem).length).toBe(0);
+  expect(window.addEventListener.mock.calls.filter(c => c[0] === 'click').length).toBe(0);
 
   TestUtils.Simulate.mouseDown(button, {button: 0});
   TestUtils.Simulate.focus(button);
 
-  assert.strictEqual(window.addEventListener.mock.calls.filter(c => c[0] === 'click').length, 1);
-  assert.strictEqual(window.addEventListener.mock.calls.filter(c => c[0] === 'click')[0][2], true);
+  expect(window.addEventListener.mock.calls.filter(c => c[0] === 'click').length).toBe(1);
+  expect(window.addEventListener.mock.calls.filter(c => c[0] === 'click')[0][2]).toBe(true);
 
-  assert.strictEqual(window.removeEventListener.mock.calls.filter(c => c[0] === 'click').length, 0);
+  expect(window.removeEventListener.mock.calls.filter(c => c[0] === 'click').length).toBe(0);
 
   const menuListItems = TestUtils.scryRenderedComponentsWithType(floatAnchor.portal, MenuItem);
 
-  assert.deepEqual(
-    menuListItems.map(c=>c.props.children),
+  expect(menuListItems.map(c=>c.props.children)).toEqual(
     ['A', 'B']
   );
 
@@ -102,10 +99,10 @@ test('closes on outside click', () => {
     target: 'window'
   });
 
-  assert.strictEqual(TestUtils.scryRenderedComponentsWithType(floatAnchor.portal, MenuItem).length, 0);
+  expect(TestUtils.scryRenderedComponentsWithType(floatAnchor.portal, MenuItem).length).toBe(0);
 
-  assert.strictEqual(window.addEventListener.mock.calls.filter(c => c[0] === 'click').length, 1);
-  assert.strictEqual(window.removeEventListener.mock.calls.filter(c => c[0] === 'click').length, 1);
+  expect(window.addEventListener.mock.calls.filter(c => c[0] === 'click').length).toBe(1);
+  expect(window.removeEventListener.mock.calls.filter(c => c[0] === 'click').length).toBe(1);
 
   ReactDOM.unmountComponentAtNode(mountPoint);
 });

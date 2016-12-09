@@ -1,6 +1,5 @@
 /* @flow */
 
-import assert from 'assert';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
@@ -29,19 +28,18 @@ test('cursor movement works', () => {
 
   const menuListItems = TestUtils.scryRenderedComponentsWithType(root, MenuItem);
 
-  assert.deepEqual(
-    menuListItems.map(c=>c.props.children),
+  expect(menuListItems.map(c=>c.props.children)).toEqual(
     ['A', 'B', 'C']
   );
 
   const keydownCaptureHandlers = window.addEventListener.mock.calls.filter(args =>
     args[0] === 'keydown' && args[2]
   ).map(args => args[1]);
-  assert.strictEqual(keydownCaptureHandlers.length, 1);
+  expect(keydownCaptureHandlers.length).toBe(1);
 
-  assert.deepEqual(menuListItems[0].props.onHighlightChange.mock.calls, []);
-  assert.deepEqual(menuListItems[1].props.onHighlightChange.mock.calls, []);
-  assert.deepEqual(menuListItems[2].props.onHighlightChange.mock.calls, []);
+  expect(menuListItems[0].props.onHighlightChange.mock.calls).toEqual([]);
+  expect(menuListItems[1].props.onHighlightChange.mock.calls).toEqual([]);
+  expect(menuListItems[2].props.onHighlightChange.mock.calls).toEqual([]);
 
   keydownCaptureHandlers[0]({
     preventDefault: jest.fn(),
@@ -51,10 +49,10 @@ test('cursor movement works', () => {
     target: document.body
   });
 
-  assert.deepEqual(menuListItems[0].props.onHighlightChange.mock.calls, [
+  expect(menuListItems[0].props.onHighlightChange.mock.calls).toEqual([
     [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}]]);
-  assert.deepEqual(menuListItems[1].props.onHighlightChange.mock.calls, []);
-  assert.deepEqual(menuListItems[2].props.onHighlightChange.mock.calls, []);
+  expect(menuListItems[1].props.onHighlightChange.mock.calls).toEqual([]);
+  expect(menuListItems[2].props.onHighlightChange.mock.calls).toEqual([]);
 
   keydownCaptureHandlers[0]({
     preventDefault: jest.fn(),
@@ -64,12 +62,12 @@ test('cursor movement works', () => {
     target: document.body
   });
 
-  assert.deepEqual(menuListItems[0].props.onHighlightChange.mock.calls, [
+  expect(menuListItems[0].props.onHighlightChange.mock.calls).toEqual([
     [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
     [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]]);
-  assert.deepEqual(menuListItems[1].props.onHighlightChange.mock.calls, [
+  expect(menuListItems[1].props.onHighlightChange.mock.calls).toEqual([
     [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}]]);
-  assert.deepEqual(menuListItems[2].props.onHighlightChange.mock.calls, []);
+  expect(menuListItems[2].props.onHighlightChange.mock.calls).toEqual([]);
 
   keydownCaptureHandlers[0]({
     preventDefault: jest.fn(),
@@ -79,13 +77,13 @@ test('cursor movement works', () => {
     target: document.body
   });
 
-  assert.deepEqual(menuListItems[0].props.onHighlightChange.mock.calls, [
+  expect(menuListItems[0].props.onHighlightChange.mock.calls).toEqual([
     [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
     [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]]);
-  assert.deepEqual(menuListItems[1].props.onHighlightChange.mock.calls, [
+  expect(menuListItems[1].props.onHighlightChange.mock.calls).toEqual([
     [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
     [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]]);
-  assert.deepEqual(menuListItems[2].props.onHighlightChange.mock.calls, [
+  expect(menuListItems[2].props.onHighlightChange.mock.calls).toEqual([
     [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}]]);
 
   keydownCaptureHandlers[0]({
@@ -96,14 +94,14 @@ test('cursor movement works', () => {
     target: document.body
   });
 
-  assert.deepEqual(menuListItems[0].props.onHighlightChange.mock.calls, [
+  expect(menuListItems[0].props.onHighlightChange.mock.calls).toEqual([
     [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
     [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}],
     [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}]]);
-  assert.deepEqual(menuListItems[1].props.onHighlightChange.mock.calls, [
+  expect(menuListItems[1].props.onHighlightChange.mock.calls).toEqual([
     [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
     [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]]);
-  assert.deepEqual(menuListItems[2].props.onHighlightChange.mock.calls, [
+  expect(menuListItems[2].props.onHighlightChange.mock.calls).toEqual([
     [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
     [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]]);
 
@@ -117,15 +115,15 @@ test('cursor movement works', () => {
     target: document.body
   });
 
-  assert.deepEqual(menuListItems[0].props.onHighlightChange.mock.calls, [
+  expect(menuListItems[0].props.onHighlightChange.mock.calls).toEqual([
     [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
     [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}],
     [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
     [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]]);
-  assert.deepEqual(menuListItems[1].props.onHighlightChange.mock.calls, [
+  expect(menuListItems[1].props.onHighlightChange.mock.calls).toEqual([
     [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
     [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]]);
-  assert.deepEqual(menuListItems[2].props.onHighlightChange.mock.calls, [
+  expect(menuListItems[2].props.onHighlightChange.mock.calls).toEqual([
     [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
     [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}],
     [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'up'}]]);
@@ -138,16 +136,16 @@ test('cursor movement works', () => {
     target: document.body
   });
 
-  assert.deepEqual(menuListItems[0].props.onHighlightChange.mock.calls, [
+  expect(menuListItems[0].props.onHighlightChange.mock.calls).toEqual([
     [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
     [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}],
     [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
     [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]]);
-  assert.deepEqual(menuListItems[1].props.onHighlightChange.mock.calls, [
+  expect(menuListItems[1].props.onHighlightChange.mock.calls).toEqual([
     [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
     [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}],
     [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'up'}]]);
-  assert.deepEqual(menuListItems[2].props.onHighlightChange.mock.calls, [
+  expect(menuListItems[2].props.onHighlightChange.mock.calls).toEqual([
     [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
     [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}],
     [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'up'}],
@@ -155,18 +153,18 @@ test('cursor movement works', () => {
 
   root.moveCursor('up', {top: 5, bottom: 6, left: 7, right: 8});
 
-  assert.deepEqual(menuListItems[0].props.onHighlightChange.mock.calls, [
+  expect(menuListItems[0].props.onHighlightChange.mock.calls).toEqual([
     [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
     [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}],
     [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
     [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}],
     [true, {byKeyboard: true, prevCursorLocation: {top: 5, bottom: 6, left: 7, right: 8}, direction: 'up'}]]);
-  assert.deepEqual(menuListItems[1].props.onHighlightChange.mock.calls, [
+  expect(menuListItems[1].props.onHighlightChange.mock.calls).toEqual([
     [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
     [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}],
     [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'up'}],
     [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]]);
-  assert.deepEqual(menuListItems[2].props.onHighlightChange.mock.calls, [
+  expect(menuListItems[2].props.onHighlightChange.mock.calls).toEqual([
     [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
     [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}],
     [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'up'}],
@@ -207,7 +205,7 @@ test('does not emit ChosenEvents on enter if nothing was chosen', () => {
   const keydownCaptureHandlers = window.addEventListener.mock.calls.filter(args =>
     args[0] === 'keydown' && args[2]
   ).map(args => args[1]);
-  assert.strictEqual(keydownCaptureHandlers.length, 1);
+  expect(keydownCaptureHandlers.length).toBe(1);
 
   expect(root.props.onItemChosen).not.toHaveBeenCalled();
   expect(menuListItems[0].props.onItemChosen).not.toHaveBeenCalled();
@@ -226,7 +224,7 @@ test('does not emit ChosenEvents on enter if nothing was chosen', () => {
     expect(event.stopPropagation).not.toHaveBeenCalled();
   }
 
-  assert(!root.hasHighlight());
+  expect(root.hasHighlight()).toBe(false);
   expect(root.props.onItemChosen).not.toHaveBeenCalled();
   expect(menuListItems[0].props.onItemChosen).not.toHaveBeenCalled();
   expect(menuListItems[1].props.onItemChosen).not.toHaveBeenCalled();
@@ -239,7 +237,7 @@ test('does not emit ChosenEvents on enter if nothing was chosen', () => {
     target: document.body
   });
 
-  assert(root.hasHighlight());
+  expect(root.hasHighlight()).toBe(true);
 
   {
     const event = {
@@ -254,7 +252,7 @@ test('does not emit ChosenEvents on enter if nothing was chosen', () => {
     expect(event.stopPropagation).toHaveBeenCalledTimes(1);
   }
 
-  assert(root.hasHighlight());
+  expect(root.hasHighlight()).toBe(true);
   expect(root.props.onItemChosen).toHaveBeenCalledTimes(1);
   expect(menuListItems[0].props.onItemChosen).toHaveBeenCalledTimes(1);
   expect(menuListItems[1].props.onItemChosen).not.toHaveBeenCalled();

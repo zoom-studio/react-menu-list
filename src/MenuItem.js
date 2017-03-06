@@ -93,12 +93,16 @@ export default class MenuItem extends React.Component {
   }
 
   componentDidMount() {
+    const el = findDOMNode(this);
+    /*:: if (!(el instanceof HTMLElement)) throw new Error(); */
+
     this._menuListHandle = (this.context.menuList:MenuListContext).registerItem(this.props, {
       notifyHighlighted: (highlighted: boolean, byKeyboard: ?boolean, direction: ?Direction, prevCursorLocation: ?Rect) => {
         this.setState({highlighted}, () => {
           if (highlighted && byKeyboard) {
             const el = findDOMNode(this);
-            if (el.scrollIntoViewIfNeeded) {
+            /*:: if (!(el instanceof HTMLElement)) throw new Error(); */
+            if (typeof el.scrollIntoViewIfNeeded === 'function') {
               el.scrollIntoViewIfNeeded();
             } else if (el.scrollIntoView) {
               el.scrollIntoView();
@@ -122,7 +126,7 @@ export default class MenuItem extends React.Component {
           break;
         }
       }
-    }, findDOMNode(this));
+    }, el);
   }
 
   componentWillUnmount() {

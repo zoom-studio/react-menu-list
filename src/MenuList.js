@@ -218,6 +218,7 @@ export default class MenuList extends React.Component {
     const isEnterOrArrowKey = e =>
       (e.which === 13) || (37 <= e.which && e.which <= 40);
     const el = findDOMNode(this);
+    /*:: if (!(el instanceof HTMLElement)) throw new Error(); */
 
     // The only things that should receive keydown/keypress events before us
     // are our children. This allows a MenuItem to contain a text input

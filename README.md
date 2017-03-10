@@ -160,7 +160,7 @@ A SubMenuItem supports the following props:
 
 A SubMenuItem has the following public methods:
 
-* `open()`
+* `open(callback?: Function)`
 * `close()`
 * `toggle()`
 * `reposition()`: Repositions the floating submenu. Call this if you change the
@@ -213,7 +213,7 @@ A MenuButton supports the following props:
 
 A MenuButton has the following public methods:
 
-* `open()`
+* `open(callback?: Function)`
 * `close()`
 * `toggle()`
 * `reposition()`: Repositions the floating submenu. Call this if you change the

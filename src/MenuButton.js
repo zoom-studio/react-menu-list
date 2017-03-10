@@ -44,10 +44,13 @@ export default class MenuButton extends React.Component {
 
   _onClose: Bus<void> = kefirBus();
 
-  open() {
+  open(callback?: () => any) {
     if (this.state.opened) return;
     if (this.props.onWillOpen) this.props.onWillOpen();
-    this.setState({opened: true}, this.props.onDidOpen);
+    this.setState({opened: true}, () => {
+      if (this.props.onDidOpen) this.props.onDidOpen();
+      if (callback) callback();
+    });
 
     // Clicking outside of the dropdown or pressing escape should close the
     // dropdown.

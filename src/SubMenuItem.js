@@ -59,11 +59,14 @@ export default class SubMenuItem extends React.Component {
     this._stopper.destroy();
   }
 
-  open() {
+  open(callback?: () => any) {
     this.refs.menuItem.lockHighlight();
     if (this.state.opened) return;
     if (this.props.onWillOpen) this.props.onWillOpen();
-    this.setState({opened: true}, this.props.onDidOpen);
+    this.setState({opened: true}, () => {
+      if (this.props.onDidOpen) this.props.onDidOpen();
+      if (callback) callback();
+    });
     this.refs.menuItem.takeKeyboard();
   }
 

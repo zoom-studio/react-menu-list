@@ -1,7 +1,8 @@
 /* @flow */
 
-import React, {PropTypes} from 'react';
+import React from 'react';
 import {findDOMNode} from 'react-dom';
+import PropTypes from 'prop-types';
 import Kefir from 'kefir';
 import kefirStopper from 'kefir-stopper';
 import findIndex from 'array-find-index';
@@ -73,11 +74,11 @@ export default class MenuList extends React.Component {
   }
 
   static childContextTypes = {
-    menuList: React.PropTypes.object
+    menuList: PropTypes.object
   };
 
   static contextTypes = {
-    menuListInspector: React.PropTypes.object
+    menuListInspector: PropTypes.object
   };
 
   getChildContext(): Object {

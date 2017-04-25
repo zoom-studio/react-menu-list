@@ -6,3 +6,4 @@ npm-debug.log
 /src
 /__tests__
 /example
+/flow-typed

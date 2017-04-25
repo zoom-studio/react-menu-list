@@ -1,6 +1,7 @@
 /* @flow */
 
-import React, {PropTypes} from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import type MenuList from './MenuList';
 import type MenuEvent from './events/MenuEvent';
 import type {Direction, Rect} from './types';
@@ -21,11 +22,11 @@ export default class MenuListInspector extends React.Component {
   };
 
   static childContextTypes = {
-    menuListInspector: React.PropTypes.object
+    menuListInspector: PropTypes.object
   };
 
   static contextTypes = {
-    menuListInspector: React.PropTypes.object
+    menuListInspector: PropTypes.object
   };
 
   _descendantMenuLists: Array<MenuList> = [];

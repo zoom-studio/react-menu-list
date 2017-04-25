@@ -4,7 +4,8 @@ import Kefir from 'kefir';
 import kefirBus from 'kefir-bus';
 import type {Bus} from 'kefir-bus';
 import kefirStopper from 'kefir-stopper';
-import React, {PropTypes} from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import pointRectDistance from './lib/pointRectDistance';
 
 import MenuListInspector from './MenuListInspector';

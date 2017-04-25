@@ -1,7 +1,8 @@
 /* @flow */
 
-import React, {PropTypes} from 'react';
+import React from 'react';
 import {findDOMNode} from 'react-dom';
+import PropTypes from 'prop-types';
 
 import type MenuEvent from './events/MenuEvent';
 import type {MenuListContext, MenuListHandle} from './MenuList';
@@ -54,7 +55,7 @@ export default class MenuItem extends React.Component {
   };
 
   static contextTypes = {
-    menuList: React.PropTypes.object
+    menuList: PropTypes.object
   };
 
   hasHighlight(): boolean {

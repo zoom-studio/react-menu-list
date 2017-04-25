@@ -1,7 +1,8 @@
 /* @flow */
 
-import React, {PropTypes} from 'react';
+import React from 'react';
 import {findDOMNode} from 'react-dom';
+import PropTypes from 'prop-types';
 import FloatAnchor from 'react-float-anchor';
 import Kefir from 'kefir';
 import kefirBus from 'kefir-bus';

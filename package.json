@@ -4,7 +4,7 @@
   "description": "React component for menu lists and submenus",
   "main": "js/index.js",
   "scripts": {
-    "prepare": "babel -s inline -d js/ src/ && flow-copy-source -v src js",
+    "prepare": "rimraf js/ && babel -s inline -d js/ src/ && flow-copy-source -v src js",
     "example-build": "NODE_ENV=development browserify -t babelify -do example/bundle.js example/main.js",
     "example-watch": "NODE_ENV=development-hmr watchify -v -p browserify-hmr -t babelify -do example/bundle.js example/main.js",
     "example-build-prod": "NODE_ENV=production browserify -t babelify -do example/bundle.js example/main.js",
@@ -46,12 +46,13 @@
     "eslint": "^3.9.1",
     "eslint-plugin-flowtype": "^2.29.1",
     "eslint-plugin-react": "^6.4.1",
-    "flow-bin": "^0.44.2",
+    "flow-bin": "^0.49.1",
     "flow-copy-source": "^1.0.1",
     "jest": "^19.0.2",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-test-renderer": "^15.5.4",
+    "rimraf": "^2.6.1",
     "watchify": "^3.7.0"
   },
   "dependencies": {

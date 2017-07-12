@@ -33,7 +33,5 @@ module.exports = {
     "no-whitespace-before-property": ["error"],
     "space-before-blocks": ["error", "always"],
     "keyword-spacing": ["error"],
-
-    "react/no-string-refs": ["off"], // TODO remove
   }
 };

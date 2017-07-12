@@ -35,6 +35,7 @@ export default class AutoComplete extends React.Component {
 
   props: Props;
   state: State;
+  _floatAnchor: FloatAnchor;
 
   constructor(props: Props) {
     super(props);
@@ -86,12 +87,11 @@ export default class AutoComplete extends React.Component {
 
     return (
       <FloatAnchor
-        ref="floatAnchor"
+        ref={el => this._floatAnchor = el}
         options={positionOptions}
         anchor={
           <input
             type="text"
-            ref="text"
             className={className}
             style={style}
             value={value}
@@ -124,7 +124,7 @@ export default class AutoComplete extends React.Component {
                 this.close();
               }}
               reposition={() => {
-                this.refs.floatAnchor.reposition();
+                this._floatAnchor.reposition();
               }}
             />
         }
@@ -146,10 +146,11 @@ type MenuProps = {
 // before the FloatAnchor's floated elements have been updated.
 class AutoCompleteMenu extends React.Component {
   props: MenuProps;
+  _firstItem: MenuItem|SubMenuItem;
 
   componentDidMount() {
-    if (this.props.autoHighlight && this.refs.firstItem) {
-      this.refs.firstItem.highlight();
+    if (this.props.autoHighlight && this._firstItem) {
+      this._firstItem.highlight();
     }
   }
 
@@ -157,8 +158,8 @@ class AutoCompleteMenu extends React.Component {
     if (prevProps.value !== this.props.value) {
       this.props.reposition();
 
-      if (this.props.autoHighlight && this.refs.firstItem) {
-        this.refs.firstItem.highlight();
+      if (this.props.autoHighlight && this._firstItem) {
+        this._firstItem.highlight();
       }
     }
   }
@@ -167,7 +168,7 @@ class AutoCompleteMenu extends React.Component {
     const {filteredItems} = this.props;
 
     const makeElements = nested => (item, i) => {
-      const ref = !nested && i === 0 ? 'firstItem' : null;
+      const ref = !nested && i === 0 ? (el => this._firstItem = el) : null;
 
       return typeof item === 'string' ?
         <MenuItem

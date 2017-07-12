@@ -53,6 +53,10 @@ export default class SubMenuItem extends React.Component {
     opened: false
   };
 
+  _menuItem: MenuItem;
+  _menuInspector: MenuListInspector;
+  _menuContainer: HTMLElement;
+  _floatAnchor: FloatAnchor;
   _resetMouseLeaveWatcher: Bus<null> = kefirBus();
   _stopper = kefirStopper();
 
@@ -61,22 +65,22 @@ export default class SubMenuItem extends React.Component {
   }
 
   open(callback?: () => any) {
-    this.refs.menuItem.lockHighlight();
+    this._menuItem.lockHighlight();
     if (this.state.opened) return;
     if (this.props.onWillOpen) this.props.onWillOpen();
     this.setState({opened: true}, () => {
       if (this.props.onDidOpen) this.props.onDidOpen();
       if (callback) callback();
     });
-    this.refs.menuItem.takeKeyboard();
+    this._menuItem.takeKeyboard();
   }
 
   close() {
     if (!this.state.opened) return;
     if (this.props.onWillClose) this.props.onWillClose();
     this.setState({opened: false});
-    this.refs.menuItem.releaseKeyboard();
-    this.refs.menuItem.unlockHighlight();
+    this._menuItem.releaseKeyboard();
+    this._menuItem.unlockHighlight();
   }
 
   toggle() {
@@ -88,23 +92,23 @@ export default class SubMenuItem extends React.Component {
   }
 
   reposition() {
-    this.refs.floatAnchor.reposition();
+    this._floatAnchor.reposition();
   }
 
   hasHighlight(): boolean {
-    return this.refs.menuItem.hasHighlight();
+    return this._menuItem.hasHighlight();
   }
 
   highlight(byKeyboard: boolean=true) {
-    this.refs.menuItem.highlight(byKeyboard);
+    this._menuItem.highlight(byKeyboard);
   }
 
   unhighlight() {
-    this.refs.menuItem.unhighlight();
+    this._menuItem.unhighlight();
   }
 
   moveCursor(direction: Direction, prevCursorLocation: ?Rect) {
-    this.refs.menuItem.moveCursor(direction, prevCursorLocation);
+    this._menuItem.moveCursor(direction, prevCursorLocation);
   }
 
   _onHighlightChange(highlighted: boolean, event: Object) {
@@ -126,13 +130,13 @@ export default class SubMenuItem extends React.Component {
 
   _onMouseLeaveItem(event: Object) {
     if (!this.state.opened) {
-      this.refs.menuItem.unhighlight();
+      this._menuItem.unhighlight();
       return;
     }
 
     // If the mouse isn't going toward the menu, then unhighlight ourself.
 
-    const menuRect = this.refs.menuContainer.getBoundingClientRect();
+    const menuRect = this._menuContainer.getBoundingClientRect();
 
     const startTime = Date.now();
     const startX = event.pageX, startY = event.pageY;
@@ -178,13 +182,13 @@ export default class SubMenuItem extends React.Component {
       .takeUntilBy(this._stopper)
       .onValue(() => {
         this.close();
-        this.refs.menuItem.unhighlight();
+        this._menuItem.unhighlight();
       });
   }
 
   _mouseEnterMenu() {
     this._resetMouseLeaveWatcher.emit(null);
-    this.refs.menuItem.unlockHighlight();
+    this._menuItem.unlockHighlight();
   }
 
   render() {
@@ -207,7 +211,7 @@ export default class SubMenuItem extends React.Component {
 
     return (
       <MenuItem
-        ref="menuItem"
+        ref={el => this._menuItem = el}
         index={index}
         style={style}
         className={className}
@@ -220,7 +224,7 @@ export default class SubMenuItem extends React.Component {
             e.stopPropagation();
             e.preventDefault();
             this.open();
-            this.refs.menuInspector.moveCursor('down');
+            this._menuInspector.moveCursor('down');
           }
         }}
         onItemChosen={(e: ChosenEvent) => {
@@ -228,14 +232,14 @@ export default class SubMenuItem extends React.Component {
           e.preventDefault();
           this.open();
           if (e.byKeyboard) {
-            this.refs.menuInspector.moveCursor('down');
+            this._menuInspector.moveCursor('down');
           }
         }}
         aria-haspopup={true}
         aria-expanded={opened}
       >
         <FloatAnchor
-          ref="floatAnchor"
+          ref={el => this._floatAnchor = el}
           options={positionOptions}
           zIndex={menuZIndex}
           anchor={
@@ -246,7 +250,7 @@ export default class SubMenuItem extends React.Component {
           float={
             !opened ? null :
               <MenuListInspector
-                ref="menuInspector"
+                ref={el => this._menuInspector = el}
                 onLeftPushed={e => {
                   e.stopPropagation();
                   e.preventDefault();
@@ -254,7 +258,7 @@ export default class SubMenuItem extends React.Component {
                 }}
               >
                 <div
-                  ref="menuContainer"
+                  ref={el => this._menuContainer = el}
                   onMouseEnter={()=>this._mouseEnterMenu()}
                 >
                   {menu}

@@ -43,6 +43,7 @@ export default class MenuButton extends React.Component {
     opened: false
   };
 
+  _floatAnchor: FloatAnchor;
   _onClose: Bus<void> = kefirBus();
 
   open(callback?: () => any) {
@@ -96,7 +97,7 @@ export default class MenuButton extends React.Component {
   }
 
   reposition() {
-    this.refs.floatAnchor.reposition();
+    this._floatAnchor.reposition();
   }
 
   _itemChosen() {
@@ -128,7 +129,7 @@ export default class MenuButton extends React.Component {
 
     return (
       <FloatAnchor
-        ref="floatAnchor"
+        ref={el => this._floatAnchor = el}
         options={positionOptions}
         zIndex={menuZIndex}
         anchor={

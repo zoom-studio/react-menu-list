@@ -256,12 +256,12 @@ export default class SubMenuItem extends React.Component {
                 <div
                   ref="menuContainer"
                   onMouseEnter={()=>this._mouseEnterMenu()}
-                  >
+                >
                   {menu}
                 </div>
               </MenuListInspector>
           }
-          />
+        />
       </MenuItem>
     );
   }

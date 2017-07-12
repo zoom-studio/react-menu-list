@@ -163,7 +163,7 @@ export default class MenuItem extends React.Component {
         role="menuitem"
         aria-haspopup={this.props['aria-haspopup']}
         aria-expanded={this.props['aria-expanded']}
-        >
+      >
         {children}
       </div>
     );

@@ -33,6 +33,7 @@ export default class AutoComplete extends React.Component {
     defaultValue: ''
   };
 
+  props: Props;
   state: State;
 
   constructor(props: Props) {
@@ -125,7 +126,7 @@ export default class AutoComplete extends React.Component {
               reposition={() => {
                 this.refs.floatAnchor.reposition();
               }}
-              />
+            />
         }
       />
     );
@@ -177,7 +178,7 @@ class AutoCompleteMenu extends React.Component {
         >
           {item}
         </MenuItem>
-      :
+        :
         <SubMenuItem
           ref={ref}
           highlightedStyle={{background: 'gray'}}

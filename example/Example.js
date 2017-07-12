@@ -32,7 +32,7 @@ export default class Example extends React.Component {
           <p>
             The MenuButton dropdown can have arbitrary elements inside of it.
             Here, the dropdown contains some menu items nested inside of a
-            scrollable section. Inside a submenu, there's a textbox in order to
+            scrollable section. Inside a submenu, there&apos;s a textbox in order to
             demonstrate that the contents can be focused.
           </p>
           <div>
@@ -75,19 +75,19 @@ export default class Example extends React.Component {
                   </MenuList>
                 </Dropdown>
               }
-              >
+            >
               Menu Button
             </MenuButton>
           </div>
           <p>
-            The autocomplete example here shows a dropdown while it's focused,
-            and it filters the dropdown options based on what's typed. The
+            The autocomplete example here shows a dropdown while it&apos;s focused,
+            and it filters the dropdown options based on what&apos;s typed. The
             dropdown is usable by mouse or arrow keys. The autocomplete
             dropdown has a submenu to show that they still work here.
           </p>
           <p>
-            The autocomplete widget here isn't something provided as a generic
-            component by the react-menu-list library; it's an example of how to
+            The autocomplete widget here isn&apos;t something provided as a generic
+            component by the react-menu-list library; it&apos;s an example of how to
             use react-menu-list.
           </p>
           <div>
@@ -103,7 +103,7 @@ export default class Example extends React.Component {
           <p>
             Different applications have different needs, which are often easy
             to accomplish with react-menu-list.
-            Here's a variation of the autocomplete widget which keeps the first
+            Here&apos;s a variation of the autocomplete widget which keeps the first
             item highlighted whenever the text changes, so that the user can
             immediately pick the first item by hitting enter.
           </p>

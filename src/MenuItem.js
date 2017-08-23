@@ -1,7 +1,6 @@
 /* @flow */
 
 import React from 'react';
-import {findDOMNode} from 'react-dom';
 import PropTypes from 'prop-types';
 
 import type MenuEvent from './events/MenuEvent';
@@ -58,6 +57,11 @@ export default class MenuItem extends React.Component {
     menuList: PropTypes.object
   };
 
+  _el: ?HTMLElement;
+  _elSetter = (el: ?HTMLElement) => {
+    this._el = el;
+  };
+
   hasHighlight(): boolean {
     return this.state.highlighted;
   }
@@ -94,15 +98,15 @@ export default class MenuItem extends React.Component {
   }
 
   componentDidMount() {
-    const el = findDOMNode(this);
-    /*:: if (!(el instanceof HTMLElement)) throw new Error(); */
+    const el = this._el;
+    /*:: if (!el) throw new Error(); */
 
     this._menuListHandle = (this.context.menuList:MenuListContext).registerItem(this.props, {
       notifyHighlighted: (highlighted: boolean, byKeyboard: ?boolean, direction: ?Direction, prevCursorLocation: ?Rect) => {
         this.setState({highlighted}, () => {
           if (highlighted && byKeyboard) {
-            const el = findDOMNode(this);
-            /*:: if (!(el instanceof HTMLElement)) throw new Error(); */
+            const el = this._el;
+            /*:: if (!el) throw new Error(); */
             if (typeof el.scrollIntoViewIfNeeded === 'function') {
               el.scrollIntoViewIfNeeded();
             } else if (el.scrollIntoView) {
@@ -155,6 +159,7 @@ export default class MenuItem extends React.Component {
 
     return (
       <div
+        ref={this._elSetter}
         style={style}
         className={className}
         onClick={()=>this._menuListHandle.itemChosen()}

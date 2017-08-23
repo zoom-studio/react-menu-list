@@ -6,6 +6,7 @@
 .*/node_modules/spdx-.*/.*
 .*/node_modules/.*/\(test\|lib\|example\|samplejson\)/.*\.json
 .*/node_modules/react-motion/.*
+<PROJECT_ROOT>/js/.*
 
 [include]
 

@@ -1,7 +1,6 @@
 /* @flow */
 
 import React from 'react';
-import {findDOMNode} from 'react-dom';
 import PropTypes from 'prop-types';
 import Kefir from 'kefir';
 import kefirStopper from 'kefir-stopper';
@@ -67,6 +66,11 @@ export default class MenuList extends React.Component {
   _naturalHighlightedIndex: ?number;
   _lockedHighlightedIndex: ?number;
   _keyboardTakenByIndex: ?number;
+
+  _el: ?HTMLElement;
+  _elSetter = (el: ?HTMLElement) => {
+    this._el = el;
+  };
 
   _getVisibleHighlightedIndex(): ?number {
     return this._lockedHighlightedIndex != null ?
@@ -218,8 +222,8 @@ export default class MenuList extends React.Component {
   componentDidMount() {
     const isEnterOrArrowKey = e =>
       (e.which === 13) || (37 <= e.which && e.which <= 40);
-    const el = findDOMNode(this);
-    /*:: if (!(el instanceof HTMLElement)) throw new Error(); */
+    const el = this._el;
+    /*:: if (!el) throw new Error(); */
 
     // The only things that should receive keydown/keypress events before us
     // are our children. This allows a MenuItem to contain a text input
@@ -392,7 +396,7 @@ export default class MenuList extends React.Component {
 
   render() {
     return (
-      <div role="menu">
+      <div role="menu" ref={this._elSetter}>
         {this.props.children}
       </div>
     );

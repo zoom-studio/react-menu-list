@@ -1,4 +1,5 @@
 /* @flow */
+/* eslint-disable react/prop-types */
 
 import React from 'react';
 import {
@@ -26,15 +27,13 @@ type State = {
 // This is an example autocomplete widget built using the library. It's not
 // very generic; you might want to copy this into your application and
 // customize it for your uses and to match your application's styling.
-export default class AutoComplete extends React.Component {
+export default class AutoComplete extends React.Component<Props, State> {
   static defaultProps = {
     positionOptions: {position:'bottom', hAlign:'left'},
     autoHighlight: false,
     defaultValue: ''
   };
 
-  props: Props;
-  state: State;
   _floatAnchor: FloatAnchor;
 
   constructor(props: Props) {
@@ -87,7 +86,9 @@ export default class AutoComplete extends React.Component {
 
     return (
       <FloatAnchor
-        ref={el => this._floatAnchor = el}
+        ref={el => {
+          if (el) this._floatAnchor = el;
+        }}
         options={positionOptions}
         anchor={
           <input
@@ -144,8 +145,7 @@ type MenuProps = {
 // This component is separate so that its componentDidUpdate method gets called
 // at the right time. AutoComplete's componentDidUpdate method may get called
 // before the FloatAnchor's floated elements have been updated.
-class AutoCompleteMenu extends React.Component {
-  props: MenuProps;
+class AutoCompleteMenu extends React.Component<MenuProps> {
   _firstItem: MenuItem|SubMenuItem;
 
   componentDidMount() {
@@ -168,7 +168,11 @@ class AutoCompleteMenu extends React.Component {
     const {filteredItems} = this.props;
 
     const makeElements = nested => (item, i) => {
-      const ref = !nested && i === 0 ? (el => this._firstItem = el) : null;
+      const ref = !nested && i === 0 ?
+        (el => {
+          if (el) this._firstItem = el;
+        })
+        : null;
 
       return typeof item === 'string' ?
         <MenuItem

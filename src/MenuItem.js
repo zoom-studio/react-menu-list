@@ -1,9 +1,11 @@
 /* @flow */
 
 import React from 'react';
+import type {Node as ReactNode} from 'react';
 import PropTypes from 'prop-types';
 
 import type MenuEvent from './events/MenuEvent';
+import ChosenEvent from './events/ChosenEvent';
 import type {MenuListContext, MenuListHandle} from './MenuList';
 import type {Direction, Rect} from './types';
 
@@ -12,10 +14,10 @@ type State = {
 };
 
 export type Props = {
-  onItemChosen?: ?Function;
-  onHighlightChange?: ?Function;
-  onLeftPushed?: ?Function;
-  onRightPushed?: ?Function;
+  onItemChosen?: ?(event: ChosenEvent) => void;
+  onLeftPushed?: ?(event: MenuEvent) => void;
+  onRightPushed?: ?(event: MenuEvent) => void;
+  onHighlightChange?: ?(highlighted: boolean, details: {byKeyboard: ?boolean, prevCursorLocation: ?Rect, direction: ?Direction}) => void;
 
   className?: ?string;
   style?: ?Object;
@@ -25,12 +27,15 @@ export type Props = {
   index?: ?number;
   onMouseLeave?: ?Function;
 
-  children: any;
+  children?: ReactNode;
+
+  'aria-haspopup'?: ?boolean;
+  'aria-expanded'?: ?boolean;
 };
 
-export default class MenuItem extends React.Component {
+export default class MenuItem extends React.Component<Props, State> {
   _menuListHandle: MenuListHandle;
-  state: State = {
+  state = {
     highlighted: false
   };
   static propTypes = {
@@ -121,6 +126,7 @@ export default class MenuItem extends React.Component {
       notifyEvent: (event: MenuEvent) => {
         switch (event.type) {
         case 'chosen':
+          /*:: if (!(event instanceof ChosenEvent)) throw new Error(); */
           if (this.props.onItemChosen) this.props.onItemChosen(event);
           break;
         case 'left':

@@ -2,9 +2,11 @@
 /* eslint-disable react/no-find-dom-node */
 
 import React from 'react';
+import type {Node as ReactNode, Element as ReactElement, ElementType as ReactElementType} from 'react';
 import {findDOMNode} from 'react-dom';
 import PropTypes from 'prop-types';
 import FloatAnchor from 'react-float-anchor';
+import type {Options as FloatAnchorOptions} from 'react-float-anchor';
 import Kefir from 'kefir';
 import kefirBus from 'kefir-bus';
 import type {Bus} from 'kefir-bus';
@@ -14,8 +16,26 @@ import MenuListInspector from './MenuListInspector';
 type State = {
   opened: boolean;
 };
+export type Props = {
+  className?: ?string;
+  style?: ?Object;
+  disabled?: ?boolean;
+  title?: ?string;
+  openedClassName?: ?string;
+  openedStyle?: ?Object;
 
-export default class MenuButton extends React.Component {
+  positionOptions: FloatAnchorOptions;
+  menuZIndex?: ?string|number;
+  ButtonComponent: ReactElementType;
+
+  children?: ReactNode;
+  menu?: ?ReactElement<any>;
+  onWillOpen?: ?() => void;
+  onDidOpen?: ?() => void;
+  onWillClose?: ?() => void;
+};
+
+export default class MenuButton extends React.Component<Props, State> {
   static propTypes = {
     className: PropTypes.string,
     style: PropTypes.object,
@@ -130,7 +150,9 @@ export default class MenuButton extends React.Component {
 
     return (
       <FloatAnchor
-        ref={el => this._floatAnchor = el}
+        ref={el => {
+          if (el) this._floatAnchor = el;
+        }}
         options={positionOptions}
         zIndex={menuZIndex}
         anchor={

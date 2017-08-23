@@ -1,9 +1,11 @@
 /* @flow */
 
 import React from 'react';
+import type {Node as ReactNode} from 'react';
 import PropTypes from 'prop-types';
 import type MenuList from './MenuList';
 import type MenuEvent from './events/MenuEvent';
+import ChosenEvent from './events/ChosenEvent';
 import type {Direction, Rect} from './types';
 
 export type MenuListInspectorContext = {
@@ -12,7 +14,14 @@ export type MenuListInspectorContext = {
   dispatchEvent(event: MenuEvent): void;
 };
 
-export default class MenuListInspector extends React.Component {
+export type Props = {
+  onItemChosen?: ?(event: ChosenEvent) => void;
+  onLeftPushed?: ?(event: MenuEvent) => void;
+  onRightPushed?: ?(event: MenuEvent) => void;
+  children?: ReactNode;
+};
+
+export default class MenuListInspector extends React.Component<Props> {
   static propTypes = {
     onItemChosen: PropTypes.func,
     onLeftPushed: PropTypes.func,
@@ -48,6 +57,7 @@ export default class MenuListInspector extends React.Component {
       dispatchEvent: (event: MenuEvent) => {
         switch (event.type) {
         case 'chosen':
+          /*:: if (!(event instanceof ChosenEvent)) throw new Error(); */
           if (this.props.onItemChosen) this.props.onItemChosen(event);
           break;
         case 'left':

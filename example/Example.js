@@ -14,14 +14,14 @@ function LI(props) {
       style={{cursor: 'pointer', userSelect: 'none'}}
       highlightedStyle={{background: 'gray'}}
       onItemChosen={e => {
-        console.log(`selected ${props.children}, byKeyboard: ${e.byKeyboard}`);
+        console.log(`selected ${props.children}, byKeyboard: ${String(e.byKeyboard)}`);
       }}
       {...props}
     />
   );
 }
 
-export default class Example extends React.Component {
+export default class Example extends React.Component<*> {
   render() {
     return (
       <div className="main">

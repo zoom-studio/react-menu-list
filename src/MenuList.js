@@ -1,6 +1,7 @@
 /* @flow */
 
 import React from 'react';
+import type {Node as ReactNode} from 'react';
 import PropTypes from 'prop-types';
 import Kefir from 'kefir';
 import kefirStopper from 'kefir-stopper';
@@ -48,7 +49,14 @@ export type MenuListContext = {
   ): MenuListHandle;
 };
 
-export default class MenuList extends React.Component {
+export type Props = {
+  onItemChosen?: ?(event: ChosenEvent) => void;
+  onLeftPushed?: ?(event: MenuEvent) => void;
+  onRightPushed?: ?(event: MenuEvent) => void;
+  children?: ReactNode;
+};
+
+export default class MenuList extends React.Component<Props> {
   static propTypes = {
     onItemChosen: PropTypes.func,
     onLeftPushed: PropTypes.func,
@@ -297,6 +305,7 @@ export default class MenuList extends React.Component {
     }
     switch (event.type) {
     case 'chosen':
+      /*:: if (!(event instanceof ChosenEvent)) throw new Error(); */
       if (this.props.onItemChosen) this.props.onItemChosen(event);
       break;
     // case 'up':

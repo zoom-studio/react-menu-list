@@ -5,11 +5,13 @@ import kefirBus from 'kefir-bus';
 import type {Bus} from 'kefir-bus';
 import kefirStopper from 'kefir-stopper';
 import React from 'react';
+import type {Node as ReactNode, Element as ReactElement} from 'react';
 import PropTypes from 'prop-types';
 import pointRectDistance from './lib/pointRectDistance';
 
 import MenuListInspector from './MenuListInspector';
 import FloatAnchor from 'react-float-anchor';
+import type {Options as FloatAnchorOptions} from 'react-float-anchor';
 import MenuItem from './MenuItem';
 
 import type {Direction, Rect} from './types';
@@ -20,7 +22,31 @@ type State = {
   opened: boolean;
 };
 
-export default class SubMenuItem extends React.Component {
+export type Props = {
+  menu?: ReactElement<any>;
+  positionOptions: FloatAnchorOptions;
+  menuZIndex?: ?string|number;
+
+  onWillOpen?: ?() => void;
+  onDidOpen?: ?() => void;
+  onWillClose?: ?() => void;
+
+  className?: ?string;
+  style?: ?Object;
+  highlightedClassName?: ?string;
+  highlightedStyle?: ?Object;
+  index?: ?number;
+
+  openedClassName?: ?string;
+  openedStyle?: ?Object;
+
+  onItemChosen?: ?(event: ChosenEvent) => void;
+  onHighlightChange?: ?(highlighted: boolean, details: {byKeyboard: ?boolean, prevCursorLocation: ?Rect, direction: ?Direction}) => void;
+
+  children?: ReactNode;
+};
+
+export default class SubMenuItem extends React.Component<Props, State> {
   static propTypes = {
     menu: PropTypes.node,
     positionOptions: PropTypes.object,
@@ -211,7 +237,9 @@ export default class SubMenuItem extends React.Component {
 
     return (
       <MenuItem
-        ref={el => this._menuItem = el}
+        ref={el => {
+          if (el) this._menuItem = el;
+        }}
         index={index}
         style={style}
         className={className}
@@ -239,7 +267,9 @@ export default class SubMenuItem extends React.Component {
         aria-expanded={opened}
       >
         <FloatAnchor
-          ref={el => this._floatAnchor = el}
+          ref={el => {
+            if (el) this._floatAnchor = el;
+          }}
           options={positionOptions}
           zIndex={menuZIndex}
           anchor={
@@ -250,7 +280,9 @@ export default class SubMenuItem extends React.Component {
           float={
             !opened ? null :
               <MenuListInspector
-                ref={el => this._menuInspector = el}
+                ref={el => {
+                  if (el) this._menuInspector = el;
+                }}
                 onLeftPushed={e => {
                   e.stopPropagation();
                   e.preventDefault();
@@ -258,7 +290,9 @@ export default class SubMenuItem extends React.Component {
                 }}
               >
                 <div
-                  ref={el => this._menuContainer = el}
+                  ref={el => {
+                    if (el) this._menuContainer = el;
+                  }}
                   onMouseEnter={()=>this._mouseEnterMenu()}
                 >
                   {menu}

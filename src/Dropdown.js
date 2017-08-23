@@ -1,9 +1,14 @@
 /* @flow */
 
 import React from 'react';
+import type {Node as ReactNode} from 'react';
 import PropTypes from 'prop-types';
 
-export default class Dropdown extends React.Component {
+type Props = {
+  children?: ReactNode;
+};
+
+export default class Dropdown extends React.Component<Props> {
   static propTypes = {
     children: PropTypes.node
   };

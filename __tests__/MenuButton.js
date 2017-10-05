@@ -34,11 +34,11 @@ xtest('opens and closes on click', () => {
   const button = TestUtils.findRenderedDOMComponentWithTag(root, 'button');
   const floatAnchor: FloatAnchor = TestUtils.findRenderedComponentWithType(root, FloatAnchor);
 
-  expect(TestUtils.scryRenderedComponentsWithType(floatAnchor.portal, MenuItem).length).toBe(0);
+  expect(TestUtils.scryRenderedComponentsWithType((floatAnchor:any).portal, MenuItem).length).toBe(0);
 
   TestUtils.Simulate.mouseDown(button, {button: 0});
 
-  const menuListItems = TestUtils.scryRenderedComponentsWithType(floatAnchor.portal, MenuItem);
+  const menuListItems = TestUtils.scryRenderedComponentsWithType((floatAnchor:any).portal, MenuItem);
 
   expect(menuListItems.map(c=>c.props.children)).toEqual(
     ['A', 'B']
@@ -48,7 +48,7 @@ xtest('opens and closes on click', () => {
 
   TestUtils.Simulate.mouseDown(button, {button: 0});
 
-  expect(TestUtils.scryRenderedComponentsWithType(floatAnchor.portal, MenuItem).length).toBe(0);
+  expect(TestUtils.scryRenderedComponentsWithType((floatAnchor:any).portal, MenuItem).length).toBe(0);
 
   ReactDOM.unmountComponentAtNode(mountPoint);
 });
@@ -77,7 +77,7 @@ xtest('closes on outside click', () => {
   const button = TestUtils.findRenderedDOMComponentWithTag(root, 'button');
   const floatAnchor: FloatAnchor = TestUtils.findRenderedComponentWithType(root, FloatAnchor);
 
-  expect(TestUtils.scryRenderedComponentsWithType(floatAnchor.portal, MenuItem).length).toBe(0);
+  expect(TestUtils.scryRenderedComponentsWithType((floatAnchor:any).portal, MenuItem).length).toBe(0);
   expect(window.addEventListener.mock.calls.filter(c => c[0] === 'click').length).toBe(0);
 
   TestUtils.Simulate.mouseDown(button, {button: 0});
@@ -88,7 +88,7 @@ xtest('closes on outside click', () => {
 
   expect(window.removeEventListener.mock.calls.filter(c => c[0] === 'click').length).toBe(0);
 
-  const menuListItems = TestUtils.scryRenderedComponentsWithType(floatAnchor.portal, MenuItem);
+  const menuListItems = TestUtils.scryRenderedComponentsWithType((floatAnchor:any).portal, MenuItem);
 
   expect(menuListItems.map(c=>c.props.children)).toEqual(
     ['A', 'B']
@@ -99,7 +99,7 @@ xtest('closes on outside click', () => {
     target: 'window'
   });
 
-  expect(TestUtils.scryRenderedComponentsWithType(floatAnchor.portal, MenuItem).length).toBe(0);
+  expect(TestUtils.scryRenderedComponentsWithType((floatAnchor:any).portal, MenuItem).length).toBe(0);
 
   expect(window.addEventListener.mock.calls.filter(c => c[0] === 'click').length).toBe(1);
   expect(window.removeEventListener.mock.calls.filter(c => c[0] === 'click').length).toBe(1);

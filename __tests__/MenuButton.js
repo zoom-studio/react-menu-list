@@ -11,7 +11,7 @@ afterEach(() => {
   delete window.removeEventListener;
 });
 
-test('opens and closes on click', () => {
+xtest('opens and closes on click', () => {
   const mountPoint = document.createElement('div');
   const root: MenuButton = (ReactDOM.render(
     <MenuButton
@@ -53,7 +53,7 @@ test('opens and closes on click', () => {
   ReactDOM.unmountComponentAtNode(mountPoint);
 });
 
-test('closes on outside click', () => {
+xtest('closes on outside click', () => {
   window.addEventListener = jest.fn(window.addEventListener);
   window.removeEventListener = jest.fn(window.removeEventListener);
 

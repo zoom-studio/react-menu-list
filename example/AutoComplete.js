@@ -204,9 +204,19 @@ class AutoCompleteMenu extends React.Component<MenuProps> {
 
     return (
       <Dropdown>
-        <MenuList>
-          {itemElements}
-        </MenuList>
+        <div
+          onMouseDown={e => {
+            // Block focus from being switched out of the AutoComplete textbox.
+            // If you need an AutoComplete-like component that keeps its
+            // dropdown open after the textbox loses focus, then look at the
+            // changes made to MenuButton in commit 47a698a3cd59.
+            e.preventDefault();
+          }}
+        >
+          <MenuList>
+            {itemElements}
+          </MenuList>
+        </div>
       </Dropdown>
     );
   }

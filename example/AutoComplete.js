@@ -71,15 +71,14 @@ export default class AutoComplete extends React.Component<Props, State> {
     const {value, opened} = this.state;
 
     function filterItems(items: Array<Item>): Array<Item> {
-      return (items.map(item => {
+      return items.map(item => {
         if (typeof item === 'string') {
           return item.toLowerCase().startsWith(value.toLowerCase()) ? item : null;
         } else {
           const subItems = filterItems(item.items);
           return subItems.length ? {title: item.title, items: subItems} : null;
         }
-      }).filter(Boolean): any);
-      // any-cast because of https://github.com/facebook/flow/issues/2199
+      }).filter(Boolean);
     }
 
     const filteredItems = filterItems(items);
@@ -167,7 +166,8 @@ class AutoCompleteMenu extends React.Component<MenuProps> {
   render() {
     const {filteredItems} = this.props;
 
-    const makeElements = nested => (item, i) => {
+    const makeElements = nested => (_item, i) => {
+      const item = _item; // needed so Flow knows the variable can't have its type change
       const ref = !nested && i === 0 ?
         (el => {
           if (el) this._firstItem = el;
@@ -178,7 +178,7 @@ class AutoCompleteMenu extends React.Component<MenuProps> {
         <MenuItem
           ref={ref}
           highlightedStyle={{background: 'gray'}}
-          onItemChosen={() => this.props.onValueChosen((item: any))}
+          onItemChosen={() => this.props.onValueChosen(item)}
           key={item}
         >
           {item}

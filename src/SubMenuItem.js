@@ -236,71 +236,69 @@ export default class SubMenuItem extends React.Component<Props, State> {
     }
 
     return (
-      <MenuItem
+      <FloatAnchor
         ref={el => {
-          if (el) this._menuItem = el;
+          if (el) this._floatAnchor = el;
         }}
-        index={index}
-        style={style}
-        className={className}
-        highlightedStyle={highlightedStyle}
-        highlightedClassName={highlightedClassName}
-        onHighlightChange={(h,e) => this._onHighlightChange(h,e)}
-        onMouseLeave={e => this._onMouseLeaveItem(e)}
-        onRightPushed={(e: MenuEvent) => {
-          if (!this.state.opened) {
-            e.stopPropagation();
-            e.preventDefault();
-            this.open();
-            this._menuInspector.moveCursor('down');
-          }
-        }}
-        onItemChosen={(e: ChosenEvent) => {
-          e.stopPropagation();
-          e.preventDefault();
-          this.open();
-          if (e.byKeyboard) {
-            this._menuInspector.moveCursor('down');
-          }
-        }}
-        aria-haspopup={true}
-        aria-expanded={opened}
-      >
-        <FloatAnchor
-          ref={el => {
-            if (el) this._floatAnchor = el;
-          }}
-          options={positionOptions}
-          zIndex={menuZIndex}
-          anchor={
-            <div>
-              {children}
-            </div>
-          }
-          float={
-            !opened ? null :
-              <MenuListInspector
+        options={positionOptions}
+        zIndex={menuZIndex}
+        anchor={
+          <MenuItem
+            ref={el => {
+              if (el) this._menuItem = el;
+            }}
+            index={index}
+            style={style}
+            className={className}
+            highlightedStyle={highlightedStyle}
+            highlightedClassName={highlightedClassName}
+            onHighlightChange={(h,e) => this._onHighlightChange(h,e)}
+            onMouseLeave={e => this._onMouseLeaveItem(e)}
+            onRightPushed={(e: MenuEvent) => {
+              if (!this.state.opened) {
+                e.stopPropagation();
+                e.preventDefault();
+                this.open();
+                this._menuInspector.moveCursor('down');
+              }
+            }}
+            onItemChosen={(e: ChosenEvent) => {
+              e.stopPropagation();
+              e.preventDefault();
+              this.open();
+              if (e.byKeyboard) {
+                this._menuInspector.moveCursor('down');
+              }
+            }}
+            aria-haspopup={true}
+            aria-expanded={opened}
+          >
+            {children}
+          </MenuItem>
+        }
+        float={
+          !opened ? null :
+            <MenuListInspector
+              ref={el => {
+                if (el) this._menuInspector = el;
+              }}
+              onLeftPushed={e => {
+                e.stopPropagation();
+                e.preventDefault();
+                this.close();
+              }}
+            >
+              <div
                 ref={el => {
-                  if (el) this._menuInspector = el;
+                  if (el) this._menuContainer = el;
                 }}
-                onLeftPushed={e => {
-                  e.stopPropagation();
-                  e.preventDefault();
-                  this.close();
-                }}
+                onMouseEnter={()=>this._mouseEnterMenu()}
               >
-                <div
-                  ref={el => {
-                    if (el) this._menuContainer = el;
-                  }}
-                  onMouseEnter={()=>this._mouseEnterMenu()}
-                >
-                  {menu}
-                </div>
-              </MenuListInspector>
-          }
-        />
-      </MenuItem>
+                {menu}
+              </div>
+            </MenuListInspector>
+        }
+      />
     );
   }
 }

@@ -11,7 +11,7 @@ afterEach(() => {
   delete window.removeEventListener;
 });
 
-xtest('opens and closes on click', () => {
+test('opens and closes on click', () => {
   const mountPoint = document.createElement('div');
   const root: MenuButton = (ReactDOM.render(
     <MenuButton
@@ -32,13 +32,12 @@ xtest('opens and closes on click', () => {
   root.reposition(); // just check this doesn't throw
 
   const button = TestUtils.findRenderedDOMComponentWithTag(root, 'button');
-  const floatAnchor: FloatAnchor = TestUtils.findRenderedComponentWithType(root, FloatAnchor);
-
-  expect(TestUtils.scryRenderedComponentsWithType((floatAnchor:any).portal, MenuItem).length).toBe(0);
+  expect(TestUtils.scryRenderedComponentsWithType(root, Dropdown).length).toBe(0);
 
   TestUtils.Simulate.mouseDown(button, {button: 0});
 
-  const menuListItems = TestUtils.scryRenderedComponentsWithType((floatAnchor:any).portal, MenuItem);
+  const dropdown: Dropdown = TestUtils.findRenderedComponentWithType(root, Dropdown);
+  const menuListItems = TestUtils.scryRenderedComponentsWithType(dropdown, MenuItem);
 
   expect(menuListItems.map(c=>c.props.children)).toEqual(
     ['A', 'B']
@@ -48,12 +47,12 @@ xtest('opens and closes on click', () => {
 
   TestUtils.Simulate.mouseDown(button, {button: 0});
 
-  expect(TestUtils.scryRenderedComponentsWithType((floatAnchor:any).portal, MenuItem).length).toBe(0);
+  expect(TestUtils.scryRenderedComponentsWithType(root, Dropdown).length).toBe(0);
 
   ReactDOM.unmountComponentAtNode(mountPoint);
 });
 
-xtest('closes on outside click', () => {
+test('closes on outside click', () => {
   window.addEventListener = jest.fn(window.addEventListener);
   window.removeEventListener = jest.fn(window.removeEventListener);
 
@@ -75,9 +74,8 @@ xtest('closes on outside click', () => {
   ): any);
 
   const button = TestUtils.findRenderedDOMComponentWithTag(root, 'button');
-  const floatAnchor: FloatAnchor = TestUtils.findRenderedComponentWithType(root, FloatAnchor);
 
-  expect(TestUtils.scryRenderedComponentsWithType((floatAnchor:any).portal, MenuItem).length).toBe(0);
+  expect(TestUtils.scryRenderedComponentsWithType(root, Dropdown).length).toBe(0);
   expect(window.addEventListener.mock.calls.filter(c => c[0] === 'click').length).toBe(0);
 
   TestUtils.Simulate.mouseDown(button, {button: 0});
@@ -88,7 +86,8 @@ xtest('closes on outside click', () => {
 
   expect(window.removeEventListener.mock.calls.filter(c => c[0] === 'click').length).toBe(0);
 
-  const menuListItems = TestUtils.scryRenderedComponentsWithType((floatAnchor:any).portal, MenuItem);
+  const dropdown: Dropdown = TestUtils.findRenderedComponentWithType(root, Dropdown);
+  const menuListItems = TestUtils.scryRenderedComponentsWithType(dropdown, MenuItem);
 
   expect(menuListItems.map(c=>c.props.children)).toEqual(
     ['A', 'B']
@@ -99,7 +98,7 @@ xtest('closes on outside click', () => {
     target: 'window'
   });
 
-  expect(TestUtils.scryRenderedComponentsWithType((floatAnchor:any).portal, MenuItem).length).toBe(0);
+  expect(TestUtils.scryRenderedComponentsWithType(root, Dropdown).length).toBe(0);
 
   expect(window.addEventListener.mock.calls.filter(c => c[0] === 'click').length).toBe(1);
   expect(window.removeEventListener.mock.calls.filter(c => c[0] === 'click').length).toBe(1);

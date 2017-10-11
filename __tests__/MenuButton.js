@@ -3,7 +3,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-dom/test-utils';
-import FloatAnchor from 'react-float-anchor';
 import {MenuButton, Dropdown, MenuList, MenuItem} from '../src';
 
 afterEach(() => {

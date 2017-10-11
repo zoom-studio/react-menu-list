@@ -1,3 +1,11 @@
+## 5.0.0 (2017-10-11)
+
+### Breaking Changes
+* SubMenuItem no longer has an inner div element wrapping its children. This change allows it to be styled consistently with MenuItem. This change may break existing users that had CSS depending on the inner element. (If you had a CSS selector that mentioned a class name put onto a SubMenuItem followed by "> div", then this means you! If you didn't, then you probably aren't affected by this change.)
+
+### Improvements
+* Fixed AutoComplete example not responding to mouse clicks correctly.
+
 ## 4.0.0 (2017-10-04)
 
 ### Breaking Changes

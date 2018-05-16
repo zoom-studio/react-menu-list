@@ -21,6 +21,8 @@ module.exports = {
     "flowtype/define-flow-type": 1,
     "flowtype/require-valid-file-annotation": ["error", "always"],
 
+    "react/no-deprecated": ["off"], // TODO remove when we target 16.3
+
     "indent": ["error", 2],
     "linebreak-style": ["error", "unix"],
     "quotes": ["error", "single", "avoid-escape"],

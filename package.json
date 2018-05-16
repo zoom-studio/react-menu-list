@@ -31,6 +31,7 @@
   "homepage": "https://github.com/StreakYC/react-menu-list#readme",
   "devDependencies": {
     "babel-cli": "^6.18.0",
+    "babel-core": "^6.26.3",
     "babel-eslint": "^8.0.1",
     "babel-jest": "^21.2.0",
     "babel-plugin-add-module-exports": "^0.2.1",
@@ -40,8 +41,8 @@
     "babel-preset-react-hmre": "^1.1.1",
     "babel-preset-stage-2": "^6.18.0",
     "babel-register": "^6.18.0",
-    "babelify": "^7.2.0",
-    "browserify": "^14.0.0",
+    "babelify": "^8.0.0",
+    "browserify": "^16.2.2",
     "browserify-hmr": "^0.3.1",
     "cross-env": "^5.0.1",
     "eslint": "^4.8.0",

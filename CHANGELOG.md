@@ -1,3 +1,7 @@
+## 5.0.1 (2018-05-15)
+
+* Fix compatibility with Flow v0.72.
+
 ## 5.0.0 (2017-10-11)
 
 ### Breaking Changes

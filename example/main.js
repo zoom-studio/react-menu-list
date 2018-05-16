@@ -20,5 +20,6 @@ onReady.then(main).catch(e => {
 
 function main() {
   const mainDiv = document.getElementById('main');
+  if (!mainDiv) throw new Error();
   ReactDOM.render(<Example />, mainDiv);
 }

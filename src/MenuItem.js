@@ -112,8 +112,8 @@ export default class MenuItem extends React.Component<Props, State> {
           if (highlighted && byKeyboard) {
             const el = this._el;
             /*:: if (!el) throw new Error(); */
-            if (typeof el.scrollIntoViewIfNeeded === 'function') {
-              el.scrollIntoViewIfNeeded();
+            if (typeof (el: any).scrollIntoViewIfNeeded === 'function') {
+              (el: any).scrollIntoViewIfNeeded();
             } else if (el.scrollIntoView) {
               el.scrollIntoView();
             }

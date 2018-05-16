@@ -31,11 +31,12 @@ test('opens and closes on click', () => {
   root.reposition(); // just check this doesn't throw
 
   const button = TestUtils.findRenderedDOMComponentWithTag(root, 'button');
+  if (!button) throw new Error();
   expect(TestUtils.scryRenderedComponentsWithType(root, Dropdown).length).toBe(0);
 
   TestUtils.Simulate.mouseDown(button, {button: 0});
 
-  const dropdown: Dropdown = TestUtils.findRenderedComponentWithType(root, Dropdown);
+  const dropdown: Dropdown = (TestUtils.findRenderedComponentWithType(root, Dropdown): any);
   const menuListItems = TestUtils.scryRenderedComponentsWithType(dropdown, MenuItem);
 
   expect(menuListItems.map(c=>c.props.children)).toEqual(
@@ -73,6 +74,7 @@ test('closes on outside click', () => {
   ): any);
 
   const button = TestUtils.findRenderedDOMComponentWithTag(root, 'button');
+  if (!button) throw new Error();
 
   expect(TestUtils.scryRenderedComponentsWithType(root, Dropdown).length).toBe(0);
   expect(window.addEventListener.mock.calls.filter(c => c[0] === 'click').length).toBe(0);
@@ -85,7 +87,7 @@ test('closes on outside click', () => {
 
   expect(window.removeEventListener.mock.calls.filter(c => c[0] === 'click').length).toBe(0);
 
-  const dropdown: Dropdown = TestUtils.findRenderedComponentWithType(root, Dropdown);
+  const dropdown: Dropdown = (TestUtils.findRenderedComponentWithType(root, Dropdown): any);
   const menuListItems = TestUtils.scryRenderedComponentsWithType(dropdown, MenuItem);
 
   expect(menuListItems.map(c=>c.props.children)).toEqual(

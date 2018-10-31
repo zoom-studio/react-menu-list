@@ -45,7 +45,7 @@ export default class MenuButton extends React.Component<Props, State> {
 
     positionOptions: PropTypes.object,
     menuZIndex: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    ButtonComponent: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+    ButtonComponent: PropTypes.func,
 
     children: PropTypes.node,
     menu: PropTypes.element,

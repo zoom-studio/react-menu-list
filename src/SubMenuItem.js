@@ -12,6 +12,7 @@ import pointRectDistance from './lib/pointRectDistance';
 import MenuListInspector from './MenuListInspector';
 import FloatAnchor from 'react-float-anchor';
 import type {Options as FloatAnchorOptions} from 'react-float-anchor';
+export type {Options as FloatAnchorOptions} from 'react-float-anchor';
 import MenuItem from './MenuItem';
 
 import type {Direction, Rect} from './types';

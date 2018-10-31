@@ -6,7 +6,8 @@ import PropTypes from 'prop-types';
 
 import type MenuEvent from './events/MenuEvent';
 import ChosenEvent from './events/ChosenEvent';
-import type {MenuListContext, MenuListHandle} from './MenuList';
+import {MenuListContext} from './MenuList';
+import type {MenuListContextValue, MenuListHandle} from './MenuList';
 import setRef from './lib/setRef';
 import type {Direction, Rect} from './types';
 
@@ -61,9 +62,7 @@ export default class MenuItem extends React.Component<Props, State> {
     'aria-expanded': PropTypes.bool
   };
 
-  static contextTypes = {
-    menuList: PropTypes.object
-  };
+  static contextType = MenuListContext;
 
   _el: ?HTMLDivElement;
   _elSetter = (el: ?HTMLDivElement) => {
@@ -113,7 +112,7 @@ export default class MenuItem extends React.Component<Props, State> {
     const el = this._el;
     /*:: if (!el) throw new Error(); */
 
-    this._menuListHandle = (this.context.menuList:MenuListContext).registerItem(this.props, {
+    this._menuListHandle = (this.context: MenuListContextValue).registerItem(this.props, {
       notifyHighlighted: (highlighted: boolean, byKeyboard: ?boolean, direction: ?Direction, prevCursorLocation: ?Rect) => {
         this.setState({highlighted}, () => {
           if (highlighted && byKeyboard) {

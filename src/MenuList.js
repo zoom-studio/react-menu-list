@@ -11,7 +11,8 @@ import fromEventsCapture from './lib/fromEventsCapture';
 import MenuEvent from './events/MenuEvent';
 import ChosenEvent from './events/ChosenEvent';
 import type {Props as MenuItemProps} from './MenuItem';
-import type {MenuListInspectorContext} from './MenuListInspector';
+import {MenuListInspectorContext} from './MenuListInspector';
+import type {MenuListInspectorContextValue} from './MenuListInspector';
 import type {Direction, Rect} from './types';
 
 // This type of object is given to a MenuItem to talk to the MenuList.
@@ -41,13 +42,15 @@ export type MenuItemControl = {
 
 // This is the type of the object that MenuList gives as context to its
 // descendants.
-export type MenuListContext = {
+export type MenuListContextValue = {
   registerItem(
     props: MenuItemProps,
     control: MenuItemControl,
     el: HTMLElement
   ): MenuListHandle;
 };
+
+export const MenuListContext = React.createContext<?MenuListContextValue>(null);
 
 export type Props = {
   onItemChosen?: (event: ChosenEvent) => void;
@@ -82,146 +85,137 @@ export default class MenuList extends React.Component<Props> {
       this._lockedHighlightedIndex : this._naturalHighlightedIndex;
   }
 
-  static childContextTypes = {
-    menuList: PropTypes.object
+  static contextType = MenuListInspectorContext;
+
+  _menuListContext: MenuListContextValue = {
+    registerItem: (props, control, el) => {
+      const item = {props, control, el};
+
+      const register = () => {
+        let i = -1;
+        if (item.props.index == null) {
+          i = findIndex(
+            this._listItems,
+            _item =>
+              (item.el.compareDocumentPosition(_item.el)&Node.DOCUMENT_POSITION_PRECEDING) === 0
+          );
+        } else {
+          i = findIndex(
+            this._listItems,
+            _item => _item.props.index != null && item.props.index < _item.props.index
+          );
+        }
+        if (i < 0) {
+          this._listItems.push(item);
+        } else {
+          this._listItems.splice(i, 0, item);
+          if (this._naturalHighlightedIndex != null && i <= this._naturalHighlightedIndex) {
+            this._naturalHighlightedIndex++;
+          }
+          if (this._lockedHighlightedIndex != null && i <= this._lockedHighlightedIndex) {
+            this._lockedHighlightedIndex++;
+          }
+          if (this._keyboardTakenByIndex != null && i <= this._keyboardTakenByIndex) {
+            this._keyboardTakenByIndex++;
+          }
+        }
+      };
+
+      register();
+
+      const menuListHandle: MenuListHandle = {
+        highlight: (byKeyboard: boolean) => {
+          const i = this._listItems.indexOf(item);
+          if (i < 0) throw new Error('Already unregistered MenuItem');
+          this._naturalHighlight(i, byKeyboard);
+        },
+        unhighlight: () => {
+          const i = this._listItems.indexOf(item);
+          if (i < 0) throw new Error('Already unregistered MenuItem');
+          if (this._naturalHighlightedIndex === i) {
+            this._naturalHighlight(null, false);
+          }
+        },
+        itemChosen: () => {
+          this._dispatchEvent(control, new ChosenEvent('chosen', false));
+        },
+        takeKeyboard: () => {
+          const i = this._listItems.indexOf(item);
+          if (i < 0) throw new Error('Already unregistered MenuItem');
+          this._keyboardTakenByIndex = i;
+        },
+        releaseKeyboard: () => {
+          const i = this._listItems.indexOf(item);
+          if (i < 0) throw new Error('Already unregistered MenuItem');
+          if (this._keyboardTakenByIndex === i) {
+            this._keyboardTakenByIndex = null;
+          }
+        },
+        lockHighlight: () => {
+          const i = this._listItems.indexOf(item);
+          if (i < 0) throw new Error('Already unregistered MenuItem');
+          this._lockHighlight(i);
+        },
+        unlockHighlight: () => {
+          const i = this._listItems.indexOf(item);
+          if (i < 0) throw new Error('Already unregistered MenuItem');
+          if (this._lockedHighlightedIndex === i) {
+            this._lockHighlight(null);
+          }
+        },
+        moveCursor: (direction: Direction, prevCursorLocation: ?Rect) => {
+          this.moveCursor(direction, prevCursorLocation);
+        },
+        updateProps: (newProps: MenuItemProps) => {
+          if (item.props.index !== newProps.index) {
+            const oldIndex = this._listItems.indexOf(item);
+            const isNaturalHighlightIndex = this._naturalHighlightedIndex === oldIndex;
+            const isLockedHighlightIndex = this._lockedHighlightedIndex === oldIndex;
+            const isKeyboardTakenByIndex = this._keyboardTakenByIndex === oldIndex;
+
+            menuListHandle.unregister();
+            props = newProps;
+            item.props = newProps;
+            register();
+
+            if (isNaturalHighlightIndex || isLockedHighlightIndex || isKeyboardTakenByIndex) {
+              const newIndex = this._listItems.indexOf(item);
+              if (isNaturalHighlightIndex) this._naturalHighlightedIndex = newIndex;
+              if (isLockedHighlightIndex) this._lockedHighlightedIndex = newIndex;
+              if (isKeyboardTakenByIndex) this._keyboardTakenByIndex = newIndex;
+            }
+          } else {
+            props = newProps;
+            item.props = newProps;
+          }
+        },
+        unregister: () => {
+          const i = this._listItems.indexOf(item);
+          if (i < 0) throw new Error('Already unregistered MenuItem');
+          if (i === this._naturalHighlightedIndex) {
+            this._naturalHighlightedIndex = null;
+          } else if (this._naturalHighlightedIndex != null && i < this._naturalHighlightedIndex) {
+            this._naturalHighlightedIndex--;
+          }
+          if (i === this._lockedHighlightedIndex) {
+            this._lockedHighlightedIndex = null;
+          } else if (this._lockedHighlightedIndex != null && i < this._lockedHighlightedIndex) {
+            this._lockedHighlightedIndex--;
+          }
+          if (i === this._keyboardTakenByIndex) {
+            this._keyboardTakenByIndex = null;
+          } else if (this._keyboardTakenByIndex != null && i < this._keyboardTakenByIndex) {
+            this._keyboardTakenByIndex--;
+          }
+          this._listItems.splice(i, 1);
+        }
+      };
+      return menuListHandle;
+    }
   };
 
-  static contextTypes = {
-    menuListInspector: PropTypes.object
-  };
-
-  getChildContext(): Object {
-    const menuList: MenuListContext = {
-      registerItem: (props, control, el) => {
-        const item = {props, control, el};
-
-        const register = () => {
-          let i = -1;
-          if (item.props.index == null) {
-            i = findIndex(
-              this._listItems,
-              _item =>
-                (item.el.compareDocumentPosition(_item.el)&Node.DOCUMENT_POSITION_PRECEDING) === 0
-            );
-          } else {
-            i = findIndex(
-              this._listItems,
-              _item => _item.props.index != null && item.props.index < _item.props.index
-            );
-          }
-          if (i < 0) {
-            this._listItems.push(item);
-          } else {
-            this._listItems.splice(i, 0, item);
-            if (this._naturalHighlightedIndex != null && i <= this._naturalHighlightedIndex) {
-              this._naturalHighlightedIndex++;
-            }
-            if (this._lockedHighlightedIndex != null && i <= this._lockedHighlightedIndex) {
-              this._lockedHighlightedIndex++;
-            }
-            if (this._keyboardTakenByIndex != null && i <= this._keyboardTakenByIndex) {
-              this._keyboardTakenByIndex++;
-            }
-          }
-        };
-
-        register();
-
-        const menuListHandle: MenuListHandle = {
-          highlight: (byKeyboard: boolean) => {
-            const i = this._listItems.indexOf(item);
-            if (i < 0) throw new Error('Already unregistered MenuItem');
-            this._naturalHighlight(i, byKeyboard);
-          },
-          unhighlight: () => {
-            const i = this._listItems.indexOf(item);
-            if (i < 0) throw new Error('Already unregistered MenuItem');
-            if (this._naturalHighlightedIndex === i) {
-              this._naturalHighlight(null, false);
-            }
-          },
-          itemChosen: () => {
-            this._dispatchEvent(control, new ChosenEvent('chosen', false));
-          },
-          takeKeyboard: () => {
-            const i = this._listItems.indexOf(item);
-            if (i < 0) throw new Error('Already unregistered MenuItem');
-            this._keyboardTakenByIndex = i;
-          },
-          releaseKeyboard: () => {
-            const i = this._listItems.indexOf(item);
-            if (i < 0) throw new Error('Already unregistered MenuItem');
-            if (this._keyboardTakenByIndex === i) {
-              this._keyboardTakenByIndex = null;
-            }
-          },
-          lockHighlight: () => {
-            const i = this._listItems.indexOf(item);
-            if (i < 0) throw new Error('Already unregistered MenuItem');
-            this._lockHighlight(i);
-          },
-          unlockHighlight: () => {
-            const i = this._listItems.indexOf(item);
-            if (i < 0) throw new Error('Already unregistered MenuItem');
-            if (this._lockedHighlightedIndex === i) {
-              this._lockHighlight(null);
-            }
-          },
-          moveCursor: (direction: Direction, prevCursorLocation: ?Rect) => {
-            this.moveCursor(direction, prevCursorLocation);
-          },
-          updateProps: (newProps: MenuItemProps) => {
-            if (item.props.index !== newProps.index) {
-              const oldIndex = this._listItems.indexOf(item);
-              const isNaturalHighlightIndex = this._naturalHighlightedIndex === oldIndex;
-              const isLockedHighlightIndex = this._lockedHighlightedIndex === oldIndex;
-              const isKeyboardTakenByIndex = this._keyboardTakenByIndex === oldIndex;
-
-              menuListHandle.unregister();
-              props = newProps;
-              item.props = newProps;
-              register();
-
-              if (isNaturalHighlightIndex || isLockedHighlightIndex || isKeyboardTakenByIndex) {
-                const newIndex = this._listItems.indexOf(item);
-                if (isNaturalHighlightIndex) this._naturalHighlightedIndex = newIndex;
-                if (isLockedHighlightIndex) this._lockedHighlightedIndex = newIndex;
-                if (isKeyboardTakenByIndex) this._keyboardTakenByIndex = newIndex;
-              }
-            } else {
-              props = newProps;
-              item.props = newProps;
-            }
-          },
-          unregister: () => {
-            const i = this._listItems.indexOf(item);
-            if (i < 0) throw new Error('Already unregistered MenuItem');
-            if (i === this._naturalHighlightedIndex) {
-              this._naturalHighlightedIndex = null;
-            } else if (this._naturalHighlightedIndex != null && i < this._naturalHighlightedIndex) {
-              this._naturalHighlightedIndex--;
-            }
-            if (i === this._lockedHighlightedIndex) {
-              this._lockedHighlightedIndex = null;
-            } else if (this._lockedHighlightedIndex != null && i < this._lockedHighlightedIndex) {
-              this._lockedHighlightedIndex--;
-            }
-            if (i === this._keyboardTakenByIndex) {
-              this._keyboardTakenByIndex = null;
-            } else if (this._keyboardTakenByIndex != null && i < this._keyboardTakenByIndex) {
-              this._keyboardTakenByIndex--;
-            }
-            this._listItems.splice(i, 1);
-          }
-        };
-        return menuListHandle;
-      }
-    };
-    return {menuList};
-  }
-
-  _parentCtx(): ?MenuListInspectorContext {
-    return this.context.menuListInspector;
+  _parentCtx(): ?MenuListInspectorContextValue {
+    return this.context;
   }
 
   componentDidMount() {
@@ -403,7 +397,9 @@ export default class MenuList extends React.Component<Props> {
   render() {
     return (
       <div role="menu" ref={this._elRef}>
-        {this.props.children}
+        <MenuListContext.Provider value={this._menuListContext}>
+          {this.props.children}
+        </MenuListContext.Provider>
       </div>
     );
   }

@@ -1,4 +1,4 @@
-## 6.0.0 (Unreleased)
+## 6.0.0 (2018-10-31)
 
 ### Breaking Changes
 * react-menu-list now requires React v16.6.0 or above.

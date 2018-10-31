@@ -64,7 +64,7 @@
     "kefir-bus": "^2.2.0",
     "kefir-stopper": "^2.1.0",
     "prop-types": "^15.6.0",
-    "react-float-anchor": "^2.0.1"
+    "react-float-anchor": "^3.0.0"
   },
   "peerDependencies": {
     "react": "^16.6.0",

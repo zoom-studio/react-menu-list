@@ -4943,10 +4943,10 @@ react-dom@^16.6.0:
     prop-types "^15.6.2"
     scheduler "^0.10.0"
 
-react-float-anchor@^2.0.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/react-float-anchor/-/react-float-anchor-2.2.1.tgz#8ee2807188628b6e319804e8b9c58ef9904cceab"
-  integrity sha512-++gsBGpoSmxw61DS3BlRaMTd4mNGJwULtlOPcjfCoP1AVA379b7YKEpxIgWygesesDyKJ+h4x/5v5W0kvGtThQ==
+react-float-anchor@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/react-float-anchor/-/react-float-anchor-3.0.0.tgz#f77d1726c13c598c1bb041611021091c75e9a6d0"
+  integrity sha512-0jZLS/JEU/0gAB3qf0x0KKx09yvK1DF823eHEkkMphy+0QGJaG/4SM+FW76Z5LGGM2dIkRxuRjgvgKq/VasXBA==
   dependencies:
     "@babel/runtime" "^7.0.0"
     contain-by-screen "^1.0.4"
@@ -5514,9 +5514,9 @@ spdx-expression-parse@^3.0.0:
     spdx-license-ids "^3.0.0"
 
 spdx-license-ids@^3.0.0:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/spdx-license-ids/-/spdx-license-ids-3.0.1.tgz#e2a303236cac54b04031fa7a5a79c7e701df852f"
-  integrity sha512-TfOfPcYGBB5sDuPn3deByxPhmfegAhpDYKSOXZQN81Oyrrif8ZCodOLzK3AesELnCx03kikhyDwh0pfvvQvF8w==
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/spdx-license-ids/-/spdx-license-ids-3.0.2.tgz#a59efc09784c2a5bada13cfeaf5c75dd214044d2"
+  integrity sha512-qky9CVt0lVIECkEsYbNILVnPvycuEBkXoMFLRWsREkomQLevYhtRKC+R91a5TOAQ3bCMjikRwhyaRqj1VYatYg==
 
 split-string@^3.0.1, split-string@^3.0.2:
   version "3.1.0"

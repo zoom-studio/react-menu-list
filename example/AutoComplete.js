@@ -133,7 +133,7 @@ export default class AutoComplete extends React.Component<Props, State> {
   }
 }
 
-type MenuProps = {
+type AutoCompleteMenuProps = {
   value: string;
   autoHighlight: boolean;
   filteredItems: Array<Item>;
@@ -144,7 +144,7 @@ type MenuProps = {
 // This component is separate so that its componentDidUpdate method gets called
 // at the right time. AutoComplete's componentDidUpdate method may get called
 // before the FloatAnchor's floated elements have been updated.
-class AutoCompleteMenu extends React.Component<MenuProps> {
+class AutoCompleteMenu extends React.Component<AutoCompleteMenuProps> {
   _firstItem: MenuItem|SubMenuItem;
 
   componentDidMount() {
@@ -153,7 +153,7 @@ class AutoCompleteMenu extends React.Component<MenuProps> {
     }
   }
 
-  componentDidUpdate(prevProps: MenuProps) {
+  componentDidUpdate(prevProps: AutoCompleteMenuProps) {
     if (prevProps.value !== this.props.value) {
       this.props.reposition();
 

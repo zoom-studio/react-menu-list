@@ -144,8 +144,8 @@ export default class MenuItem extends React.Component<Props, State> {
     this._menuListHandle.unregister();
   }
 
-  componentWillReceiveProps(newProps: Props) {
-    this._menuListHandle.updateProps(newProps);
+  componentDidUpdate() {
+    this._menuListHandle.updateProps(this.props);
   }
 
   render() {

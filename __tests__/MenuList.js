@@ -173,6 +173,74 @@ test('cursor movement works', () => {
   ReactDOM.unmountComponentAtNode(mountPoint);
 });
 
+test('index prop change is respected', () => {
+  const mountPoint = document.createElement('div');
+  const root: MenuList = (ReactDOM.render(
+    <MenuList>
+      <MenuItem onHighlightChange={jest.fn()}>A</MenuItem>
+      <div>
+        <MenuItem onHighlightChange={jest.fn()}>B</MenuItem>
+      </div>
+      <MenuItem onHighlightChange={jest.fn()}>C</MenuItem>
+    </MenuList>,
+    mountPoint
+  ): any);
+
+  const menuListItems = TestUtils.scryRenderedComponentsWithType(root, MenuItem);
+
+  expect(menuListItems.map(c=>c.props.children)).toEqual(
+    ['A', 'B', 'C']
+  );
+
+  expect(menuListItems[0].props.onHighlightChange.mock.calls).toEqual([]);
+  expect(menuListItems[1].props.onHighlightChange.mock.calls).toEqual([]);
+  expect(menuListItems[2].props.onHighlightChange.mock.calls).toEqual([]);
+
+  root.moveCursor('down');
+
+  expect(menuListItems[0].props.onHighlightChange.mock.calls).toEqual([
+    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}]]);
+  expect(menuListItems[1].props.onHighlightChange.mock.calls).toEqual([]);
+  expect(menuListItems[2].props.onHighlightChange.mock.calls).toEqual([]);
+
+  root.moveCursor('down');
+
+  expect(menuListItems[0].props.onHighlightChange.mock.calls).toEqual([
+    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
+    [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]
+  ]);
+  expect(menuListItems[1].props.onHighlightChange.mock.calls).toEqual([
+    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}]
+  ]);
+  expect(menuListItems[2].props.onHighlightChange.mock.calls).toEqual([]);
+
+  ReactDOM.render(
+    <MenuList>
+      <MenuItem index={5} onHighlightChange={menuListItems[0].props.onHighlightChange}>A</MenuItem>
+      <div>
+        <MenuItem index={4} onHighlightChange={menuListItems[1].props.onHighlightChange}>B</MenuItem>
+      </div>
+      <MenuItem index={3} onHighlightChange={menuListItems[2].props.onHighlightChange}>C</MenuItem>
+    </MenuList>,
+    mountPoint
+  );
+
+  root.moveCursor('down');
+
+  expect(menuListItems[0].props.onHighlightChange.mock.calls).toEqual([
+    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
+    [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}],
+    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}]
+  ]);
+  expect(menuListItems[1].props.onHighlightChange.mock.calls).toEqual([
+    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
+    [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]
+  ]);
+  expect(menuListItems[2].props.onHighlightChange.mock.calls).toEqual([]);
+
+  ReactDOM.unmountComponentAtNode(mountPoint);
+});
+
 test('empty list works', () => {
   const mountPoint = document.createElement('div');
   const root: MenuList = (ReactDOM.render(

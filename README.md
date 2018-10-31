@@ -103,6 +103,8 @@ A MenuItem supports the following props:
  default onMouseLeave event handler, which is in charge of unhighlighting the
  menu item. Unless you're reimplementing SubMenuItem, you probably won't need
  this.
+* `domRef`: Optional prop which is passed as the `ref` value to the MenuItem's
+ div element.
 
 A MenuItem has the following public methods:
 
@@ -203,7 +205,8 @@ A MenuButton supports the following props:
  These work the same as the props on SubMenuItem.
 * `disabled`, `title`: These are passed to the button element.
 * `ButtonComponent`: Optional prop that allows a different component to be used
- instead of an html `<button>`.
+ instead of an html `<button>`. The component passed here must support a
+ `domRef` prop which is passed as a ref to the button's DOM element.
 
 A MenuButton has the following public methods:
 

@@ -87,8 +87,9 @@ export default class AutoComplete extends React.Component<Props, State> {
       <FloatAnchor
         ref={this._floatAnchorRef}
         options={positionOptions}
-        anchor={
+        anchor={anchorRef =>
           <input
+            ref={anchorRef}
             type="text"
             className={className}
             style={style}

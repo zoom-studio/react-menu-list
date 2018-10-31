@@ -2,6 +2,7 @@
 
 ### Breaking Changes
 * react-menu-list now requires React v16.6.0 or above.
+* The component passed to the optional MenuButton prop `ButtonComponent` must support a `domRef` prop which is passed as a ref to the button's DOM element.
 
 ### Improvements
 * No longer uses any deprecated APIs (legacy Context API, lifecycle methods,

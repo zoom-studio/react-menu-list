@@ -1,12 +1,13 @@
 /* @flow */
 
 import React from 'react';
-import type {Node as ReactNode} from 'react';
+import type {Ref as ReactRef, Node as ReactNode} from 'react';
 import PropTypes from 'prop-types';
 
 import type MenuEvent from './events/MenuEvent';
 import ChosenEvent from './events/ChosenEvent';
 import type {MenuListContext, MenuListHandle} from './MenuList';
+import setRef from './lib/setRef';
 import type {Direction, Rect} from './types';
 
 type State = {
@@ -28,6 +29,8 @@ export type Props = {
   onMouseLeave?: (event: MouseEvent) => void;
 
   children?: ReactNode;
+
+  domRef?: ReactRef<'div'>;
 
   'aria-haspopup'?: boolean;
   'aria-expanded'?: boolean;
@@ -62,7 +65,14 @@ export default class MenuItem extends React.Component<Props, State> {
     menuList: PropTypes.object
   };
 
-  _elRef = React.createRef<'div'>();
+  _el: ?HTMLDivElement;
+  _elSetter = (el: ?HTMLDivElement) => {
+    this._el = el;
+
+    if (this.props.domRef) {
+      setRef(this.props.domRef, el);
+    }
+  };
 
   hasHighlight(): boolean {
     return this.state.highlighted;
@@ -100,14 +110,14 @@ export default class MenuItem extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    const el = this._elRef.current;
+    const el = this._el;
     /*:: if (!el) throw new Error(); */
 
     this._menuListHandle = (this.context.menuList:MenuListContext).registerItem(this.props, {
       notifyHighlighted: (highlighted: boolean, byKeyboard: ?boolean, direction: ?Direction, prevCursorLocation: ?Rect) => {
         this.setState({highlighted}, () => {
           if (highlighted && byKeyboard) {
-            const el = this._elRef.current;
+            const el = this._el;
             /*:: if (!el) throw new Error(); */
             if (typeof (el: any).scrollIntoViewIfNeeded === 'function') {
               (el: any).scrollIntoViewIfNeeded();
@@ -166,7 +176,7 @@ export default class MenuItem extends React.Component<Props, State> {
 
     return (
       <div
-        ref={this._elRef}
+        ref={this._elSetter}
         style={style}
         className={className}
         onClick={()=>this._menuListHandle.itemChosen()}

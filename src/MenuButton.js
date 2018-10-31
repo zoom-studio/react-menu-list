@@ -57,7 +57,7 @@ export default class MenuButton extends React.Component<Props, State> {
 
   static defaultProps = {
     positionOptions: {position:'bottom', hAlign:'left'},
-    ButtonComponent: 'button'
+    ButtonComponent: ({domRef, ...props}: Object) => <button ref={domRef} {...props} />
   };
 
   state: State = {
@@ -155,8 +155,9 @@ export default class MenuButton extends React.Component<Props, State> {
         ref={this._floatAnchorRef}
         options={positionOptions}
         zIndex={menuZIndex}
-        anchor={
+        anchor={anchorRef =>
           <ButtonComponent
+            domRef={anchorRef}
             type="button"
             className={className}
             style={style}

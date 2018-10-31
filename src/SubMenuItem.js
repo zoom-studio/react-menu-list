@@ -26,23 +26,23 @@ type State = {
 export type Props = {
   menu: ReactNode;
   positionOptions: FloatAnchorOptions;
-  menuZIndex?: ?string|number;
+  menuZIndex?: string|number;
 
-  onWillOpen?: ?() => void;
-  onDidOpen?: ?() => void;
-  onWillClose?: ?() => void;
+  onWillOpen?: () => void;
+  onDidOpen?: () => void;
+  onWillClose?: () => void;
 
-  className?: ?string;
-  style?: ?Object;
-  highlightedClassName?: ?string;
-  highlightedStyle?: ?Object;
-  index?: ?number;
+  className?: string;
+  style?: Object;
+  highlightedClassName?: string;
+  highlightedStyle?: Object;
+  index?: number;
 
-  openedClassName?: ?string;
-  openedStyle?: ?Object;
+  openedClassName?: string;
+  openedStyle?: Object;
 
-  onItemChosen?: ?(event: ChosenEvent) => void;
-  onHighlightChange?: ?(highlighted: boolean, details: {byKeyboard: ?boolean, prevCursorLocation: ?Rect, direction: ?Direction}) => void;
+  onItemChosen?: (event: ChosenEvent) => void;
+  onHighlightChange?: (highlighted: boolean, details: {byKeyboard?: boolean, prevCursorLocation?: Rect, direction?: Direction}) => void;
 
   children?: ReactNode;
 };

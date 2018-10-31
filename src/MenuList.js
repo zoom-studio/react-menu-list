@@ -50,9 +50,9 @@ export type MenuListContext = {
 };
 
 export type Props = {
-  onItemChosen?: ?(event: ChosenEvent) => void;
-  onLeftPushed?: ?(event: MenuEvent) => void;
-  onRightPushed?: ?(event: MenuEvent) => void;
+  onItemChosen?: (event: ChosenEvent) => void;
+  onLeftPushed?: (event: MenuEvent) => void;
+  onRightPushed?: (event: MenuEvent) => void;
   children?: ReactNode;
 };
 

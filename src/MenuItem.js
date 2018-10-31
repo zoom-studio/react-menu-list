@@ -14,23 +14,23 @@ type State = {
 };
 
 export type Props = {
-  onItemChosen?: ?(event: ChosenEvent) => void;
-  onLeftPushed?: ?(event: MenuEvent) => void;
-  onRightPushed?: ?(event: MenuEvent) => void;
-  onHighlightChange?: ?(highlighted: boolean, details: {byKeyboard: ?boolean, prevCursorLocation: ?Rect, direction: ?Direction}) => void;
+  onItemChosen?: (event: ChosenEvent) => void;
+  onLeftPushed?: (event: MenuEvent) => void;
+  onRightPushed?: (event: MenuEvent) => void;
+  onHighlightChange?: (highlighted: boolean, details: {byKeyboard?: boolean, prevCursorLocation?: Rect, direction?: Direction}) => void;
 
-  className?: ?string;
-  style?: ?Object;
-  highlightedClassName?: ?string;
-  highlightedStyle?: ?Object;
+  className?: string;
+  style?: Object;
+  highlightedClassName?: string;
+  highlightedStyle?: Object;
 
-  index?: ?number;
-  onMouseLeave?: ?Function;
+  index?: number;
+  onMouseLeave?: (event: MouseEvent) => void;
 
   children?: ReactNode;
 
-  'aria-haspopup'?: ?boolean;
-  'aria-expanded'?: ?boolean;
+  'aria-haspopup'?: boolean;
+  'aria-expanded'?: boolean;
 };
 
 export default class MenuItem extends React.Component<Props, State> {
@@ -117,7 +117,11 @@ export default class MenuItem extends React.Component<Props, State> {
           }
         });
         if (this.props.onHighlightChange) {
-          this.props.onHighlightChange(highlighted, {byKeyboard, prevCursorLocation, direction});
+          this.props.onHighlightChange(highlighted, {
+            byKeyboard: byKeyboard == null ? undefined : byKeyboard,
+            prevCursorLocation: prevCursorLocation == null ? undefined : prevCursorLocation,
+            direction: direction == null ? undefined : direction
+          });
         }
       },
       notifyEvent: (event: MenuEvent) => {

@@ -17,22 +17,22 @@ type State = {
   opened: boolean;
 };
 export type Props = {
-  className?: ?string;
-  style?: ?Object;
-  disabled?: ?boolean;
-  title?: ?string;
-  openedClassName?: ?string;
-  openedStyle?: ?Object;
+  className?: string;
+  style?: Object;
+  disabled?: boolean;
+  title?: string;
+  openedClassName?: string;
+  openedStyle?: Object;
 
   positionOptions: FloatAnchorOptions;
-  menuZIndex?: ?string|number;
+  menuZIndex?: string|number;
   ButtonComponent: ReactElementType;
 
   children?: ReactNode;
   menu: ReactNode;
-  onWillOpen?: ?() => void;
-  onDidOpen?: ?() => void;
-  onWillClose?: ?() => void;
+  onWillOpen?: () => void;
+  onDidOpen?: () => void;
+  onWillClose?: () => void;
 };
 
 export default class MenuButton extends React.Component<Props, State> {

@@ -58,6 +58,11 @@ export default class MenuItem extends React.Component<Props, State> {
 
     children: PropTypes.node,
 
+    domRef: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.func
+    ]),
+
     'aria-haspopup': PropTypes.bool,
     'aria-expanded': PropTypes.bool
   };

@@ -5,7 +5,10 @@
 npm-debug.log
 /src
 /__tests__
+*.test.*
 /example
 /flow-typed
+/.flowconfig
 /yarn.lock
 /.circleci
+.babelrc

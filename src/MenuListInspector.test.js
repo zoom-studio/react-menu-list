@@ -3,7 +3,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-dom/test-utils';
-import {MenuListInspector, MenuList, MenuItem} from '../src';
+import {MenuListInspector, MenuList, MenuItem} from '.';
 
 test('cursor movement works', () => {
   const mountPoint = document.createElement('div');

@@ -3,7 +3,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-dom/test-utils';
-import {MenuButton, Dropdown, MenuList, MenuItem} from '../src';
+import {MenuButton, Dropdown, MenuList, MenuItem} from '.';
 
 afterEach(() => {
   delete window.addEventListener;

@@ -1,6 +1,6 @@
 /* @flow */
 
-import pointRectDistance from '../src/lib/pointRectDistance';
+import pointRectDistance from './pointRectDistance';
 
 test('works', () => {
   expect(pointRectDistance(20,30, 40,20,100,100)).toBe(20);

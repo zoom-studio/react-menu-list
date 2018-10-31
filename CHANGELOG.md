@@ -1,3 +1,15 @@
+## 6.0.0 (Unreleased)
+
+### Breaking Changes
+* react-menu-list now requires React v16.6.0 or above.
+* The component passed to the optional MenuButton prop `ButtonComponent` must support a `domRef` prop which is passed as a ref to the button's DOM element.
+* The `open` method of MenuButton and SubMenuItem no longer takes a callback as a parameter. It returns a Promise now instead.
+
+### Improvements
+* No longer uses any deprecated APIs (legacy Context API, lifecycle methods,
+  and ReactDOM.findDOMNode).
+* Added TypeScript type definitions.
+
 ## 5.0.1 (2018-05-15)
 
 * Fix compatibility with Flow v0.72.

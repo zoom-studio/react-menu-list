@@ -34,7 +34,7 @@ export default class AutoComplete extends React.Component<Props, State> {
     defaultValue: ''
   };
 
-  _floatAnchor: FloatAnchor;
+  _floatAnchorRef = React.createRef<Class<FloatAnchor>>();
 
   constructor(props: Props) {
     super(props);
@@ -85,12 +85,11 @@ export default class AutoComplete extends React.Component<Props, State> {
 
     return (
       <FloatAnchor
-        ref={el => {
-          if (el) this._floatAnchor = el;
-        }}
+        ref={this._floatAnchorRef}
         options={positionOptions}
-        anchor={
+        anchor={anchorRef =>
           <input
+            ref={anchorRef}
             type="text"
             className={className}
             style={style}
@@ -124,7 +123,9 @@ export default class AutoComplete extends React.Component<Props, State> {
                 this.close();
               }}
               reposition={() => {
-                this._floatAnchor.reposition();
+                const floatAnchor = this._floatAnchorRef.current;
+                if (!floatAnchor) throw new Error('should not happen');
+                floatAnchor.reposition();
               }}
             />
         }
@@ -133,7 +134,7 @@ export default class AutoComplete extends React.Component<Props, State> {
   }
 }
 
-type MenuProps = {
+type AutoCompleteMenuProps = {
   value: string;
   autoHighlight: boolean;
   filteredItems: Array<Item>;
@@ -144,7 +145,7 @@ type MenuProps = {
 // This component is separate so that its componentDidUpdate method gets called
 // at the right time. AutoComplete's componentDidUpdate method may get called
 // before the FloatAnchor's floated elements have been updated.
-class AutoCompleteMenu extends React.Component<MenuProps> {
+class AutoCompleteMenu extends React.Component<AutoCompleteMenuProps> {
   _firstItem: MenuItem|SubMenuItem;
 
   componentDidMount() {
@@ -153,7 +154,7 @@ class AutoCompleteMenu extends React.Component<MenuProps> {
     }
   }
 
-  componentDidUpdate(prevProps: MenuProps) {
+  componentDidUpdate(prevProps: AutoCompleteMenuProps) {
     if (prevProps.value !== this.props.value) {
       this.props.reposition();
 

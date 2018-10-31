@@ -1,9 +1,7 @@
 /* @flow */
-/* eslint-disable react/no-find-dom-node */
 
 import React from 'react';
-import type {Node as ReactNode, Element as ReactElement, ElementType as ReactElementType} from 'react';
-import {findDOMNode} from 'react-dom';
+import type {Node as ReactNode, ElementType as ReactElementType} from 'react';
 import PropTypes from 'prop-types';
 import FloatAnchor from 'react-float-anchor';
 import type {Options as FloatAnchorOptions} from 'react-float-anchor';
@@ -11,28 +9,29 @@ import Kefir from 'kefir';
 import kefirBus from 'kefir-bus';
 import type {Bus} from 'kefir-bus';
 import fromEventsCapture from './lib/fromEventsCapture';
+import setRef from './lib/setRef';
 import MenuListInspector from './MenuListInspector';
 
 type State = {
   opened: boolean;
 };
 export type Props = {
-  className?: ?string;
-  style?: ?Object;
-  disabled?: ?boolean;
-  title?: ?string;
-  openedClassName?: ?string;
-  openedStyle?: ?Object;
+  className?: string;
+  style?: Object;
+  disabled?: boolean;
+  title?: string;
+  openedClassName?: string;
+  openedStyle?: Object;
 
   positionOptions: FloatAnchorOptions;
-  menuZIndex?: ?string|number;
+  menuZIndex?: string|number;
   ButtonComponent: ReactElementType;
 
   children?: ReactNode;
-  menu?: ?ReactElement<any>;
-  onWillOpen?: ?() => void;
-  onDidOpen?: ?() => void;
-  onWillClose?: ?() => void;
+  menu: ReactNode;
+  onWillOpen?: () => void;
+  onDidOpen?: () => void;
+  onWillClose?: () => void;
 };
 
 export default class MenuButton extends React.Component<Props, State> {
@@ -46,7 +45,7 @@ export default class MenuButton extends React.Component<Props, State> {
 
     positionOptions: PropTypes.object,
     menuZIndex: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    ButtonComponent: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+    ButtonComponent: PropTypes.func,
 
     children: PropTypes.node,
     menu: PropTypes.element,
@@ -57,23 +56,20 @@ export default class MenuButton extends React.Component<Props, State> {
 
   static defaultProps = {
     positionOptions: {position:'bottom', hAlign:'left'},
-    ButtonComponent: 'button'
+    ButtonComponent: ({domRef, ...props}: Object) => <button ref={domRef} {...props} />
   };
 
   state: State = {
     opened: false
   };
 
-  _floatAnchor: FloatAnchor;
+  _floatAnchorRef = React.createRef<Class<FloatAnchor>>();
+  _anchorEl: ?HTMLElement = null;
   _onClose: Bus<void> = kefirBus();
 
-  open(callback?: () => any) {
-    if (this.state.opened) return;
+  open(): Promise<void> {
+    if (this.state.opened) return Promise.resolve();
     if (this.props.onWillOpen) this.props.onWillOpen();
-    this.setState({opened: true}, () => {
-      if (this.props.onDidOpen) this.props.onDidOpen();
-      if (callback) callback();
-    });
 
     // Clicking outside of the dropdown or pressing escape should close the
     // dropdown.
@@ -83,7 +79,7 @@ export default class MenuButton extends React.Component<Props, State> {
         fromEventsCapture(window, 'focus')
       ])
         .filter(e => {
-          const el = findDOMNode(this);
+          const el = this._anchorEl;
           for (let node of FloatAnchor.parentNodes(e.target)) {
             if (node === el) return false;
           }
@@ -100,6 +96,13 @@ export default class MenuButton extends React.Component<Props, State> {
       .onValue(() => {
         this.close();
       });
+
+    return new Promise(resolve => {
+      this.setState({opened: true}, () => {
+        if (this.props.onDidOpen) this.props.onDidOpen();
+        resolve();
+      });
+    });
   }
 
   close() {
@@ -118,7 +121,9 @@ export default class MenuButton extends React.Component<Props, State> {
   }
 
   reposition() {
-    this._floatAnchor.reposition();
+    const floatAnchor = this._floatAnchorRef.current;
+    if (!floatAnchor) throw new Error();
+    floatAnchor.reposition();
   }
 
   _itemChosen() {
@@ -150,13 +155,15 @@ export default class MenuButton extends React.Component<Props, State> {
 
     return (
       <FloatAnchor
-        ref={el => {
-          if (el) this._floatAnchor = el;
-        }}
+        ref={this._floatAnchorRef}
         options={positionOptions}
         zIndex={menuZIndex}
-        anchor={
+        anchor={anchorRef =>
           <ButtonComponent
+            domRef={el => {
+              this._anchorEl = el;
+              setRef(anchorRef, el);
+            }}
             type="button"
             className={className}
             style={style}

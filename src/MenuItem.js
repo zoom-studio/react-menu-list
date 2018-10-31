@@ -1,12 +1,14 @@
 /* @flow */
 
 import React from 'react';
-import type {Node as ReactNode} from 'react';
+import type {Ref as ReactRef, Node as ReactNode} from 'react';
 import PropTypes from 'prop-types';
 
 import type MenuEvent from './events/MenuEvent';
 import ChosenEvent from './events/ChosenEvent';
-import type {MenuListContext, MenuListHandle} from './MenuList';
+import {MenuListContext} from './MenuList';
+import type {MenuListContextValue, MenuListHandle} from './MenuList';
+import setRef from './lib/setRef';
 import type {Direction, Rect} from './types';
 
 type State = {
@@ -14,23 +16,25 @@ type State = {
 };
 
 export type Props = {
-  onItemChosen?: ?(event: ChosenEvent) => void;
-  onLeftPushed?: ?(event: MenuEvent) => void;
-  onRightPushed?: ?(event: MenuEvent) => void;
-  onHighlightChange?: ?(highlighted: boolean, details: {byKeyboard: ?boolean, prevCursorLocation: ?Rect, direction: ?Direction}) => void;
+  onItemChosen?: (event: ChosenEvent) => void;
+  onLeftPushed?: (event: MenuEvent) => void;
+  onRightPushed?: (event: MenuEvent) => void;
+  onHighlightChange?: (highlighted: boolean, details: {byKeyboard?: boolean, prevCursorLocation?: Rect, direction?: Direction}) => void;
 
-  className?: ?string;
-  style?: ?Object;
-  highlightedClassName?: ?string;
-  highlightedStyle?: ?Object;
+  className?: string;
+  style?: Object;
+  highlightedClassName?: string;
+  highlightedStyle?: Object;
 
-  index?: ?number;
-  onMouseLeave?: ?Function;
+  index?: number;
+  onMouseLeave?: (event: MouseEvent) => void;
 
   children?: ReactNode;
 
-  'aria-haspopup'?: ?boolean;
-  'aria-expanded'?: ?boolean;
+  domRef?: ReactRef<'div'>;
+
+  'aria-haspopup'?: boolean;
+  'aria-expanded'?: boolean;
 };
 
 export default class MenuItem extends React.Component<Props, State> {
@@ -54,17 +58,24 @@ export default class MenuItem extends React.Component<Props, State> {
 
     children: PropTypes.node,
 
+    domRef: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.func
+    ]),
+
     'aria-haspopup': PropTypes.bool,
     'aria-expanded': PropTypes.bool
   };
 
-  static contextTypes = {
-    menuList: PropTypes.object
-  };
+  static contextType = MenuListContext;
 
-  _el: ?HTMLElement;
-  _elSetter = (el: ?HTMLElement) => {
+  _el: ?HTMLDivElement;
+  _elSetter = (el: ?HTMLDivElement) => {
     this._el = el;
+
+    if (this.props.domRef) {
+      setRef(this.props.domRef, el);
+    }
   };
 
   hasHighlight(): boolean {
@@ -106,7 +117,7 @@ export default class MenuItem extends React.Component<Props, State> {
     const el = this._el;
     /*:: if (!el) throw new Error(); */
 
-    this._menuListHandle = (this.context.menuList:MenuListContext).registerItem(this.props, {
+    this._menuListHandle = (this.context: MenuListContextValue).registerItem(this.props, {
       notifyHighlighted: (highlighted: boolean, byKeyboard: ?boolean, direction: ?Direction, prevCursorLocation: ?Rect) => {
         this.setState({highlighted}, () => {
           if (highlighted && byKeyboard) {
@@ -120,7 +131,11 @@ export default class MenuItem extends React.Component<Props, State> {
           }
         });
         if (this.props.onHighlightChange) {
-          this.props.onHighlightChange(highlighted, {byKeyboard, prevCursorLocation, direction});
+          this.props.onHighlightChange(highlighted, {
+            byKeyboard: byKeyboard == null ? undefined : byKeyboard,
+            prevCursorLocation: prevCursorLocation == null ? undefined : prevCursorLocation,
+            direction: direction == null ? undefined : direction
+          });
         }
       },
       notifyEvent: (event: MenuEvent) => {

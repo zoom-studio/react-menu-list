@@ -32,13 +32,7 @@ by running:
 ```
 yarn
 yarn example-build
-```
-
-You can build the example with live editing enabled (using
-[react-transform-hmr](https://github.com/gaearon/react-transform-hmr) and
-[browserify-hmr](https://github.com/AgentME/browserify-hmr)) by running:
-
-```
+# or use this to auto-rebuild on changes:
 yarn example-watch
 ```
 
@@ -109,6 +103,8 @@ A MenuItem supports the following props:
  default onMouseLeave event handler, which is in charge of unhighlighting the
  menu item. Unless you're reimplementing SubMenuItem, you probably won't need
  this.
+* `domRef`: Optional prop which is passed as the `ref` value to the MenuItem's
+ div element.
 
 A MenuItem has the following public methods:
 
@@ -160,7 +156,7 @@ A SubMenuItem supports the following props:
 
 A SubMenuItem has the following public methods:
 
-* `open(callback?: Function)`
+* `open(): Promise<void>`
 * `close()`
 * `toggle()`
 * `reposition()`: Repositions the floating submenu. Call this if you change the
@@ -209,11 +205,12 @@ A MenuButton supports the following props:
  These work the same as the props on SubMenuItem.
 * `disabled`, `title`: These are passed to the button element.
 * `ButtonComponent`: Optional prop that allows a different component to be used
- instead of an html `<button>`.
+ instead of an html `<button>`. The component passed here must support a
+ `domRef` prop which is passed as a ref to the button's DOM element.
 
 A MenuButton has the following public methods:
 
-* `open(callback?: Function)`
+* `open(): Promise<void>`
 * `close()`
 * `toggle()`
 * `reposition()`: Repositions the floating submenu. Call this if you change the
@@ -246,5 +243,6 @@ Some callback props are passed a `ChosenEvent` object, which extends the
 
 ## Types
 
-[Flow](https://flowtype.org/) type declarations for this module are included!
-If you are using Flow, they won't require any configuration to use.
+Both [TypeScript](https://www.typescriptlang.org/) and
+[Flow](https://flowtype.org/) type definitions for this module are included!
+The type definitions won't require any configuration to use.

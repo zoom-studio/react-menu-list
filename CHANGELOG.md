@@ -1,3 +1,12 @@
+## 6.0.0 (Unreleased)
+
+### Breaking Changes
+* react-menu-list now requires React v16.6.0 or above.
+
+### Improvements
+* No longer uses any deprecated APIs (legacy Context API, lifecycle methods,
+  and ReactDOM.findDOMNode).
+
 ## 5.0.1 (2018-05-15)
 
 * Fix compatibility with Flow v0.72.

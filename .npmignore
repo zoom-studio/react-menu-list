@@ -8,3 +8,4 @@ npm-debug.log
 /example
 /flow-typed
 /yarn.lock
+/.circleci

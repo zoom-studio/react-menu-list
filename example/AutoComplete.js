@@ -34,7 +34,7 @@ export default class AutoComplete extends React.Component<Props, State> {
     defaultValue: ''
   };
 
-  _floatAnchor: FloatAnchor;
+  _floatAnchorRef = React.createRef<Class<FloatAnchor>>();
 
   constructor(props: Props) {
     super(props);
@@ -85,9 +85,7 @@ export default class AutoComplete extends React.Component<Props, State> {
 
     return (
       <FloatAnchor
-        ref={el => {
-          if (el) this._floatAnchor = el;
-        }}
+        ref={this._floatAnchorRef}
         options={positionOptions}
         anchor={
           <input
@@ -124,7 +122,9 @@ export default class AutoComplete extends React.Component<Props, State> {
                 this.close();
               }}
               reposition={() => {
-                this._floatAnchor.reposition();
+                const floatAnchor = this._floatAnchorRef.current;
+                if (!floatAnchor) throw new Error('should not happen');
+                floatAnchor.reposition();
               }}
             />
         }

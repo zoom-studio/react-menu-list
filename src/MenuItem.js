@@ -62,10 +62,7 @@ export default class MenuItem extends React.Component<Props, State> {
     menuList: PropTypes.object
   };
 
-  _el: ?HTMLElement;
-  _elSetter = (el: ?HTMLElement) => {
-    this._el = el;
-  };
+  _elRef = React.createRef<'div'>();
 
   hasHighlight(): boolean {
     return this.state.highlighted;
@@ -103,14 +100,14 @@ export default class MenuItem extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    const el = this._el;
+    const el = this._elRef.current;
     /*:: if (!el) throw new Error(); */
 
     this._menuListHandle = (this.context.menuList:MenuListContext).registerItem(this.props, {
       notifyHighlighted: (highlighted: boolean, byKeyboard: ?boolean, direction: ?Direction, prevCursorLocation: ?Rect) => {
         this.setState({highlighted}, () => {
           if (highlighted && byKeyboard) {
-            const el = this._el;
+            const el = this._elRef.current;
             /*:: if (!el) throw new Error(); */
             if (typeof (el: any).scrollIntoViewIfNeeded === 'function') {
               (el: any).scrollIntoViewIfNeeded();
@@ -165,7 +162,7 @@ export default class MenuItem extends React.Component<Props, State> {
 
     return (
       <div
-        ref={this._elSetter}
+        ref={this._elRef}
         style={style}
         className={className}
         onClick={()=>this._menuListHandle.itemChosen()}

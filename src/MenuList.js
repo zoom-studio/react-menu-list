@@ -75,10 +75,7 @@ export default class MenuList extends React.Component<Props> {
   _lockedHighlightedIndex: ?number;
   _keyboardTakenByIndex: ?number;
 
-  _el: ?HTMLElement;
-  _elSetter = (el: ?HTMLElement) => {
-    this._el = el;
-  };
+  _elRef = React.createRef<'div'>();
 
   _getVisibleHighlightedIndex(): ?number {
     return this._lockedHighlightedIndex != null ?
@@ -230,7 +227,7 @@ export default class MenuList extends React.Component<Props> {
   componentDidMount() {
     const isEnterOrArrowKey = e =>
       (e.which === 13) || (37 <= e.which && e.which <= 40);
-    const el = this._el;
+    const el = this._elRef.current;
     /*:: if (!el) throw new Error(); */
 
     // The only things that should receive keydown/keypress events before us
@@ -405,7 +402,7 @@ export default class MenuList extends React.Component<Props> {
 
   render() {
     return (
-      <div role="menu" ref={this._elSetter}>
+      <div role="menu" ref={this._elRef}>
         {this.props.children}
       </div>
     );

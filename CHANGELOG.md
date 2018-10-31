@@ -8,6 +8,7 @@
 ### Improvements
 * No longer uses any deprecated APIs (legacy Context API, lifecycle methods,
   and ReactDOM.findDOMNode).
+* Added TypeScript type definitions.
 
 ## 5.0.1 (2018-05-15)
 

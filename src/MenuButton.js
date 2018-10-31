@@ -1,9 +1,7 @@
 /* @flow */
-/* eslint-disable react/no-find-dom-node */
 
 import React from 'react';
 import type {Node as ReactNode, ElementType as ReactElementType} from 'react';
-import {findDOMNode} from 'react-dom';
 import PropTypes from 'prop-types';
 import FloatAnchor from 'react-float-anchor';
 import type {Options as FloatAnchorOptions} from 'react-float-anchor';
@@ -11,6 +9,7 @@ import Kefir from 'kefir';
 import kefirBus from 'kefir-bus';
 import type {Bus} from 'kefir-bus';
 import fromEventsCapture from './lib/fromEventsCapture';
+import setRef from './lib/setRef';
 import MenuListInspector from './MenuListInspector';
 
 type State = {
@@ -65,6 +64,7 @@ export default class MenuButton extends React.Component<Props, State> {
   };
 
   _floatAnchorRef = React.createRef<Class<FloatAnchor>>();
+  _anchorEl: ?HTMLElement = null;
   _onClose: Bus<void> = kefirBus();
 
   open(callback?: () => any) {
@@ -83,7 +83,7 @@ export default class MenuButton extends React.Component<Props, State> {
         fromEventsCapture(window, 'focus')
       ])
         .filter(e => {
-          const el = findDOMNode(this);
+          const el = this._anchorEl;
           for (let node of FloatAnchor.parentNodes(e.target)) {
             if (node === el) return false;
           }
@@ -157,7 +157,10 @@ export default class MenuButton extends React.Component<Props, State> {
         zIndex={menuZIndex}
         anchor={anchorRef =>
           <ButtonComponent
-            domRef={anchorRef}
+            domRef={el => {
+              this._anchorEl = el;
+              setRef(anchorRef, el);
+            }}
             type="button"
             className={className}
             style={style}

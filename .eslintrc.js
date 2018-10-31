@@ -27,8 +27,6 @@ module.exports = {
     "flowtype/define-flow-type": 1,
     "flowtype/require-valid-file-annotation": ["error", "always"],
 
-    "react/no-deprecated": ["off"], // TODO remove
-
     "indent": ["error", 2],
     "linebreak-style": ["error", "unix"],
     "quotes": ["error", "single", "avoid-escape"],

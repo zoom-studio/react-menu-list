@@ -5,7 +5,7 @@ import kefirBus from 'kefir-bus';
 import type {Bus} from 'kefir-bus';
 import kefirStopper from 'kefir-stopper';
 import React from 'react';
-import type {Node as ReactNode, Element as ReactElement} from 'react';
+import type {Node as ReactNode} from 'react';
 import PropTypes from 'prop-types';
 import pointRectDistance from './lib/pointRectDistance';
 
@@ -23,7 +23,7 @@ type State = {
 };
 
 export type Props = {
-  menu?: ReactElement<any>;
+  menu: ReactNode;
   positionOptions: FloatAnchorOptions;
   menuZIndex?: ?string|number;
 

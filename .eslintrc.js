@@ -17,11 +17,17 @@ module.exports = {
   "plugins": [
     "react", "flowtype"
   ],
+  "settings": {
+    "react": {
+      "version": "16.6",
+      "flowVersion": "0.85"
+    }
+  },
   "rules": {
     "flowtype/define-flow-type": 1,
     "flowtype/require-valid-file-annotation": ["error", "always"],
 
-    "react/no-deprecated": ["off"], // TODO remove when we target 16.3
+    "react/no-deprecated": ["off"], // TODO remove
 
     "indent": ["error", 2],
     "linebreak-style": ["error", "unix"],
@@ -34,6 +40,6 @@ module.exports = {
     "no-spaced-func": ["error"],
     "no-whitespace-before-property": ["error"],
     "space-before-blocks": ["error", "always"],
-    "keyword-spacing": ["error"],
+    "keyword-spacing": ["error"]
   }
 };

@@ -2,7 +2,7 @@
 /* eslint-disable react/no-find-dom-node */
 
 import React from 'react';
-import type {Node as ReactNode, Element as ReactElement, ElementType as ReactElementType} from 'react';
+import type {Node as ReactNode, ElementType as ReactElementType} from 'react';
 import {findDOMNode} from 'react-dom';
 import PropTypes from 'prop-types';
 import FloatAnchor from 'react-float-anchor';
@@ -29,7 +29,7 @@ export type Props = {
   ButtonComponent: ReactElementType;
 
   children?: ReactNode;
-  menu?: ?ReactElement<any>;
+  menu: ReactNode;
   onWillOpen?: ?() => void;
   onDidOpen?: ?() => void;
   onWillClose?: ?() => void;

@@ -18,7 +18,7 @@ export type Props = {
   onItemChosen?: ?(event: ChosenEvent) => void;
   onLeftPushed?: ?(event: MenuEvent) => void;
   onRightPushed?: ?(event: MenuEvent) => void;
-  children?: ReactNode;
+  children: ReactNode;
 };
 
 export default class MenuListInspector extends React.Component<Props> {

@@ -180,13 +180,15 @@ export default class SubMenuItem extends React.Component<Props, State> {
 
   _onMouseLeaveItem(event: Object) {
     const menuItem = this._menuItemRef.current;
-    const menuContainer = this._menuContainerRef.current;
-    if (!menuItem || !menuContainer) throw new Error();
+    if (!menuItem) throw new Error();
 
     if (!this.state.opened) {
       menuItem.unhighlight();
       return;
     }
+
+    const menuContainer = this._menuContainerRef.current;
+    if (!menuContainer) throw new Error();
 
     // If the mouse isn't going toward the menu, then unhighlight ourself.
 

@@ -1,3 +1,7 @@
+## 6.0.1 (2018-11-08)
+
+* Fixed an error being logged when a user moved the mouse off of a SubMenuItem quickly before the menu opened.
+
 ## 6.0.0 (2018-10-31)
 
 ### Breaking Changes

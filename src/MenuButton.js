@@ -63,7 +63,7 @@ export default class MenuButton extends React.Component<Props, State> {
     opened: false
   };
 
-  _floatAnchorRef = React.createRef<Class<FloatAnchor>>();
+  _floatAnchorRef = React.createRef<FloatAnchor>();
   _anchorEl: ?HTMLElement = null;
   _onClose: Bus<void> = kefirBus();
 

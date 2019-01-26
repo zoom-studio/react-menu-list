@@ -80,10 +80,10 @@ export default class SubMenuItem extends React.Component<Props, State> {
     opened: false
   };
 
-  _menuItemRef = React.createRef<Class<MenuItem>>();
-  _floatAnchorRef = React.createRef<Class<FloatAnchor>>();
-  _menuInspectorRef = React.createRef<Class<MenuListInspector>>();
-  _menuContainerRef = React.createRef<'div'>();
+  _menuItemRef = React.createRef<MenuItem>();
+  _floatAnchorRef = React.createRef<FloatAnchor>();
+  _menuInspectorRef = React.createRef<MenuListInspector>();
+  _menuContainerRef = React.createRef<HTMLDivElement>();
   _resetMouseLeaveWatcher: Bus<null> = kefirBus();
   _stopper = kefirStopper();
 

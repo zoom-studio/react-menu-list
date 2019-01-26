@@ -34,7 +34,7 @@ export default class AutoComplete extends React.Component<Props, State> {
     defaultValue: ''
   };
 
-  _floatAnchorRef = React.createRef<Class<FloatAnchor>>();
+  _floatAnchorRef = React.createRef<FloatAnchor>();
 
   constructor(props: Props) {
     super(props);

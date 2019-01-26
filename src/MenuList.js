@@ -78,7 +78,7 @@ export default class MenuList extends React.Component<Props> {
   _lockedHighlightedIndex: ?number;
   _keyboardTakenByIndex: ?number;
 
-  _elRef = React.createRef<'div'>();
+  _elRef = React.createRef<HTMLDivElement>();
 
   _getVisibleHighlightedIndex(): ?number {
     return this._lockedHighlightedIndex != null ?

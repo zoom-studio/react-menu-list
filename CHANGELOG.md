@@ -1,3 +1,8 @@
+## 6.0.2 (2019-01-26)
+
+* Updated TypeScript and Flow type definitions to expose MenuEvent and ChosenEvent types.
+* Fixed compatibility with Flow v0.87.
+
 ## 6.0.1 (2018-11-08)
 
 * Fixed an error being logged when a user moved the mouse off of a SubMenuItem quickly before the menu opened.

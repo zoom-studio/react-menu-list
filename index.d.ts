@@ -4,16 +4,16 @@ import {ReactNode, Ref} from 'react';
 import {Options as FloatAnchorOptions} from 'react-float-anchor';
 export {Options as FloatAnchorOptions} from 'react-float-anchor';
 
-type Direction = 'up'|'down'|'left'|'right';
+export type Direction = 'up'|'down'|'left'|'right';
 
-type Rect = {
+export type Rect = {
   top: number;
   bottom: number;
   left: number;
   right: number;
 };
 
-interface MenuEvent {
+export interface MenuEvent {
   type: string;
   cancelBubble: boolean;
   defaultPrevented: boolean;
@@ -21,13 +21,13 @@ interface MenuEvent {
   preventDefault(): void;
 }
 
-interface ChosenEvent extends MenuEvent {
+export interface ChosenEvent extends MenuEvent {
   byKeyboard: boolean;
 }
 
 // MenuList
 
-type MenuListProps = {
+export type MenuListProps = {
   onItemChosen?: (event: ChosenEvent) => void;
   onLeftPushed?: (event: MenuEvent) => void;
   onRightPushed?: (event: MenuEvent) => void;
@@ -40,7 +40,7 @@ export class MenuList extends React.Component<MenuListProps> {
 
 // MenuItem
 
-type MenuItemProps = {
+export type MenuItemProps = {
   onItemChosen?: (event: ChosenEvent) => void;
   onLeftPushed?: (event: MenuEvent) => void;
   onRightPushed?: (event: MenuEvent) => void;
@@ -80,7 +80,7 @@ export class MenuItem extends React.Component<MenuItemProps> {
 
 // MenuListInspector
 
-type MenuListInspectorProps = {
+export type MenuListInspectorProps = {
   onItemChosen?: (event: ChosenEvent) => void;
   onLeftPushed?: (event: MenuEvent) => void;
   onRightPushed?: (event: MenuEvent) => void;
@@ -98,7 +98,7 @@ export class Dropdown extends React.Component<{}> {
 
 // MenuButton
 
-type MenuButtonProps = {
+export type MenuButtonProps = {
   className?: string;
   style?: Object;
   disabled?: boolean;
@@ -125,7 +125,7 @@ export class MenuButton extends React.Component<MenuButtonProps> {
 
 // SubMenuItem
 
-type SubMenuItemProps = {
+export type SubMenuItemProps = {
   menu: ReactNode;
   positionOptions?: FloatAnchorOptions;
   menuZIndex?: string|number;

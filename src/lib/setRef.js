@@ -8,7 +8,7 @@ export default function setRef(ref: Ref<any>, value: any) {
   if (typeof ref === 'function') {
     ref(value);
   } else {
-    /*:: if (typeof ref === 'string') throw new Error(); */
+    /*:: if (typeof ref === 'string' || typeof ref === 'number') throw new Error(); */
     ref.current = value;
   }
 }

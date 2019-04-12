@@ -1,3 +1,7 @@
+## 6.0.3 (2019-04-11)
+
+* Fixed compatibility with Flow v0.96.
+
 ## 6.0.2 (2019-01-26)
 
 * Updated TypeScript and Flow type definitions to expose MenuEvent and ChosenEvent types.

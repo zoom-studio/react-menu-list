@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import type {Node as ReactNode, ElementType as ReactElementType} from 'react';
+import type {Ref as ReactRef, Node as ReactNode, ComponentType as ReactComponentType} from 'react';
 import PropTypes from 'prop-types';
 import FloatAnchor from 'react-float-anchor';
 import type {Options as FloatAnchorOptions} from 'react-float-anchor';
@@ -25,7 +25,7 @@ export type Props = {
 
   positionOptions: FloatAnchorOptions;
   menuZIndex?: string|number;
-  ButtonComponent: ReactElementType;
+  ButtonComponent: ReactComponentType<{domRef: ReactRef<any>}>;
 
   children?: ReactNode;
   menu: ReactNode;

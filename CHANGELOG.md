@@ -1,3 +1,7 @@
+## 6.0.4 (2019-05-31)
+
+* Fixed compatibility with Flow v0.100.
+
 ## 6.0.3 (2019-04-11)
 
 * Fixed compatibility with Flow v0.96.

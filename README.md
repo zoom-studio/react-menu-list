@@ -2,7 +2,7 @@
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/StreakYC/react-menu-list/blob/master/LICENSE.txt) [![npm version](https://badge.fury.io/js/react-menu-list.svg)](https://badge.fury.io/js/react-menu-list) [![Circle CI](https://circleci.com/gh/StreakYC/react-menu-list.svg?style=shield)](https://circleci.com/gh/StreakYC/react-menu-list)
 
-This project is a set of components for building menus with. This project works
+This project is a set of components for building menus. This project works
 well for dropdown and autocomplete menus. The menus are correctly
 keyboard-accessible, and it includes polish like established desktop
 application menus have such as well-behaved submenus which stay open even if

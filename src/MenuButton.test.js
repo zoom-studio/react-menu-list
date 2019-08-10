@@ -77,15 +77,15 @@ test('closes on outside click', () => {
   if (!button) throw new Error();
 
   expect(TestUtils.scryRenderedComponentsWithType(root, Dropdown).length).toBe(0);
-  expect(window.addEventListener.mock.calls.filter(c => c[0] === 'click').length).toBe(0);
+  expect(window.addEventListener.mock.calls.filter(c => c[0] === 'mousedown').length).toBe(0);
 
   TestUtils.Simulate.mouseDown(button, {button: 0});
   TestUtils.Simulate.focus(button);
 
-  expect(window.addEventListener.mock.calls.filter(c => c[0] === 'click').length).toBe(1);
-  expect(window.addEventListener.mock.calls.filter(c => c[0] === 'click')[0][2]).toBe(true);
+  expect(window.addEventListener.mock.calls.filter(c => c[0] === 'mousedown').length).toBe(1);
+  expect(window.addEventListener.mock.calls.filter(c => c[0] === 'mousedown')[0][2]).toBe(true);
 
-  expect(window.removeEventListener.mock.calls.filter(c => c[0] === 'click').length).toBe(0);
+  expect(window.removeEventListener.mock.calls.filter(c => c[0] === 'mousedown').length).toBe(0);
 
   const dropdown: Dropdown = (TestUtils.findRenderedComponentWithType(root, Dropdown): any);
   const menuListItems = TestUtils.scryRenderedComponentsWithType(dropdown, MenuItem);
@@ -95,14 +95,14 @@ test('closes on outside click', () => {
   );
 
   // Simulate a click on the page
-  window.addEventListener.mock.calls.filter(c => c[0] === 'click')[0][1].call(window, {
+  window.addEventListener.mock.calls.filter(c => c[0] === 'mousedown')[0][1].call(window, {
     target: 'window'
   });
 
   expect(TestUtils.scryRenderedComponentsWithType(root, Dropdown).length).toBe(0);
 
-  expect(window.addEventListener.mock.calls.filter(c => c[0] === 'click').length).toBe(1);
-  expect(window.removeEventListener.mock.calls.filter(c => c[0] === 'click').length).toBe(1);
+  expect(window.addEventListener.mock.calls.filter(c => c[0] === 'mousedown').length).toBe(1);
+  expect(window.removeEventListener.mock.calls.filter(c => c[0] === 'mousedown').length).toBe(1);
 
   ReactDOM.unmountComponentAtNode(mountPoint);
 });

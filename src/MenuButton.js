@@ -75,7 +75,7 @@ export default class MenuButton extends React.Component<Props, State> {
     // dropdown.
     Kefir.merge([
       Kefir.merge([
-        fromEventsCapture(window, 'click'),
+        fromEventsCapture(window, 'mousedown'),
         fromEventsCapture(window, 'focus')
       ])
         .filter(e => {

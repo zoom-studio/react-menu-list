@@ -1,3 +1,7 @@
+## 6.0.5 (2019-08-09)
+
+* Fixed a bug where if the user opened a MenuButton and then released the click over the MenuButton's dropdown (which would always happen if the MenuButton had position: 'cover' passed in the positionOptions prop), the MenuButton would close the dropdown.
+
 ## 6.0.4 (2019-05-31)
 
 * Fixed compatibility with Flow v0.100.

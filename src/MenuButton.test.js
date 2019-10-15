@@ -2,6 +2,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import TestUtils from 'react-dom/test-utils';
 import {MenuButton, Dropdown, MenuList, MenuItem} from '.';
 
@@ -103,6 +104,46 @@ test('closes on outside click', () => {
 
   expect(window.addEventListener.mock.calls.filter(c => c[0] === 'mousedown').length).toBe(1);
   expect(window.removeEventListener.mock.calls.filter(c => c[0] === 'mousedown').length).toBe(1);
+
+  ReactDOM.unmountComponentAtNode(mountPoint);
+});
+
+test('passes componentProps to custom component', () => {
+  const mountPoint = document.createElement('div');
+  /* eslint-ignore-next-line react/prop-types */
+  const CustomButton: Function = ({domNode, customProp}) => {
+    return <button html-custom={customProp} ref={domNode}>btn</button>;
+  };
+  CustomButton.propTypes = {
+    domNode: PropTypes.node,
+    customProp: PropTypes.string
+  };
+
+  const root: MenuButton = (ReactDOM.render(
+    <MenuButton
+      ButtonComponent={CustomButton}
+      componentProps={{ customProp: 'custom-prop' }}
+      menu={
+        <Dropdown>
+          <MenuList>
+            <MenuItem>A</MenuItem>
+            <MenuItem>B</MenuItem>
+          </MenuList>
+        </Dropdown>
+      }
+    >
+      foo button
+    </MenuButton>,
+    mountPoint
+  ): any);
+
+  root.reposition(); // just check this doesn't throw
+
+  const button = TestUtils.findRenderedDOMComponentWithTag(root, 'button');
+  if (!button) throw new Error();
+  expect(TestUtils.scryRenderedComponentsWithType(root, Dropdown).length).toBe(0);
+
+  expect(button.getAttribute('custom')).toBeDefined();
 
   ReactDOM.unmountComponentAtNode(mountPoint);
 });

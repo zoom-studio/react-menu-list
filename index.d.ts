@@ -108,6 +108,7 @@ export type MenuButtonProps = {
 
   positionOptions?: FloatAnchorOptions;
   menuZIndex?: string|number;
+  menuParentElement?: HTMLElement;
   ButtonComponent?: React.ComponentType<{domRef: Ref<HTMLElement>}>;
   buttonProps?: object;
 
@@ -130,6 +131,7 @@ export type SubMenuItemProps = {
   menu: ReactNode;
   positionOptions?: FloatAnchorOptions;
   menuZIndex?: string|number;
+  menuParentElement?: HTMLElement;
 
   onWillOpen?: () => void;
   onDidOpen?: () => void;

@@ -27,6 +27,7 @@ export type Props = {
   menu: ReactNode;
   positionOptions: FloatAnchorOptions;
   menuZIndex?: string|number;
+  menuParentElement?: HTMLElement;
 
   onWillOpen?: () => void;
   onDidOpen?: () => void;
@@ -270,6 +271,7 @@ export default class SubMenuItem extends React.Component<Props, State> {
 
     return (
       <FloatAnchor
+        parentElement={this.props.menuParentElement}
         ref={this._floatAnchorRef}
         options={positionOptions}
         zIndex={menuZIndex}

@@ -25,6 +25,7 @@ export type Props = {
 
   positionOptions: FloatAnchorOptions;
   menuZIndex?: string|number;
+  menuParentElement?: HTMLElement;
   ButtonComponent: ReactComponentType<{domRef: ReactRef<any>}>;
   buttonProps?: Object;
 
@@ -157,6 +158,7 @@ export default class MenuButton extends React.Component<Props, State> {
 
     return (
       <FloatAnchor
+        parentElement={this.props.menuParentElement}
         ref={this._floatAnchorRef}
         options={positionOptions}
         zIndex={menuZIndex}

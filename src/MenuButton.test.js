@@ -108,7 +108,7 @@ test('closes on outside click', () => {
   ReactDOM.unmountComponentAtNode(mountPoint);
 });
 
-test('passes componentProps to custom component', () => {
+test('passes buttonProps to custom component', () => {
   const mountPoint = document.createElement('div');
   /* eslint-ignore-next-line react/prop-types */
   const CustomButton: Function = ({domNode, customProp}) => {
@@ -122,7 +122,7 @@ test('passes componentProps to custom component', () => {
   const root: MenuButton = (ReactDOM.render(
     <MenuButton
       ButtonComponent={CustomButton}
-      componentProps={{ customProp: 'custom-prop' }}
+      buttonProps={{ customProp: 'custom-prop' }}
       menu={
         <Dropdown>
           <MenuList>

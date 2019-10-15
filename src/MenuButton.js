@@ -26,7 +26,7 @@ export type Props = {
   positionOptions: FloatAnchorOptions;
   menuZIndex?: string|number;
   ButtonComponent: ReactComponentType<{domRef: ReactRef<any>}>;
-  componentProps?: Object;
+  buttonProps?: Object;
 
   children?: ReactNode;
   menu: ReactNode;
@@ -47,7 +47,7 @@ export default class MenuButton extends React.Component<Props, State> {
     positionOptions: PropTypes.object,
     menuZIndex: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     ButtonComponent: PropTypes.func,
-    componentProps: PropTypes.object,
+    buttonProps: PropTypes.object,
 
     children: PropTypes.node,
     menu: PropTypes.element,
@@ -182,7 +182,7 @@ export default class MenuButton extends React.Component<Props, State> {
             aria-expanded={opened}
             disabled={disabled}
             title={title}
-            {...this.props.componentProps}
+            {...this.props.buttonProps}
           >
             {children}
           </ButtonComponent>

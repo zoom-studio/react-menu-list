@@ -49,17 +49,17 @@
     "babel-jest": "^24.0.0",
     "babelify": "^10.0.0",
     "browserify": "^16.2.2",
-    "cross-env": "^5.0.1",
+    "cross-env": "^6.0.3",
     "eslint": "^6.1.0",
     "eslint-plugin-flowtype": "^4.2.0",
     "eslint-plugin-react": "^7.4.0",
-    "flow-bin": "^0.104.0",
+    "flow-bin": "^0.109.0",
     "flow-copy-source": "^2.0.2",
     "jest": "^24.0.0",
     "react": "^16.6.0",
     "react-dom": "^16.6.0",
     "react-test-renderer": "^16.6.0",
-    "rimraf": "^2.6.1",
+    "rimraf": "^3.0.0",
     "typescript": "^3.5.1",
     "watchify": "^3.7.0"
   },
@@ -70,7 +70,7 @@
     "kefir-bus": "^2.2.0",
     "kefir-stopper": "^2.1.0",
     "prop-types": "^15.6.0",
-    "react-float-anchor": "^3.0.0"
+    "react-float-anchor": "^3.2.0"
   },
   "peerDependencies": {
     "react": "^16.6.0"

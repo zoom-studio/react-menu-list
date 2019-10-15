@@ -206,6 +206,8 @@ A MenuButton supports the following props:
 * `ButtonComponent`: Optional prop that allows a different component to be used
  instead of an html `<button>`. The component passed here must support a
  `domRef` prop which is passed as a ref to the button's DOM element.
+* `buttonProps`: Optional object that will be merged with the props passed to
+ the button component.
 
 A MenuButton has the following public methods:
 

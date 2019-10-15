@@ -109,6 +109,7 @@ export type MenuButtonProps = {
   positionOptions?: FloatAnchorOptions;
   menuZIndex?: string|number;
   ButtonComponent?: React.ComponentType<{domRef: Ref<HTMLElement>}>;
+  componentProps?: object;
 
   children?: ReactNode;
   menu: ReactNode;

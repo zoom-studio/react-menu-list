@@ -93,7 +93,7 @@ A MenuItem supports the following props:
 * `highlightedClassName`, `highlightedStyle`: These are optional and are
  combined with the className and style props and passed to the underlying div
  when the item is highlighted.
-* `index`: This an optional number which overrides the menu item's index in the
+* `index`: This is an optional number which overrides the menu item's index in the
  MenuList for keyboard control purposes. The order of menu items is normally
  determined by their position in the DOM when mounted. This property should be
  unnecessary unless you're reordering mounted menu items. If any MenuItems
@@ -136,12 +136,12 @@ A SubMenuItem supports the following props:
 
 * `menu`: This is the React element to show as the dropdown when the submenu is
  open.
-* `positionOptions`: This an optional object of options to control how the
+* `positionOptions`: This is an optional object of options to control how the
  dropdown is aligned to the menu item. The options are the same as those
  supported by
  [contain-by-screen (version ^1.0)](https://github.com/AgentME/contain-by-screen#readme).
  This defaults to `{position:'right', vAlign:'top', hAlign: 'left'}`.
-* `menuZIndex`: This an optional number controlling the z-index CSS property of
+* `menuZIndex`: This is an optional number controlling the z-index CSS property of
  the menu's container.
 * `onWillOpen`: This is an optional function called before the submenu opens.
 * `onDidOpen`: This is an optional function called after the submenu opened.

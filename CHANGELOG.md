@@ -1,3 +1,8 @@
+## 6.1.0 (2019-10-15)
+
+* Added `menuParentElement` prop. ([#14](https://github.com/StreakYC/react-menu-list/pull/14))
+* Added `buttonProps` prop. ([#13](https://github.com/StreakYC/react-menu-list/pull/13))
+
 ## 6.0.5 (2019-08-09)
 
 * Fixed a bug where if the user opened a MenuButton and then released the click over the MenuButton's dropdown (which would always happen if the MenuButton had position: 'cover' passed in the positionOptions prop), the MenuButton would close the dropdown.

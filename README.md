@@ -143,6 +143,8 @@ A SubMenuItem supports the following props:
  This defaults to `{position:'right', vAlign:'top', hAlign: 'left'}`.
 * `menuZIndex`: This is an optional number controlling the z-index CSS property of
  the menu's container.
+* `menuParentElement`: This is an optional HTMLElement to attach the menu's container
+ to instead of the document's body element.
 * `onWillOpen`: This is an optional function called before the submenu opens.
 * `onDidOpen`: This is an optional function called after the submenu opened.
 * `onWillClose`: This is an optional function called before the submenu closes.
@@ -199,7 +201,7 @@ MenuItem's onItemChosen callback.
 
 A MenuButton supports the following props:
 
-* `menu`, `positionOptions`, `menuZIndex`, `onWillOpen`, `onDidOpen`,
+* `menu`, `positionOptions`, `menuZIndex`, `menuParentElement`, `onWillOpen`, `onDidOpen`,
  `onWillClose`, `className`, `style`, `openedClassName`, `openedStyle`:
  These work the same as the props on SubMenuItem.
 * `disabled`, `title`: These are passed to the button element.

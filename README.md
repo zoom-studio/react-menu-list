@@ -1,6 +1,6 @@
 # react-menu-list
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/StreakYC/react-menu-list/blob/master/LICENSE.txt) [![npm version](https://badge.fury.io/js/react-menu-list.svg)](https://badge.fury.io/js/react-menu-list) [![Circle CI](https://circleci.com/gh/StreakYC/react-menu-list.svg?style=shield)](https://circleci.com/gh/StreakYC/react-menu-list)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/StreakYC/react-menu-list/blob/master/LICENSE.txt) [![npm version](https://badge.fury.io/js/react-menu-list.svg)](https://badge.fury.io/js/react-menu-list) [![CI Status](https://github.com/StreakYC/react-menu-list/workflows/CI/badge.svg)](https://github.com/StreakYC/react-menu-list/actions?query=workflow%3ACI)
 
 This project is a set of components for building menus. This project works
 well for dropdown and autocomplete menus. The menus are correctly

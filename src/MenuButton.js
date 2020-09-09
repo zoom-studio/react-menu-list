@@ -152,19 +152,8 @@ export default class MenuButton extends React.Component<Props, State> {
     this.close();
   }
 
-  componentWillUnmount() {
-    this._onClose.emit();
-  }
-
-  render() {
-    const {
-      menu,
-      positionOptions, menuZIndex,
-      renderButton, openedStyle, openedClassName,
-      disabled, title
-    } = this.props;
-    const {opened} = this.state;
-
+  _defaultRenderButton = (domRef: React.Ref<any>, opened: boolean, onKeyPress: (e: KeyboardEvent) => void, onMouseDown: (e: MouseEvent) => void) => {
+    const {openedStyle, openedClassName} = this.props;
     let {style, className} = this.props;
     if (opened) {
       if (openedStyle) {
@@ -176,31 +165,42 @@ export default class MenuButton extends React.Component<Props, State> {
     }
 
     return (
+      <button
+        className={className}
+        style={style}
+        ref={domRef}
+        aria-haspopup={true}
+        aria-expanded={opened}
+        onKeyPress={onKeyPress}
+        onMouseDown={onMouseDown}
+        disabled={this.props.disabled}
+        title={this.props.title}
+      >
+        {this.props.children}
+      </button>
+    );
+  }
+
+  componentWillUnmount() {
+    this._onClose.emit();
+  }
+
+  render() {
+    const {
+      menu,
+      positionOptions, menuZIndex,
+    } = this.props;
+    const {opened} = this.state;
+
+    const renderButton = this.props.renderButton || this._defaultRenderButton;
+
+    return (
       <FloatAnchor
         parentElement={this.props.menuParentElement}
         ref={this._floatAnchorRef}
         options={positionOptions}
         zIndex={menuZIndex}
-        anchor={anchorRef => {
-          if (!renderButton) {
-            return (
-              <button
-                className={className}
-                style={style}
-                ref={el => this._setRef(el, anchorRef)}
-                aria-haspopup={true}
-                aria-expanded={opened}
-                onKeyPress={e => this._onKeyPress(e)}
-                onMouseDown={e => this._onMouseDown(e)}
-                disabled={disabled}
-                title={title}
-              >
-                {this.props.children}
-              </button>
-            );
-          }
-          return renderButton(el => this._setRef(el, anchorRef), opened, e => this._onKeyPress(e), e => this._onMouseDown(e));
-        }}
+        anchor={anchorRef => renderButton(el => this._setRef(el, anchorRef), opened, e => this._onKeyPress(e), e => this._onMouseDown(e))}
         float={
           !opened ? null :
             <MenuListInspector onItemChosen={() => this._itemChosen()}>

@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import type {Ref as ReactRef, Node as ReactNode, ComponentType as ReactComponentType, KeyboardEvent, MouseEvent, RefObject} from 'react';
+import type {Ref as ReactRef, Node as ReactNode, ComponentType as ReactComponentType, KeyboardEvent as ReactKeyboardEvent, MouseEvent as ReactMouseEvent, RefObject as ReactRefObject} from 'react';
 import PropTypes from 'prop-types';
 import FloatAnchor from 'react-float-anchor';
 import type {Options as FloatAnchorOptions} from 'react-float-anchor';
@@ -21,9 +21,17 @@ export type Props = {
   positionOptions: FloatAnchorOptions;
   menuZIndex?: string|number;
   menuParentElement?: HTMLElement;
+
   renderButton?: RenderProp;
 
   children?: ReactNode;
+  className?: string;
+  style: Object,
+  openedClassName?: string;
+  openedStyle?: Object;
+  disabled?: boolean;
+  title?: string;
+
   menu: ReactNode;
   onWillOpen?: () => void;
   onDidOpen?: () => void;
@@ -32,10 +40,18 @@ export type Props = {
 
 export default class MenuButton extends React.Component<Props, State> {
   static propTypes = {
-    children: PropTypes.node,
     positionOptions: PropTypes.object,
     menuZIndex: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    
     renderButton: PropTypes.func,
+
+    className: PropTypes.string,
+    openedClassName: PropTypes.string,
+    children: PropTypes.node,
+    style: PropTypes.object,
+    openedStyle: PropTypes.object,
+    disabled: PropTypes.bool,
+    title: PropTypes.string,
 
     menu: PropTypes.element,
     onWillOpen: PropTypes.func,
@@ -125,7 +141,7 @@ export default class MenuButton extends React.Component<Props, State> {
     }
   }
 
-  _setRef(el: HTMLElement | null, anchorRef: RefObject<HTMLElement>) {
+  _setRef(el: HTMLElement | null, anchorRef: ReactRefObject<HTMLElement>) {
     this._anchorRef = el;
     setRef(anchorRef, el);
   }
@@ -142,9 +158,20 @@ export default class MenuButton extends React.Component<Props, State> {
     const {
       menu,
       positionOptions, menuZIndex,
-      renderButton
+      renderButton, openedStyle, openedClassName,
+      disabled, title
     } = this.props;
     const {opened} = this.state;
+
+    let {style, className} = this.props;
+    if (opened) {
+      if (openedStyle) {
+        style = {...style, ...openedStyle};
+      }
+      if (openedClassName) {
+        className = `${className||''} ${openedClassName}`;
+      }
+    }
 
     return (
       <FloatAnchor
@@ -155,12 +182,16 @@ export default class MenuButton extends React.Component<Props, State> {
         anchor={anchorRef => {
           if (!renderButton) {
             return (
-              <button 
+              <button
+                className={className}
+                style={style}
                 ref={el => this._setRef(el, anchorRef)}
                 aria-haspopup={true}
                 aria-expanded={opened}
                 onKeyPress={e => this._onKeyPress(e)}
                 onMouseDown={e => this._onMouseDown(e)}
+                disabled={disabled}
+                title={title}
               >
                 {this.props.children}
               </button>

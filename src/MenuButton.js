@@ -1,7 +1,6 @@
 /* @flow */
 
-import React from 'react';
-import type {Ref as ReactRef, Node as ReactNode, ComponentType as ReactComponentType, KeyboardEvent as ReactKeyboardEvent, MouseEvent as ReactMouseEvent, RefObject as ReactRefObject} from 'react';
+import * as React from 'react';
 import PropTypes from 'prop-types';
 import FloatAnchor from 'react-float-anchor';
 import type {Options as FloatAnchorOptions} from 'react-float-anchor';
@@ -16,7 +15,7 @@ type State = {
   opened: boolean;
 };
 
-type RenderProp = (domRef: ReactRef<any>, opened: boolean, onKeyPress: (e: KeyboardEvent) => void, onMouseDown: (e: MouseEvent) => void) => ReactNode;
+type RenderProp = (domRef: React.Ref<any>, opened: boolean, onKeyPress: (e: KeyboardEvent) => void, onMouseDown: (e: MouseEvent) => void) => React.Node;
 export type Props = {
   positionOptions: FloatAnchorOptions;
   menuZIndex?: string|number;
@@ -24,15 +23,15 @@ export type Props = {
 
   renderButton?: RenderProp;
 
-  children?: ReactNode;
+  children?: React.Node;
   className?: string;
-  style: Object,
+  style?: Object,
   openedClassName?: string;
   openedStyle?: Object;
   disabled?: boolean;
   title?: string;
 
-  menu: ReactNode;
+  menu: React.Node;
   onWillOpen?: () => void;
   onDidOpen?: () => void;
   onWillClose?: () => void;
@@ -131,8 +130,11 @@ export default class MenuButton extends React.Component<Props, State> {
   }
 
   _onMouseDown(e: MouseEvent) {
-      if (e.button !== 0) return;
-      this.toggle();
+    if (e.button !== 0) {
+      return;
+    }
+    
+    this.toggle();
   }
 
   _onKeyPress(e: KeyboardEvent) {
@@ -141,7 +143,7 @@ export default class MenuButton extends React.Component<Props, State> {
     }
   }
 
-  _setRef(el: HTMLElement | null, anchorRef: ReactRefObject<HTMLElement>) {
+  _setRef(el: HTMLElement | null, anchorRef: React.Ref<any>) {
     this._anchorRef = el;
     setRef(anchorRef, el);
   }

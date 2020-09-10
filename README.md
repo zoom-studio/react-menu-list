@@ -206,7 +206,7 @@ A MenuButton supports the following props:
 * If `renderButton` is not provided: `className`, `style`, `openedClassName`, `openedStyle`,`disabled`, `title` props are accepted and provided to the default html `<button>` element.
 * `renderButton`: Optional render prop that allows a different component to be used
  instead of an html `<button>`. `renderButton` is a function with a signature of `(domRef: React.Ref<any>, opened: boolean, onKeyPress: (e: KeyboardEvent) => void, onMouseDown: (e: MouseEvent) => void) => React.Node`
-   * `domRef` is passed as a ref to the button's DOM element in your custom implementation
+   * `domRef` must be passed as a ref to the button's DOM element in your custom implementation
    * `opened` is whether the menu is being opened.  Useful if you want the appearance of the button to change in this state
    * `onKeyPress` must be called when your custom button registers key press events
    * `onMouseDown` must be called when your custom button registers mouse down events

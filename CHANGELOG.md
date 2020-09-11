@@ -1,3 +1,35 @@
+## 7.0.0 (2020-09-10)
+
+- **Breaking change:** MenuButton's `ButtonComponent` prop was replaced with the `renderButton` prop. This change makes it easier to pass values down from a closure to the button element, and avoids a common mistake with the old API where a user may pass a fresh component on every render, causing React to mount a new component instance on every render.
+
+Affected old code example:
+
+```jsx
+return (
+  <MenuButton
+    ButtonComponent={MyButtonComponent}
+    {/*...*/}
+  />
+);
+```
+
+New code example:
+
+```jsx
+return (
+  <MenuButton
+    renderButton={(domRef, opened, onKeyPress, onMouseDown) =>
+      <MyButtonComponent
+        domRef={domRef}
+        onKeyPress={onKeyPress}
+        onMouseDown={onMouseDown}
+      />
+    }
+    {/*...*/}
+  />
+);
+```
+
 ## 6.1.0 (2019-10-15)
 
 - Added `menuParentElement` prop. ([#14](https://github.com/StreakYC/react-menu-list/pull/14))

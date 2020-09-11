@@ -1,3 +1,7 @@
+## 7.0.1 (2020-09-11)
+
+- Use correct types for events in the Typescript definition of MenuButton's `renderButton` prop.
+
 ## 7.0.0 (2020-09-10)
 
 - **Breaking change:** MenuButton's `ButtonComponent` prop was replaced with the `renderButton` prop. This change makes it easier to pass values down from a closure to the button element, and avoids a common mistake with the old API where a user may pass a fresh component on every render, causing React to mount a new component instance on every render.

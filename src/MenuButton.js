@@ -133,19 +133,19 @@ export default class MenuButton extends React.Component<Props, State> {
     floatAnchor.reposition();
   }
 
-  _onMouseDown(e: MouseEvent) {
+  _onMouseDown = (e: MouseEvent) => {
     if (e.button !== 0) {
       return;
     }
 
     this.toggle();
-  }
+  };
 
-  _onKeyPress(e: KeyboardEvent) {
+  _onKeyPress = (e: KeyboardEvent) => {
     if (e.key === 'Enter' || e.key === ' ') {
       this.toggle();
     }
-  }
+  };
 
   _setRef(el: HTMLElement | null, anchorRef: React.Ref<any>) {
     this._anchorRef = el;
@@ -210,8 +210,8 @@ export default class MenuButton extends React.Component<Props, State> {
           renderButton(
             el => this._setRef(el, anchorRef),
             opened,
-            e => this._onKeyPress(e),
-            e => this._onMouseDown(e)
+            this._onKeyPress,
+            this._onMouseDown
           )
         }
         float={

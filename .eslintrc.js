@@ -1,3 +1,4 @@
+/* @flow */
 module.exports = {
   parser: 'babel-eslint',
   env: {

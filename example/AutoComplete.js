@@ -2,26 +2,24 @@
 /* eslint-disable react/prop-types */
 
 import React from 'react';
-import {
-  Dropdown, MenuList, MenuItem, SubMenuItem
-} from '../src';
+import {Dropdown, MenuList, MenuItem, SubMenuItem} from '../src';
 import FloatAnchor from 'react-float-anchor';
 import type {Options as PositionOptions} from 'react-float-anchor';
 
-type Item = string|{title:string,items:Array<Item>};
+type Item = string | {title: string, items: Array<Item>};
 
 type Props = {
-  className?: ?string;
-  style?: ?Object;
-  positionOptions: PositionOptions;
-  autoHighlight: boolean;
-  defaultValue: string;
-  items: Array<Item>;
+  className?: ?string,
+  style?: ?Object,
+  positionOptions: PositionOptions,
+  autoHighlight: boolean,
+  defaultValue: string,
+  items: Array<Item>,
 };
 
 type State = {
-  opened: boolean;
-  value: string;
+  opened: boolean,
+  value: string,
 };
 
 // This is an example autocomplete widget built using the library. It's not
@@ -29,9 +27,9 @@ type State = {
 // customize it for your uses and to match your application's styling.
 export default class AutoComplete extends React.Component<Props, State> {
   static defaultProps = {
-    positionOptions: {position:'bottom', hAlign:'left'},
+    positionOptions: {position: 'bottom', hAlign: 'left'},
     autoHighlight: false,
-    defaultValue: ''
+    defaultValue: '',
   };
 
   _floatAnchorRef = React.createRef<FloatAnchor>();
@@ -40,7 +38,7 @@ export default class AutoComplete extends React.Component<Props, State> {
     super(props);
     this.state = {
       opened: false,
-      value: props.defaultValue
+      value: props.defaultValue,
     };
   }
 
@@ -67,18 +65,30 @@ export default class AutoComplete extends React.Component<Props, State> {
   }
 
   render() {
-    const {className, style, positionOptions, autoHighlight, items} = this.props;
+    const {
+      className,
+      style,
+      positionOptions,
+      autoHighlight,
+      items,
+    } = this.props;
     const {value, opened} = this.state;
 
     function filterItems(items: Array<Item>): Array<Item> {
-      return items.map(item => {
-        if (typeof item === 'string') {
-          return item.toLowerCase().startsWith(value.toLowerCase()) ? item : null;
-        } else {
-          const subItems = filterItems(item.items);
-          return subItems.length ? {title: item.title, items: subItems} : null;
-        }
-      }).filter(Boolean);
+      return items
+        .map(item => {
+          if (typeof item === 'string') {
+            return item.toLowerCase().startsWith(value.toLowerCase())
+              ? item
+              : null;
+          } else {
+            const subItems = filterItems(item.items);
+            return subItems.length
+              ? {title: item.title, items: subItems}
+              : null;
+          }
+        })
+        .filter(Boolean);
     }
 
     const filteredItems = filterItems(items);
@@ -87,7 +97,7 @@ export default class AutoComplete extends React.Component<Props, State> {
       <FloatAnchor
         ref={this._floatAnchorRef}
         options={positionOptions}
-        anchor={anchorRef =>
+        anchor={anchorRef => (
           <input
             ref={anchorRef}
             type="text"
@@ -95,9 +105,9 @@ export default class AutoComplete extends React.Component<Props, State> {
             style={style}
             value={value}
             onChange={e => this.setState({value: e.target.value})}
-            onBlur={()=>this.close()}
-            onFocus={()=>this.open()}
-            onKeyDown={e=>{
+            onBlur={() => this.close()}
+            onFocus={() => this.open()}
+            onKeyDown={e => {
               if (opened) {
                 if (e.key === 'Escape') {
                   this.close();
@@ -111,9 +121,9 @@ export default class AutoComplete extends React.Component<Props, State> {
               }
             }}
           />
-        }
+        )}
         float={
-          !(opened && filteredItems.length) ? null :
+          !(opened && filteredItems.length) ? null : (
             <AutoCompleteMenu
               value={value}
               autoHighlight={autoHighlight}
@@ -128,6 +138,7 @@ export default class AutoComplete extends React.Component<Props, State> {
                 floatAnchor.reposition();
               }}
             />
+          )
         }
       />
     );
@@ -135,18 +146,18 @@ export default class AutoComplete extends React.Component<Props, State> {
 }
 
 type AutoCompleteMenuProps = {
-  value: string;
-  autoHighlight: boolean;
-  filteredItems: Array<Item>;
-  onValueChosen: (value: string) => void;
-  reposition: () => void;
+  value: string,
+  autoHighlight: boolean,
+  filteredItems: Array<Item>,
+  onValueChosen: (value: string) => void,
+  reposition: () => void,
 };
 
 // This component is separate so that its componentDidUpdate method gets called
 // at the right time. AutoComplete's componentDidUpdate method may get called
 // before the FloatAnchor's floated elements have been updated.
 class AutoCompleteMenu extends React.Component<AutoCompleteMenuProps> {
-  _firstItem: MenuItem|SubMenuItem;
+  _firstItem: MenuItem | SubMenuItem;
 
   componentDidMount() {
     if (this.props.autoHighlight && this._firstItem) {
@@ -169,13 +180,14 @@ class AutoCompleteMenu extends React.Component<AutoCompleteMenuProps> {
 
     const makeElements = nested => (_item, i) => {
       const item = _item; // needed so Flow knows the variable can't have its type change
-      const ref = !nested && i === 0 ?
-        (el => {
-          if (el) this._firstItem = el;
-        })
-        : null;
+      const ref =
+        !nested && i === 0
+          ? el => {
+              if (el) this._firstItem = el;
+            }
+          : null;
 
-      return typeof item === 'string' ?
+      return typeof item === 'string' ? (
         <MenuItem
           ref={ref}
           highlightedStyle={{background: 'gray'}}
@@ -184,21 +196,20 @@ class AutoCompleteMenu extends React.Component<AutoCompleteMenuProps> {
         >
           {item}
         </MenuItem>
-        :
+      ) : (
         <SubMenuItem
           ref={ref}
           highlightedStyle={{background: 'gray'}}
           key={item.title}
           menu={
             <Dropdown>
-              <MenuList>
-                {item.items.map(makeElements(true))}
-              </MenuList>
+              <MenuList>{item.items.map(makeElements(true))}</MenuList>
             </Dropdown>
           }
         >
           {item.title} ►
-        </SubMenuItem>;
+        </SubMenuItem>
+      );
     };
 
     const itemElements = filteredItems.map(makeElements(false));
@@ -214,9 +225,7 @@ class AutoCompleteMenu extends React.Component<AutoCompleteMenuProps> {
             e.preventDefault();
           }}
         >
-          <MenuList>
-            {itemElements}
-          </MenuList>
+          <MenuList>{itemElements}</MenuList>
         </div>
       </Dropdown>
     );

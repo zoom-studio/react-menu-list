@@ -47,26 +47,26 @@ up, and down.
 
 A MenuList supports the following props:
 
-* `onItemChosen`: This is an optional function which is called when an item in
- the menu is chosen by the user. The callback is passed a `ChosenEvent` object.
- This event object does not identify which item was chosen by the user. Use the
- MenuItem's `onItemChosen` prop instead if you want to know which item was
- picked.
-* `onLeftPushed`, `onRightPushed`: These are optional functions which are
- called when the user presses the left or right arrow key while the menu is
- open. The callback is passed a `MenuEvent` object.
+- `onItemChosen`: This is an optional function which is called when an item in
+  the menu is chosen by the user. The callback is passed a `ChosenEvent` object.
+  This event object does not identify which item was chosen by the user. Use the
+  MenuItem's `onItemChosen` prop instead if you want to know which item was
+  picked.
+- `onLeftPushed`, `onRightPushed`: These are optional functions which are
+  called when the user presses the left or right arrow key while the menu is
+  open. The callback is passed a `MenuEvent` object.
 
 A MenuList has the following public methods:
 
-* `moveCursor(direction: Direction, prevCursorLocation: ?Rect)`: Move the
- cursor in the menu. `direction` must be the the string "up" or "down".
- `prevCursorLocation` may be an object with `top`, `bottom`, `left`, and
- `right` number properties, and it will be passed to the  onHighlightChange
- callback of the newly selected MenuItem. (This property is only useful for
- when the cursor moves between two menu items which each implement their own
- cursor over their own subitems.)
-* `hasHighlight()`: Returns true if any items in the list are currently
- highlighted.
+- `moveCursor(direction: Direction, prevCursorLocation: ?Rect)`: Move the
+  cursor in the menu. `direction` must be the the string "up" or "down".
+  `prevCursorLocation` may be an object with `top`, `bottom`, `left`, and
+  `right` number properties, and it will be passed to the onHighlightChange
+  callback of the newly selected MenuItem. (This property is only useful for
+  when the cursor moves between two menu items which each implement their own
+  cursor over their own subitems.)
+- `hasHighlight()`: Returns true if any items in the list are currently
+  highlighted.
 
 ### MenuItem
 
@@ -76,53 +76,53 @@ MenuList component.
 
 A MenuItem supports the following props:
 
-* `onItemChosen`: This is an optional function which is called when the item is
- chosen by the user. The callback is passed a `ChosenEvent` object.
-* `onHighlightChange`: This is an optional function which is called when the
- item is highlighted or unhighlighted by the user. The callback is passed a
- boolean representing whether the item is highlighted now, and if the item is
- highlighted, the second argument is an object with  `byKeyboard` boolean
- property, `prevCursorLocation` optional property (see MenuList.moveCursor),
- and an optional `direction` string of "up" or "down" describing which key the
- user pressed to highlight the item.
-* `onLeftPushed`, `onRightPushed`: These are optional functions which are
- called when the user presses the left or right arrow key while the menu item
- is highlighted. The callback is passed a `MenuEvent` object.
-* `className`, `style`: These are optional and are passed as props to the
- MenuItem's underlying div.
-* `highlightedClassName`, `highlightedStyle`: These are optional and are
- combined with the className and style props and passed to the underlying div
- when the item is highlighted.
-* `index`: This is an optional number which overrides the menu item's index in the
- MenuList for keyboard control purposes. The order of menu items is normally
- determined by their position in the DOM when mounted. This property should be
- unnecessary unless you're reordering mounted menu items. If any MenuItems
- within a MenuList use this prop, then all of them should.
-* `onMouseLeave`: This is an optional function which overrides the MenuItem's
- default onMouseLeave event handler, which is in charge of unhighlighting the
- menu item. Unless you're reimplementing SubMenuItem, you probably won't need
- this.
-* `domRef`: Optional prop which is passed as the `ref` value to the MenuItem's
- div element.
+- `onItemChosen`: This is an optional function which is called when the item is
+  chosen by the user. The callback is passed a `ChosenEvent` object.
+- `onHighlightChange`: This is an optional function which is called when the
+  item is highlighted or unhighlighted by the user. The callback is passed a
+  boolean representing whether the item is highlighted now, and if the item is
+  highlighted, the second argument is an object with `byKeyboard` boolean
+  property, `prevCursorLocation` optional property (see MenuList.moveCursor),
+  and an optional `direction` string of "up" or "down" describing which key the
+  user pressed to highlight the item.
+- `onLeftPushed`, `onRightPushed`: These are optional functions which are
+  called when the user presses the left or right arrow key while the menu item
+  is highlighted. The callback is passed a `MenuEvent` object.
+- `className`, `style`: These are optional and are passed as props to the
+  MenuItem's underlying div.
+- `highlightedClassName`, `highlightedStyle`: These are optional and are
+  combined with the className and style props and passed to the underlying div
+  when the item is highlighted.
+- `index`: This is an optional number which overrides the menu item's index in the
+  MenuList for keyboard control purposes. The order of menu items is normally
+  determined by their position in the DOM when mounted. This property should be
+  unnecessary unless you're reordering mounted menu items. If any MenuItems
+  within a MenuList use this prop, then all of them should.
+- `onMouseLeave`: This is an optional function which overrides the MenuItem's
+  default onMouseLeave event handler, which is in charge of unhighlighting the
+  menu item. Unless you're reimplementing SubMenuItem, you probably won't need
+  this.
+- `domRef`: Optional prop which is passed as the `ref` value to the MenuItem's
+  div element.
 
 A MenuItem has the following public methods:
 
-* `takeKeyboard()`: This causes the parent MenuList to stop listening for
- keyboard events until `releaseKeyboard()` is called or this menu item is
- removed. Used by SubMenuItem when a dropdown menu is opened.
-* `releaseKeyboard()`: Cancels a previous `takeKeyboard()` call on this item.
-* `lockHighlight()`: This prevents other items in the MenuList from becoming
- highlighted by the mouse until `unlockHighlight()` is called or this menu item
- is removed. Used by SubMenuItem to provide a grace period before it becomes
- unhighlighted and closes its dropdown.
-* `unlockHighlight()`: Cancels a previous `lockHighlight()` call on this item.
-* `highlight(byKeyboard: boolean=true)`: Attempt to highlight the menu item.
- If byKeyboard is false, then the attempt may not be successful if a highlight
- lock is in place.
-* `unhighlight()`: Attempt to unhighlight the menu item.
-* `moveCursor(direction: Direction, prevCursorLocation: ?Rect)`: See
- menuList.moveCursor.
-* `hasHighlight()`: Returns true if the item is currently highlighted.
+- `takeKeyboard()`: This causes the parent MenuList to stop listening for
+  keyboard events until `releaseKeyboard()` is called or this menu item is
+  removed. Used by SubMenuItem when a dropdown menu is opened.
+- `releaseKeyboard()`: Cancels a previous `takeKeyboard()` call on this item.
+- `lockHighlight()`: This prevents other items in the MenuList from becoming
+  highlighted by the mouse until `unlockHighlight()` is called or this menu item
+  is removed. Used by SubMenuItem to provide a grace period before it becomes
+  unhighlighted and closes its dropdown.
+- `unlockHighlight()`: Cancels a previous `lockHighlight()` call on this item.
+- `highlight(byKeyboard: boolean=true)`: Attempt to highlight the menu item.
+  If byKeyboard is false, then the attempt may not be successful if a highlight
+  lock is in place.
+- `unhighlight()`: Attempt to unhighlight the menu item.
+- `moveCursor(direction: Direction, prevCursorLocation: ?Rect)`: See
+  menuList.moveCursor.
+- `hasHighlight()`: Returns true if the item is currently highlighted.
 
 ### SubMenuItem
 
@@ -134,42 +134,42 @@ they're moving the mouse toward the dropdown.
 
 A SubMenuItem supports the following props:
 
-* `menu`: This is the React element to show as the dropdown when the submenu is
- open.
-* `positionOptions`: This is an optional object of options to control how the
- dropdown is aligned to the menu item. The options are the same as those
- supported by
- [contain-by-screen (version ^1.0)](https://github.com/AgentME/contain-by-screen#readme).
- This defaults to `{position:'right', vAlign:'top', hAlign: 'left'}`.
-* `menuZIndex`: This is an optional number controlling the z-index CSS property of
- the menu's container.
-* `menuParentElement`: This is an optional HTMLElement to attach the menu's container
- to instead of the document's body element.
-* `onWillOpen`: This is an optional function called before the submenu opens.
-* `onDidOpen`: This is an optional function called after the submenu opened.
-* `onWillClose`: This is an optional function called before the submenu closes.
-* `className`, `style`, `highlightedClassName`, `highlightedStyle`, `index`,
- `onItemChosen`, `onHighlightChange`: These props are all passed through to the
- underlying MenuItem element.
-* `openedClassName`, `openedStyle`: These are optional and are combined with
- the className and style props and passed to the underlying div when the item
- is opened.
+- `menu`: This is the React element to show as the dropdown when the submenu is
+  open.
+- `positionOptions`: This is an optional object of options to control how the
+  dropdown is aligned to the menu item. The options are the same as those
+  supported by
+  [contain-by-screen (version ^1.0)](https://github.com/AgentME/contain-by-screen#readme).
+  This defaults to `{position:'right', vAlign:'top', hAlign: 'left'}`.
+- `menuZIndex`: This is an optional number controlling the z-index CSS property of
+  the menu's container.
+- `menuParentElement`: This is an optional HTMLElement to attach the menu's container
+  to instead of the document's body element.
+- `onWillOpen`: This is an optional function called before the submenu opens.
+- `onDidOpen`: This is an optional function called after the submenu opened.
+- `onWillClose`: This is an optional function called before the submenu closes.
+- `className`, `style`, `highlightedClassName`, `highlightedStyle`, `index`,
+  `onItemChosen`, `onHighlightChange`: These props are all passed through to the
+  underlying MenuItem element.
+- `openedClassName`, `openedStyle`: These are optional and are combined with
+  the className and style props and passed to the underlying div when the item
+  is opened.
 
 A SubMenuItem has the following public methods:
 
-* `open(): Promise<void>`
-* `close()`
-* `toggle()`
-* `reposition()`: Repositions the floating submenu. Call this if you change the
- size of the menu.
-* `highlight(byKeyboard: boolean=true)`: Attempt to highlight the menu item.
- If byKeyboard is false, then the attempt may not be successful if a highlight
- lock is in place. If byKeyboard is false, then the highlight will trigger the
- submenu to display.
-* `unhighlight()`: Attempt to unhighlight the menu item.
-* `moveCursor(direction: Direction, prevCursorLocation: ?Rect)`: See
- menuList.moveCursor.
-* `hasHighlight()`: Returns true if the item is currently highlighted.
+- `open(): Promise<void>`
+- `close()`
+- `toggle()`
+- `reposition()`: Repositions the floating submenu. Call this if you change the
+  size of the menu.
+- `highlight(byKeyboard: boolean=true)`: Attempt to highlight the menu item.
+  If byKeyboard is false, then the attempt may not be successful if a highlight
+  lock is in place. If byKeyboard is false, then the highlight will trigger the
+  submenu to display.
+- `unhighlight()`: Attempt to unhighlight the menu item.
+- `moveCursor(direction: Direction, prevCursorLocation: ?Rect)`: See
+  menuList.moveCursor.
+- `hasHighlight()`: Returns true if the item is currently highlighted.
 
 ### MenuListInspector
 
@@ -180,16 +180,16 @@ on, and by SubMenuItem to trigger highlighting its submenu.
 
 A MenuListInspector supports the following props:
 
-* `onItemChosen`, `onLeftPushed`, `onRightPushed`: These work the same as on
- MenuList.
+- `onItemChosen`, `onLeftPushed`, `onRightPushed`: These work the same as on
+  MenuList.
 
 A MenuListInspector has the following public methods:
 
-* `moveCursor(direction: Direction, prevCursorLocation: ?Rect): boolean`: This
- calls moveCursor on the first descendant MenuList and returns true, or returns
- false if no descendant MenuLists were found.
-* `hasHighlight()`: Returns true if any descendant lists currently have a
- highlighted item.
+- `moveCursor(direction: Direction, prevCursorLocation: ?Rect): boolean`: This
+  calls moveCursor on the first descendant MenuList and returns true, or returns
+  false if no descendant MenuLists were found.
+- `hasHighlight()`: Returns true if any descendant lists currently have a
+  highlighted item.
 
 ### MenuButton
 
@@ -201,23 +201,23 @@ MenuItem's onItemChosen callback.
 
 A MenuButton supports the following props:
 
-* `menu`, `positionOptions`, `menuZIndex`, `menuParentElement`, `onWillOpen`, `onDidOpen`,
- `onWillClose`: These work the same as the props on SubMenuItem.
-* If `renderButton` is not provided: `className`, `style`, `openedClassName`, `openedStyle`,`disabled`, `title` props are accepted and provided to the default html `<button>` element.
-* `renderButton`: Optional render prop that allows a different component to be used
- instead of an html `<button>`. `renderButton` is a function with a signature of `(domRef: React.Ref<any>, opened: boolean, onKeyPress: (e: KeyboardEvent) => void, onMouseDown: (e: MouseEvent) => void) => React.Node`
-   * `domRef` must be passed as a ref to the button's DOM element in your custom implementation
-   * `opened` is whether the menu is being opened.  Useful if you want the appearance of the button to change in this state
-   * `onKeyPress` must be called when your custom button registers key press events
-   * `onMouseDown` must be called when your custom button registers mouse down events
+- `menu`, `positionOptions`, `menuZIndex`, `menuParentElement`, `onWillOpen`, `onDidOpen`,
+  `onWillClose`: These work the same as the props on SubMenuItem.
+- If `renderButton` is not provided: `className`, `style`, `openedClassName`, `openedStyle`,`disabled`, `title` props are accepted and provided to the default html `<button>` element.
+- `renderButton`: Optional render prop that allows a different component to be used
+  instead of an html `<button>`. `renderButton` is a function with a signature of `(domRef: React.Ref<any>, opened: boolean, onKeyPress: (e: KeyboardEvent) => void, onMouseDown: (e: MouseEvent) => void) => React.Node`
+  - `domRef` must be passed as a ref to the button's DOM element in your custom implementation
+  - `opened` is whether the menu is being opened. Useful if you want the appearance of the button to change in this state
+  - `onKeyPress` must be called when your custom button registers key press events
+  - `onMouseDown` must be called when your custom button registers mouse down events
 
 A MenuButton has the following public methods:
 
-* `open(): Promise<void>`
-* `close()`
-* `toggle()`
-* `reposition()`: Repositions the floating submenu. Call this if you change the
- size of the menu.
+- `open(): Promise<void>`
+- `close()`
+- `toggle()`
+- `reposition()`: Repositions the floating submenu. Call this if you change the
+  size of the menu.
 
 ### Dropdown
 

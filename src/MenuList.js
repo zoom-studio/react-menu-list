@@ -17,16 +17,16 @@ import type {Direction, Rect} from './types';
 
 // This type of object is given to a MenuItem to talk to the MenuList.
 export type MenuListHandle = {
-  highlight(byKeyboard: boolean): void;
-  unhighlight(): void;
-  moveCursor(direction: Direction, prevCursorLocation: ?Rect): void;
-  itemChosen(): void;
-  takeKeyboard(): void;
-  releaseKeyboard(): void;
-  lockHighlight(): void;
-  unlockHighlight(): void;
-  updateProps(props: MenuItemProps): void;
-  unregister(): void;
+  highlight(byKeyboard: boolean): void,
+  unhighlight(): void,
+  moveCursor(direction: Direction, prevCursorLocation: ?Rect): void,
+  itemChosen(): void,
+  takeKeyboard(): void,
+  releaseKeyboard(): void,
+  lockHighlight(): void,
+  unlockHighlight(): void,
+  updateProps(props: MenuItemProps): void,
+  unregister(): void,
 };
 
 // This type of object is given to a MenuList to talk to a MenuItem.
@@ -36,8 +36,8 @@ export type MenuItemControl = {
     byKeyboard: ?boolean,
     direction: ?Direction,
     prevCursorLocation: ?Rect
-  ): void;
-  notifyEvent(event: MenuEvent): void;
+  ): void,
+  notifyEvent(event: MenuEvent): void,
 };
 
 // This is the type of the object that MenuList gives as context to its
@@ -47,16 +47,16 @@ export type MenuListContextValue = {
     props: MenuItemProps,
     control: MenuItemControl,
     el: HTMLElement
-  ): MenuListHandle;
+  ): MenuListHandle,
 };
 
 export const MenuListContext = React.createContext<?MenuListContextValue>(null);
 
 export type Props = {
-  onItemChosen?: (event: ChosenEvent) => void;
-  onLeftPushed?: (event: MenuEvent) => void;
-  onRightPushed?: (event: MenuEvent) => void;
-  children?: ReactNode;
+  onItemChosen?: (event: ChosenEvent) => void,
+  onLeftPushed?: (event: MenuEvent) => void,
+  onRightPushed?: (event: MenuEvent) => void,
+  children?: ReactNode,
 };
 
 export default class MenuList extends React.Component<Props> {
@@ -64,13 +64,13 @@ export default class MenuList extends React.Component<Props> {
     onItemChosen: PropTypes.func,
     onLeftPushed: PropTypes.func,
     onRightPushed: PropTypes.func,
-    children: PropTypes.node
+    children: PropTypes.node,
   };
 
   _stopper = kefirStopper();
   _listItems: Array<{
-    props: MenuItemProps;
-    control: MenuItemControl;
+    props: MenuItemProps,
+    control: MenuItemControl,
   }> = [];
 
   // The natural highlight is where the highlight would be if no lock is active.
@@ -81,8 +81,9 @@ export default class MenuList extends React.Component<Props> {
   _elRef = React.createRef<HTMLDivElement>();
 
   _getVisibleHighlightedIndex(): ?number {
-    return this._lockedHighlightedIndex != null ?
-      this._lockedHighlightedIndex : this._naturalHighlightedIndex;
+    return this._lockedHighlightedIndex != null
+      ? this._lockedHighlightedIndex
+      : this._naturalHighlightedIndex;
   }
 
   static contextType = MenuListInspectorContext;
@@ -97,25 +98,37 @@ export default class MenuList extends React.Component<Props> {
           i = findIndex(
             this._listItems,
             _item =>
-              (item.el.compareDocumentPosition(_item.el)&Node.DOCUMENT_POSITION_PRECEDING) === 0
+              (item.el.compareDocumentPosition(_item.el) &
+                Node.DOCUMENT_POSITION_PRECEDING) ===
+              0
           );
         } else {
           i = findIndex(
             this._listItems,
-            _item => _item.props.index != null && item.props.index < _item.props.index
+            _item =>
+              _item.props.index != null && item.props.index < _item.props.index
           );
         }
         if (i < 0) {
           this._listItems.push(item);
         } else {
           this._listItems.splice(i, 0, item);
-          if (this._naturalHighlightedIndex != null && i <= this._naturalHighlightedIndex) {
+          if (
+            this._naturalHighlightedIndex != null &&
+            i <= this._naturalHighlightedIndex
+          ) {
             this._naturalHighlightedIndex++;
           }
-          if (this._lockedHighlightedIndex != null && i <= this._lockedHighlightedIndex) {
+          if (
+            this._lockedHighlightedIndex != null &&
+            i <= this._lockedHighlightedIndex
+          ) {
             this._lockedHighlightedIndex++;
           }
-          if (this._keyboardTakenByIndex != null && i <= this._keyboardTakenByIndex) {
+          if (
+            this._keyboardTakenByIndex != null &&
+            i <= this._keyboardTakenByIndex
+          ) {
             this._keyboardTakenByIndex++;
           }
         }
@@ -169,19 +182,28 @@ export default class MenuList extends React.Component<Props> {
         updateProps: (newProps: MenuItemProps) => {
           if (item.props.index !== newProps.index) {
             const oldIndex = this._listItems.indexOf(item);
-            const isNaturalHighlightIndex = this._naturalHighlightedIndex === oldIndex;
-            const isLockedHighlightIndex = this._lockedHighlightedIndex === oldIndex;
-            const isKeyboardTakenByIndex = this._keyboardTakenByIndex === oldIndex;
+            const isNaturalHighlightIndex =
+              this._naturalHighlightedIndex === oldIndex;
+            const isLockedHighlightIndex =
+              this._lockedHighlightedIndex === oldIndex;
+            const isKeyboardTakenByIndex =
+              this._keyboardTakenByIndex === oldIndex;
 
             menuListHandle.unregister();
             props = newProps;
             item.props = newProps;
             register();
 
-            if (isNaturalHighlightIndex || isLockedHighlightIndex || isKeyboardTakenByIndex) {
+            if (
+              isNaturalHighlightIndex ||
+              isLockedHighlightIndex ||
+              isKeyboardTakenByIndex
+            ) {
               const newIndex = this._listItems.indexOf(item);
-              if (isNaturalHighlightIndex) this._naturalHighlightedIndex = newIndex;
-              if (isLockedHighlightIndex) this._lockedHighlightedIndex = newIndex;
+              if (isNaturalHighlightIndex)
+                this._naturalHighlightedIndex = newIndex;
+              if (isLockedHighlightIndex)
+                this._lockedHighlightedIndex = newIndex;
               if (isKeyboardTakenByIndex) this._keyboardTakenByIndex = newIndex;
             }
           } else {
@@ -194,24 +216,33 @@ export default class MenuList extends React.Component<Props> {
           if (i < 0) throw new Error('Already unregistered MenuItem');
           if (i === this._naturalHighlightedIndex) {
             this._naturalHighlightedIndex = null;
-          } else if (this._naturalHighlightedIndex != null && i < this._naturalHighlightedIndex) {
+          } else if (
+            this._naturalHighlightedIndex != null &&
+            i < this._naturalHighlightedIndex
+          ) {
             this._naturalHighlightedIndex--;
           }
           if (i === this._lockedHighlightedIndex) {
             this._lockedHighlightedIndex = null;
-          } else if (this._lockedHighlightedIndex != null && i < this._lockedHighlightedIndex) {
+          } else if (
+            this._lockedHighlightedIndex != null &&
+            i < this._lockedHighlightedIndex
+          ) {
             this._lockedHighlightedIndex--;
           }
           if (i === this._keyboardTakenByIndex) {
             this._keyboardTakenByIndex = null;
-          } else if (this._keyboardTakenByIndex != null && i < this._keyboardTakenByIndex) {
+          } else if (
+            this._keyboardTakenByIndex != null &&
+            i < this._keyboardTakenByIndex
+          ) {
             this._keyboardTakenByIndex--;
           }
           this._listItems.splice(i, 1);
-        }
+        },
       };
       return menuListHandle;
-    }
+    },
   };
 
   _parentCtx(): ?MenuListInspectorContextValue {
@@ -220,7 +251,7 @@ export default class MenuList extends React.Component<Props> {
 
   componentDidMount() {
     const isEnterOrArrowKey = e =>
-      (e.which === 13) || (37 <= e.which && e.which <= 40);
+      e.which === 13 || (37 <= e.which && e.which <= 40);
     const el = this._elRef.current;
     /*:: if (!el) throw new Error(); */
 
@@ -228,10 +259,12 @@ export default class MenuList extends React.Component<Props> {
     // are our children. This allows a MenuItem to contain a text input
     // which selectively stops propagation on key events for example.
     Kefir.merge([
-      Kefir.fromEvents(window, 'keydown').filter(isEnterOrArrowKey)
+      Kefir.fromEvents(window, 'keydown')
+        .filter(isEnterOrArrowKey)
         .filter(e => el.contains(e.target)),
-      fromEventsCapture(window, 'keydown').filter(isEnterOrArrowKey)
-        .filter(e => !el.contains(e.target))
+      fromEventsCapture(window, 'keydown')
+        .filter(isEnterOrArrowKey)
+        .filter(e => !el.contains(e.target)),
     ])
       .takeUntilBy(this._stopper)
       .onValue(event => this._key(event));
@@ -251,7 +284,12 @@ export default class MenuList extends React.Component<Props> {
     }
   }
 
-  _naturalHighlight(index: ?number, byKeyboard: boolean, direction: ?Direction, prevCursorLocation: ?Rect) {
+  _naturalHighlight(
+    index: ?number,
+    byKeyboard: boolean,
+    direction: ?Direction,
+    prevCursorLocation: ?Rect
+  ) {
     const visibleHighlightedIndex = this._getVisibleHighlightedIndex();
 
     if (this._lockedHighlightedIndex != null && byKeyboard) {
@@ -260,10 +298,17 @@ export default class MenuList extends React.Component<Props> {
     this._naturalHighlightedIndex = index;
     if (this._lockedHighlightedIndex == null) {
       if (index != null) {
-        this._listItems[index].control.notifyHighlighted(true, byKeyboard, direction, prevCursorLocation);
+        this._listItems[index].control.notifyHighlighted(
+          true,
+          byKeyboard,
+          direction,
+          prevCursorLocation
+        );
       }
       if (visibleHighlightedIndex != null && visibleHighlightedIndex != index) {
-        this._listItems[visibleHighlightedIndex].control.notifyHighlighted(false);
+        this._listItems[visibleHighlightedIndex].control.notifyHighlighted(
+          false
+        );
       }
     }
   }
@@ -279,12 +324,19 @@ export default class MenuList extends React.Component<Props> {
       this._naturalHighlightedIndex = visibleHighlightedIndex;
     } else if (visibleHighlightedIndex != newVisibleHighlightedIndex) {
       if (visibleHighlightedIndex != null) {
-        this._listItems[visibleHighlightedIndex].control.notifyHighlighted(false);
+        this._listItems[visibleHighlightedIndex].control.notifyHighlighted(
+          false
+        );
       }
       if (newVisibleHighlightedIndex != null) {
-        this._listItems[newVisibleHighlightedIndex].control.notifyHighlighted(true, false);
+        this._listItems[newVisibleHighlightedIndex].control.notifyHighlighted(
+          true,
+          false
+        );
       } else if (this._naturalHighlightedIndex != null) {
-        this._listItems[this._naturalHighlightedIndex].control.notifyHighlighted(true, false);
+        this._listItems[
+          this._naturalHighlightedIndex
+        ].control.notifyHighlighted(true, false);
       }
     }
   }
@@ -295,20 +347,20 @@ export default class MenuList extends React.Component<Props> {
       if (event.cancelBubble) return;
     }
     switch (event.type) {
-    case 'chosen':
-      /*:: if (!(event instanceof ChosenEvent)) throw new Error(); */
-      if (this.props.onItemChosen) this.props.onItemChosen(event);
-      break;
-    // case 'up':
-    //   break;
-    // case 'down':
-    //   break;
-    case 'left':
-      if (this.props.onLeftPushed) this.props.onLeftPushed(event);
-      break;
-    case 'right':
-      if (this.props.onRightPushed) this.props.onRightPushed(event);
-      break;
+      case 'chosen':
+        /*:: if (!(event instanceof ChosenEvent)) throw new Error(); */
+        if (this.props.onItemChosen) this.props.onItemChosen(event);
+        break;
+      // case 'up':
+      //   break;
+      // case 'down':
+      //   break;
+      case 'left':
+        if (this.props.onLeftPushed) this.props.onLeftPushed(event);
+        break;
+      case 'right':
+        if (this.props.onRightPushed) this.props.onRightPushed(event);
+        break;
     }
     if (event.cancelBubble) return;
     const parentCtx = this._parentCtx();
@@ -331,41 +383,44 @@ export default class MenuList extends React.Component<Props> {
     let mEvent = null;
 
     switch (event.which) {
-    case 13: //enter
-      if (visibleHighlightedIndex != null) {
-        mEvent = new ChosenEvent('chosen', true);
+      case 13: //enter
+        if (visibleHighlightedIndex != null) {
+          mEvent = new ChosenEvent('chosen', true);
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        break;
+      case 37: //left
+        if (visibleHighlightedIndex != null) {
+          mEvent = new MenuEvent('left');
+        }
+        break;
+      case 39: //right
+        if (visibleHighlightedIndex != null) {
+          mEvent = new MenuEvent('right');
+        }
+        break;
+      case 38: //up
         event.preventDefault();
         event.stopPropagation();
-      }
-      break;
-    case 37: //left
-      if (visibleHighlightedIndex != null) {
-        mEvent = new MenuEvent('left');
-      }
-      break;
-    case 39: //right
-      if (visibleHighlightedIndex != null) {
-        mEvent = new MenuEvent('right');
-      }
-      break;
-    case 38: //up
-      event.preventDefault();
-      event.stopPropagation();
-      this.moveCursor('up');
-      break;
-    case 40: //down
-      event.preventDefault();
-      event.stopPropagation();
-      this.moveCursor('down');
-      break;
+        this.moveCursor('up');
+        break;
+      case 40: //down
+        event.preventDefault();
+        event.stopPropagation();
+        this.moveCursor('down');
+        break;
     }
 
     if (mEvent) {
-      const control = visibleHighlightedIndex == null ? null :
-        this._listItems[visibleHighlightedIndex].control;
+      const control =
+        visibleHighlightedIndex == null
+          ? null
+          : this._listItems[visibleHighlightedIndex].control;
       this._dispatchEvent(control, mEvent);
       if (mEvent.defaultPrevented) event.preventDefault();
-      if (mEvent.defaultPrevented || mEvent.cancelBubble) event.stopPropagation();
+      if (mEvent.defaultPrevented || mEvent.cancelBubble)
+        event.stopPropagation();
     }
   }
 
@@ -373,20 +428,41 @@ export default class MenuList extends React.Component<Props> {
     if (this._listItems.length == 0) return;
 
     switch (direction) {
-    case 'up':
-      if (this._naturalHighlightedIndex == null || this._naturalHighlightedIndex == 0) {
-        this._naturalHighlight(this._listItems.length-1, true, direction, prevCursorLocation);
-      } else {
-        this._naturalHighlight(this._naturalHighlightedIndex-1, true, direction, prevCursorLocation);
-      }
-      break;
-    case 'down':
-      if (this._naturalHighlightedIndex == null || this._naturalHighlightedIndex == this._listItems.length-1) {
-        this._naturalHighlight(0, true, direction, prevCursorLocation);
-      } else {
-        this._naturalHighlight(this._naturalHighlightedIndex+1, true, direction, prevCursorLocation);
-      }
-      break;
+      case 'up':
+        if (
+          this._naturalHighlightedIndex == null ||
+          this._naturalHighlightedIndex == 0
+        ) {
+          this._naturalHighlight(
+            this._listItems.length - 1,
+            true,
+            direction,
+            prevCursorLocation
+          );
+        } else {
+          this._naturalHighlight(
+            this._naturalHighlightedIndex - 1,
+            true,
+            direction,
+            prevCursorLocation
+          );
+        }
+        break;
+      case 'down':
+        if (
+          this._naturalHighlightedIndex == null ||
+          this._naturalHighlightedIndex == this._listItems.length - 1
+        ) {
+          this._naturalHighlight(0, true, direction, prevCursorLocation);
+        } else {
+          this._naturalHighlight(
+            this._naturalHighlightedIndex + 1,
+            true,
+            direction,
+            prevCursorLocation
+          );
+        }
+        break;
     }
   }
 

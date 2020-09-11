@@ -4,7 +4,7 @@ import {ReactNode, Ref} from 'react';
 import {Options as FloatAnchorOptions} from 'react-float-anchor';
 export {Options as FloatAnchorOptions} from 'react-float-anchor';
 
-export type Direction = 'up'|'down'|'left'|'right';
+export type Direction = 'up' | 'down' | 'left' | 'right';
 
 export type Rect = {
   top: number;
@@ -44,7 +44,14 @@ export type MenuItemProps = {
   onItemChosen?: (event: ChosenEvent) => void;
   onLeftPushed?: (event: MenuEvent) => void;
   onRightPushed?: (event: MenuEvent) => void;
-  onHighlightChange?: (highlighted: boolean, details: {byKeyboard?: boolean, prevCursorLocation?: Rect, direction?: Direction}) => void;
+  onHighlightChange?: (
+    highlighted: boolean,
+    details: {
+      byKeyboard?: boolean;
+      prevCursorLocation?: Rect;
+      direction?: Direction;
+    }
+  ) => void;
 
   className?: string;
   style?: Object;
@@ -93,13 +100,16 @@ export class MenuListInspector extends React.Component<MenuListInspectorProps> {
 
 // Dropdown
 
-export class Dropdown extends React.Component<{}> {
-}
+export class Dropdown extends React.Component<{}> {}
 
 // MenuButton
 
-type RenderProp = (domRef: React.Ref<any>, opened: boolean, onKeyPress: (e: KeyboardEvent) => void, onMouseDown: (e: MouseEvent) => void) => ReactNode;
-
+type RenderProp = (
+  domRef: React.Ref<any>,
+  opened: boolean,
+  onKeyPress: (e: KeyboardEvent) => void,
+  onMouseDown: (e: MouseEvent) => void
+) => ReactNode;
 
 export type MenuButtonProps = {
   className?: string;
@@ -113,7 +123,7 @@ export type MenuButtonProps = {
   renderButton?: RenderProp;
 
   positionOptions?: FloatAnchorOptions;
-  menuZIndex?: string|number;
+  menuZIndex?: string | number;
   menuParentElement?: HTMLElement;
 
   menu: ReactNode;
@@ -133,7 +143,7 @@ export class MenuButton extends React.Component<MenuButtonProps> {
 export type SubMenuItemProps = {
   menu: ReactNode;
   positionOptions?: FloatAnchorOptions;
-  menuZIndex?: string|number;
+  menuZIndex?: string | number;
   menuParentElement?: HTMLElement;
 
   onWillOpen?: () => void;
@@ -150,7 +160,14 @@ export type SubMenuItemProps = {
   openedStyle?: Object;
 
   onItemChosen?: (event: ChosenEvent) => void;
-  onHighlightChange?: (highlighted: boolean, details: {byKeyboard?: boolean, prevCursorLocation?: Rect, direction?: Direction}) => void;
+  onHighlightChange?: (
+    highlighted: boolean,
+    details: {
+      byKeyboard?: boolean;
+      prevCursorLocation?: Rect;
+      direction?: Direction;
+    }
+  ) => void;
 
   children?: ReactNode;
 };

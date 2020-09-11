@@ -22,11 +22,12 @@ test('cursor movement works', () => {
     mountPoint
   ): any);
 
-  const menuListItems = TestUtils.scryRenderedComponentsWithType(root, MenuItem);
-
-  expect(menuListItems.map(c=>c.props.children)).toEqual(
-    ['A', 'B', 'C']
+  const menuListItems = TestUtils.scryRenderedComponentsWithType(
+    root,
+    MenuItem
   );
+
+  expect(menuListItems.map(c => c.props.children)).toEqual(['A', 'B', 'C']);
 
   expect(menuListItems[0].props.onHighlightChange.mock.calls).toEqual([]);
   expect(menuListItems[1].props.onHighlightChange.mock.calls).toEqual([]);
@@ -35,19 +36,33 @@ test('cursor movement works', () => {
   root.moveCursor('down');
 
   expect(menuListItems[0].props.onHighlightChange.mock.calls).toEqual([
-    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}]]);
+    [
+      true,
+      {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'},
+    ],
+  ]);
   expect(menuListItems[1].props.onHighlightChange.mock.calls).toEqual([]);
   expect(menuListItems[2].props.onHighlightChange.mock.calls).toEqual([]);
 
   root.moveCursor('up');
 
   expect(menuListItems[0].props.onHighlightChange.mock.calls).toEqual([
-    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
-    [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]
+    [
+      true,
+      {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'},
+    ],
+    [
+      false,
+      {
+        byKeyboard: undefined,
+        prevCursorLocation: undefined,
+        direction: undefined,
+      },
+    ],
   ]);
   expect(menuListItems[1].props.onHighlightChange.mock.calls).toEqual([]);
   expect(menuListItems[2].props.onHighlightChange.mock.calls).toEqual([
-    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'up'}]
+    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'up'}],
   ]);
 
   ReactDOM.unmountComponentAtNode(mountPoint);
@@ -78,8 +93,7 @@ test('empty list works', () => {
   const mountPoint = document.createElement('div');
   const root: MenuListInspector = (ReactDOM.render(
     <MenuListInspector>
-      <MenuList>
-      </MenuList>
+      <MenuList></MenuList>
     </MenuListInspector>,
     mountPoint
   ): any);

@@ -9,18 +9,20 @@ import ChosenEvent from './events/ChosenEvent';
 import type {Direction, Rect} from './types';
 
 export type MenuListInspectorContextValue = {
-  registerMenuList(menuList: MenuList): void;
-  unregisterMenuList(menuList: MenuList): void;
-  dispatchEvent(event: MenuEvent): void;
+  registerMenuList(menuList: MenuList): void,
+  unregisterMenuList(menuList: MenuList): void,
+  dispatchEvent(event: MenuEvent): void,
 };
 
-export const MenuListInspectorContext = React.createContext<?MenuListInspectorContextValue>(null);
+export const MenuListInspectorContext = React.createContext<?MenuListInspectorContextValue>(
+  null
+);
 
 export type Props = {
-  onItemChosen?: (event: ChosenEvent) => void;
-  onLeftPushed?: (event: MenuEvent) => void;
-  onRightPushed?: (event: MenuEvent) => void;
-  children: ReactNode;
+  onItemChosen?: (event: ChosenEvent) => void,
+  onLeftPushed?: (event: MenuEvent) => void,
+  onRightPushed?: (event: MenuEvent) => void,
+  children: ReactNode,
 };
 
 export default class MenuListInspector extends React.Component<Props> {
@@ -29,7 +31,7 @@ export default class MenuListInspector extends React.Component<Props> {
     onLeftPushed: PropTypes.func,
     onRightPushed: PropTypes.func,
 
-    children: PropTypes.element
+    children: PropTypes.element,
   };
 
   static contextType = MenuListInspectorContext;
@@ -51,23 +53,23 @@ export default class MenuListInspector extends React.Component<Props> {
     },
     dispatchEvent: (event: MenuEvent) => {
       switch (event.type) {
-      case 'chosen':
-        /*:: if (!(event instanceof ChosenEvent)) throw new Error(); */
-        if (this.props.onItemChosen) this.props.onItemChosen(event);
-        break;
-      case 'left':
-        if (this.props.onLeftPushed) this.props.onLeftPushed(event);
-        break;
-      case 'right':
-        if (this.props.onRightPushed) this.props.onRightPushed(event);
-        break;
+        case 'chosen':
+          /*:: if (!(event instanceof ChosenEvent)) throw new Error(); */
+          if (this.props.onItemChosen) this.props.onItemChosen(event);
+          break;
+        case 'left':
+          if (this.props.onLeftPushed) this.props.onLeftPushed(event);
+          break;
+        case 'right':
+          if (this.props.onRightPushed) this.props.onRightPushed(event);
+          break;
       }
       if (event.cancelBubble) return;
       const parentCtx = this._parentCtx();
       if (parentCtx) {
         parentCtx.dispatchEvent(event);
       }
-    }
+    },
   };
 
   moveCursor(direction: Direction, prevCursorLocation: ?Rect): boolean {
@@ -80,7 +82,7 @@ export default class MenuListInspector extends React.Component<Props> {
   }
 
   hasHighlight(): boolean {
-    for (let i=0, len=this._descendantMenuLists.length; i<len; i++) {
+    for (let i = 0, len = this._descendantMenuLists.length; i < len; i++) {
       if (this._descendantMenuLists[i].hasHighlight()) {
         return true;
       }

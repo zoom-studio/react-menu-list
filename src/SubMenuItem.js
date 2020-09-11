@@ -20,32 +20,39 @@ import type MenuEvent from './events/MenuEvent';
 import type ChosenEvent from './events/ChosenEvent';
 
 type State = {
-  opened: boolean;
+  opened: boolean,
 };
 
 export type Props = {
-  menu: ReactNode;
-  positionOptions: FloatAnchorOptions;
-  menuZIndex?: string|number;
-  menuParentElement?: HTMLElement;
+  menu: ReactNode,
+  positionOptions: FloatAnchorOptions,
+  menuZIndex?: string | number,
+  menuParentElement?: HTMLElement,
 
-  onWillOpen?: () => void;
-  onDidOpen?: () => void;
-  onWillClose?: () => void;
+  onWillOpen?: () => void,
+  onDidOpen?: () => void,
+  onWillClose?: () => void,
 
-  className?: string;
-  style?: Object;
-  highlightedClassName?: string;
-  highlightedStyle?: Object;
-  index?: number;
+  className?: string,
+  style?: Object,
+  highlightedClassName?: string,
+  highlightedStyle?: Object,
+  index?: number,
 
-  openedClassName?: string;
-  openedStyle?: Object;
+  openedClassName?: string,
+  openedStyle?: Object,
 
-  onItemChosen?: (event: ChosenEvent) => void;
-  onHighlightChange?: (highlighted: boolean, details: {byKeyboard?: boolean, prevCursorLocation?: Rect, direction?: Direction}) => void;
+  onItemChosen?: (event: ChosenEvent) => void,
+  onHighlightChange?: (
+    highlighted: boolean,
+    details: {
+      byKeyboard?: boolean,
+      prevCursorLocation?: Rect,
+      direction?: Direction,
+    }
+  ) => void,
 
-  children?: ReactNode;
+  children?: ReactNode,
 };
 
 export default class SubMenuItem extends React.Component<Props, State> {
@@ -70,15 +77,15 @@ export default class SubMenuItem extends React.Component<Props, State> {
     onItemChosen: PropTypes.func,
     onHighlightChange: PropTypes.func,
 
-    children: PropTypes.node
+    children: PropTypes.node,
   };
 
   static defaultProps = {
-    positionOptions: {position:'right', vAlign:'top', hAlign: 'left'}
+    positionOptions: {position: 'right', vAlign: 'top', hAlign: 'left'},
   };
 
   state: State = {
-    opened: false
+    opened: false,
   };
 
   _menuItemRef = React.createRef<MenuItem>();
@@ -141,7 +148,7 @@ export default class SubMenuItem extends React.Component<Props, State> {
     return menuItem.hasHighlight();
   }
 
-  highlight(byKeyboard: boolean=true) {
+  highlight(byKeyboard: boolean = true) {
     const menuItem = this._menuItemRef.current;
     if (!menuItem) throw new Error();
 
@@ -196,10 +203,18 @@ export default class SubMenuItem extends React.Component<Props, State> {
     const menuRect = menuContainer.getBoundingClientRect();
 
     const startTime = Date.now();
-    const startX = event.pageX, startY = event.pageY;
+    const startX = event.pageX,
+      startY = event.pageY;
 
     function getDistance(x, y) {
-      return pointRectDistance(x, y, menuRect.left, menuRect.top, menuRect.right-menuRect.width, menuRect.bottom-menuRect.top);
+      return pointRectDistance(
+        x,
+        y,
+        menuRect.left,
+        menuRect.top,
+        menuRect.right - menuRect.width,
+        menuRect.bottom - menuRect.top
+      );
     }
 
     const startDistance = getDistance(startX, startY);
@@ -223,17 +238,19 @@ export default class SubMenuItem extends React.Component<Props, State> {
       .bufferBy(Kefir.interval(60, null))
       .map(events => {
         if (events.length) {
-          const last = events[events.length-1];
+          const last = events[events.length - 1];
           lastCoords = {pageX: last.pageX, pageY: last.pageY};
         }
         return lastCoords;
       })
       .filter(({pageX, pageY}) => {
         const distance = getDistance(pageX, pageY);
-        const maxDistance = startDistance - (Date.now()-startTime-LEAD_TIME)/1000 * MIN_SPEED;
+        const maxDistance =
+          startDistance -
+          ((Date.now() - startTime - LEAD_TIME) / 1000) * MIN_SPEED;
         return distance > maxDistance;
       })
-      .merge(Kefir.later(MAX_TIME*1000))
+      .merge(Kefir.later(MAX_TIME * 1000))
       .take(1)
       .takeUntilBy(this._resetMouseLeaveWatcher)
       .takeUntilBy(this._stopper)
@@ -253,8 +270,13 @@ export default class SubMenuItem extends React.Component<Props, State> {
 
   render() {
     const {
-      index, highlightedStyle, highlightedClassName,
-      positionOptions, menuZIndex, children, menu
+      index,
+      highlightedStyle,
+      highlightedClassName,
+      positionOptions,
+      menuZIndex,
+      children,
+      menu,
     } = this.props;
     const {opened} = this.state;
 
@@ -265,7 +287,7 @@ export default class SubMenuItem extends React.Component<Props, State> {
         style = {...style, ...this.props.openedStyle};
       }
       if (this.props.openedClassName) {
-        className = `${className||''} ${this.props.openedClassName}`;
+        className = `${className || ''} ${this.props.openedClassName}`;
       }
     }
 
@@ -275,7 +297,7 @@ export default class SubMenuItem extends React.Component<Props, State> {
         ref={this._floatAnchorRef}
         options={positionOptions}
         zIndex={menuZIndex}
-        anchor={anchorRef =>
+        anchor={anchorRef => (
           <MenuItem
             ref={this._menuItemRef}
             domRef={anchorRef}
@@ -284,7 +306,7 @@ export default class SubMenuItem extends React.Component<Props, State> {
             className={className}
             highlightedStyle={highlightedStyle}
             highlightedClassName={highlightedClassName}
-            onHighlightChange={(h,e) => this._onHighlightChange(h,e)}
+            onHighlightChange={(h, e) => this._onHighlightChange(h, e)}
             onMouseLeave={e => this._onMouseLeaveItem(e)}
             onRightPushed={(e: MenuEvent) => {
               if (!this.state.opened) {
@@ -311,9 +333,9 @@ export default class SubMenuItem extends React.Component<Props, State> {
           >
             {children}
           </MenuItem>
-        }
+        )}
         float={
-          !opened ? null :
+          !opened ? null : (
             <MenuListInspector
               ref={this._menuInspectorRef}
               onLeftPushed={e => {
@@ -324,11 +346,12 @@ export default class SubMenuItem extends React.Component<Props, State> {
             >
               <div
                 ref={this._menuContainerRef}
-                onMouseEnter={()=>this._mouseEnterMenu()}
+                onMouseEnter={() => this._mouseEnterMenu()}
               >
                 {menu}
               </div>
             </MenuListInspector>
+          )
         }
       />
     );

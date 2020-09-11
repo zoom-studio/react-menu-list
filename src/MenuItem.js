@@ -12,35 +12,42 @@ import setRef from './lib/setRef';
 import type {Direction, Rect} from './types';
 
 type State = {
-  highlighted: boolean;
+  highlighted: boolean,
 };
 
 export type Props = {
-  onItemChosen?: (event: ChosenEvent) => void;
-  onLeftPushed?: (event: MenuEvent) => void;
-  onRightPushed?: (event: MenuEvent) => void;
-  onHighlightChange?: (highlighted: boolean, details: {byKeyboard?: boolean, prevCursorLocation?: Rect, direction?: Direction}) => void;
+  onItemChosen?: (event: ChosenEvent) => void,
+  onLeftPushed?: (event: MenuEvent) => void,
+  onRightPushed?: (event: MenuEvent) => void,
+  onHighlightChange?: (
+    highlighted: boolean,
+    details: {
+      byKeyboard?: boolean,
+      prevCursorLocation?: Rect,
+      direction?: Direction,
+    }
+  ) => void,
 
-  className?: string;
-  style?: Object;
-  highlightedClassName?: string;
-  highlightedStyle?: Object;
+  className?: string,
+  style?: Object,
+  highlightedClassName?: string,
+  highlightedStyle?: Object,
 
-  index?: number;
-  onMouseLeave?: (event: MouseEvent) => void;
+  index?: number,
+  onMouseLeave?: (event: MouseEvent) => void,
 
-  children?: ReactNode;
+  children?: ReactNode,
 
-  domRef?: ReactRef<'div'>;
+  domRef?: ReactRef<'div'>,
 
-  'aria-haspopup'?: boolean;
-  'aria-expanded'?: boolean;
+  'aria-haspopup'?: boolean,
+  'aria-expanded'?: boolean,
 };
 
 export default class MenuItem extends React.Component<Props, State> {
   _menuListHandle: MenuListHandle;
   state = {
-    highlighted: false
+    highlighted: false,
   };
   static propTypes = {
     onItemChosen: PropTypes.func,
@@ -58,13 +65,10 @@ export default class MenuItem extends React.Component<Props, State> {
 
     children: PropTypes.node,
 
-    domRef: PropTypes.oneOfType([
-      PropTypes.object,
-      PropTypes.func
-    ]),
+    domRef: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
 
     'aria-haspopup': PropTypes.bool,
-    'aria-expanded': PropTypes.bool
+    'aria-expanded': PropTypes.bool,
   };
 
   static contextType = MenuListContext;
@@ -101,7 +105,7 @@ export default class MenuItem extends React.Component<Props, State> {
   // byKeyboard forces focus immediately and scrolls the item into view.
   // With it false, the highlight might be delayed depending on mouse movement
   // and won't cause anything to scroll.
-  highlight(byKeyboard: boolean=true) {
+  highlight(byKeyboard: boolean = true) {
     this._menuListHandle.highlight(byKeyboard);
   }
 
@@ -117,42 +121,52 @@ export default class MenuItem extends React.Component<Props, State> {
     const el = this._el;
     /*:: if (!el) throw new Error(); */
 
-    this._menuListHandle = (this.context: MenuListContextValue).registerItem(this.props, {
-      notifyHighlighted: (highlighted: boolean, byKeyboard: ?boolean, direction: ?Direction, prevCursorLocation: ?Rect) => {
-        this.setState({highlighted}, () => {
-          if (highlighted && byKeyboard) {
-            const el = this._el;
-            /*:: if (!el) throw new Error(); */
-            if (typeof (el: any).scrollIntoViewIfNeeded === 'function') {
-              (el: any).scrollIntoViewIfNeeded();
-            } else if (el.scrollIntoView) {
-              el.scrollIntoView();
+    this._menuListHandle = (this.context: MenuListContextValue).registerItem(
+      this.props,
+      {
+        notifyHighlighted: (
+          highlighted: boolean,
+          byKeyboard: ?boolean,
+          direction: ?Direction,
+          prevCursorLocation: ?Rect
+        ) => {
+          this.setState({highlighted}, () => {
+            if (highlighted && byKeyboard) {
+              const el = this._el;
+              /*:: if (!el) throw new Error(); */
+              if (typeof (el: any).scrollIntoViewIfNeeded === 'function') {
+                (el: any).scrollIntoViewIfNeeded();
+              } else if (el.scrollIntoView) {
+                el.scrollIntoView();
+              }
             }
-          }
-        });
-        if (this.props.onHighlightChange) {
-          this.props.onHighlightChange(highlighted, {
-            byKeyboard: byKeyboard == null ? undefined : byKeyboard,
-            prevCursorLocation: prevCursorLocation == null ? undefined : prevCursorLocation,
-            direction: direction == null ? undefined : direction
           });
-        }
+          if (this.props.onHighlightChange) {
+            this.props.onHighlightChange(highlighted, {
+              byKeyboard: byKeyboard == null ? undefined : byKeyboard,
+              prevCursorLocation:
+                prevCursorLocation == null ? undefined : prevCursorLocation,
+              direction: direction == null ? undefined : direction,
+            });
+          }
+        },
+        notifyEvent: (event: MenuEvent) => {
+          switch (event.type) {
+            case 'chosen':
+              /*:: if (!(event instanceof ChosenEvent)) throw new Error(); */
+              if (this.props.onItemChosen) this.props.onItemChosen(event);
+              break;
+            case 'left':
+              if (this.props.onLeftPushed) this.props.onLeftPushed(event);
+              break;
+            case 'right':
+              if (this.props.onRightPushed) this.props.onRightPushed(event);
+              break;
+          }
+        },
       },
-      notifyEvent: (event: MenuEvent) => {
-        switch (event.type) {
-        case 'chosen':
-          /*:: if (!(event instanceof ChosenEvent)) throw new Error(); */
-          if (this.props.onItemChosen) this.props.onItemChosen(event);
-          break;
-        case 'left':
-          if (this.props.onLeftPushed) this.props.onLeftPushed(event);
-          break;
-        case 'right':
-          if (this.props.onRightPushed) this.props.onRightPushed(event);
-          break;
-        }
-      }
-    }, el);
+      el
+    );
   }
 
   componentWillUnmount() {
@@ -174,7 +188,7 @@ export default class MenuItem extends React.Component<Props, State> {
         style = {...style, ...this.props.highlightedStyle};
       }
       if (this.props.highlightedClassName) {
-        className = `${className||''} ${this.props.highlightedClassName}`;
+        className = `${className || ''} ${this.props.highlightedClassName}`;
       }
     }
 
@@ -183,7 +197,7 @@ export default class MenuItem extends React.Component<Props, State> {
         ref={this._elSetter}
         style={style}
         className={className}
-        onClick={()=>this._menuListHandle.itemChosen()}
+        onClick={() => this._menuListHandle.itemChosen()}
         onMouseEnter={() => this.highlight(false)}
         onMouseLeave={onMouseLeave || (() => this.unhighlight())}
         role="menuitem"

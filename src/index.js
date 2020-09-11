@@ -15,5 +15,6 @@ export {default as MenuButton} from './MenuButton';
 export type {Props as MenuButtonProps} from './MenuButton';
 export {default as SubMenuItem} from './SubMenuItem';
 export type {
-  Props as SubMenuItemProps, FloatAnchorOptions
+  Props as SubMenuItemProps,
+  FloatAnchorOptions,
 } from './SubMenuItem';

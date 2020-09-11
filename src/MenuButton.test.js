@@ -33,22 +33,30 @@ test('opens and closes on click', () => {
 
   const button = TestUtils.findRenderedDOMComponentWithTag(root, 'button');
   if (!button) throw new Error();
-  expect(TestUtils.scryRenderedComponentsWithType(root, Dropdown).length).toBe(0);
+  expect(TestUtils.scryRenderedComponentsWithType(root, Dropdown).length).toBe(
+    0
+  );
 
   TestUtils.Simulate.mouseDown(button, {button: 0});
 
-  const dropdown: Dropdown = (TestUtils.findRenderedComponentWithType(root, Dropdown): any);
-  const menuListItems = TestUtils.scryRenderedComponentsWithType(dropdown, MenuItem);
-
-  expect(menuListItems.map(c=>c.props.children)).toEqual(
-    ['A', 'B']
+  const dropdown: Dropdown = (TestUtils.findRenderedComponentWithType(
+    root,
+    Dropdown
+  ): any);
+  const menuListItems = TestUtils.scryRenderedComponentsWithType(
+    dropdown,
+    MenuItem
   );
+
+  expect(menuListItems.map(c => c.props.children)).toEqual(['A', 'B']);
 
   root.reposition(); // just check this doesn't throw
 
   TestUtils.Simulate.mouseDown(button, {button: 0});
 
-  expect(TestUtils.scryRenderedComponentsWithType(root, Dropdown).length).toBe(0);
+  expect(TestUtils.scryRenderedComponentsWithType(root, Dropdown).length).toBe(
+    0
+  );
 
   ReactDOM.unmountComponentAtNode(mountPoint);
 });
@@ -77,33 +85,57 @@ test('closes on outside click', () => {
   const button = TestUtils.findRenderedDOMComponentWithTag(root, 'button');
   if (!button) throw new Error();
 
-  expect(TestUtils.scryRenderedComponentsWithType(root, Dropdown).length).toBe(0);
-  expect(window.addEventListener.mock.calls.filter(c => c[0] === 'mousedown').length).toBe(0);
+  expect(TestUtils.scryRenderedComponentsWithType(root, Dropdown).length).toBe(
+    0
+  );
+  expect(
+    window.addEventListener.mock.calls.filter(c => c[0] === 'mousedown').length
+  ).toBe(0);
 
   TestUtils.Simulate.mouseDown(button, {button: 0});
   TestUtils.Simulate.focus(button);
 
-  expect(window.addEventListener.mock.calls.filter(c => c[0] === 'mousedown').length).toBe(1);
-  expect(window.addEventListener.mock.calls.filter(c => c[0] === 'mousedown')[0][2]).toBe(true);
+  expect(
+    window.addEventListener.mock.calls.filter(c => c[0] === 'mousedown').length
+  ).toBe(1);
+  expect(
+    window.addEventListener.mock.calls.filter(c => c[0] === 'mousedown')[0][2]
+  ).toBe(true);
 
-  expect(window.removeEventListener.mock.calls.filter(c => c[0] === 'mousedown').length).toBe(0);
+  expect(
+    window.removeEventListener.mock.calls.filter(c => c[0] === 'mousedown')
+      .length
+  ).toBe(0);
 
-  const dropdown: Dropdown = (TestUtils.findRenderedComponentWithType(root, Dropdown): any);
-  const menuListItems = TestUtils.scryRenderedComponentsWithType(dropdown, MenuItem);
-
-  expect(menuListItems.map(c=>c.props.children)).toEqual(
-    ['A', 'B']
+  const dropdown: Dropdown = (TestUtils.findRenderedComponentWithType(
+    root,
+    Dropdown
+  ): any);
+  const menuListItems = TestUtils.scryRenderedComponentsWithType(
+    dropdown,
+    MenuItem
   );
 
+  expect(menuListItems.map(c => c.props.children)).toEqual(['A', 'B']);
+
   // Simulate a click on the page
-  window.addEventListener.mock.calls.filter(c => c[0] === 'mousedown')[0][1].call(window, {
-    target: 'window'
-  });
+  window.addEventListener.mock.calls
+    .filter(c => c[0] === 'mousedown')[0][1]
+    .call(window, {
+      target: 'window',
+    });
 
-  expect(TestUtils.scryRenderedComponentsWithType(root, Dropdown).length).toBe(0);
+  expect(TestUtils.scryRenderedComponentsWithType(root, Dropdown).length).toBe(
+    0
+  );
 
-  expect(window.addEventListener.mock.calls.filter(c => c[0] === 'mousedown').length).toBe(1);
-  expect(window.removeEventListener.mock.calls.filter(c => c[0] === 'mousedown').length).toBe(1);
+  expect(
+    window.addEventListener.mock.calls.filter(c => c[0] === 'mousedown').length
+  ).toBe(1);
+  expect(
+    window.removeEventListener.mock.calls.filter(c => c[0] === 'mousedown')
+      .length
+  ).toBe(1);
 
   ReactDOM.unmountComponentAtNode(mountPoint);
 });
@@ -112,17 +144,21 @@ test('passes buttonProps to custom component', () => {
   const mountPoint = document.createElement('div');
   /* eslint-ignore-next-line react/prop-types */
   const CustomButton: Function = ({domNode, customProp}) => {
-    return <button html-custom={customProp} ref={domNode}>btn</button>;
+    return (
+      <button html-custom={customProp} ref={domNode}>
+        btn
+      </button>
+    );
   };
   CustomButton.propTypes = {
     domNode: PropTypes.node,
-    customProp: PropTypes.string
+    customProp: PropTypes.string,
   };
 
   const root: MenuButton = (ReactDOM.render(
     <MenuButton
       ButtonComponent={CustomButton}
-      buttonProps={{ customProp: 'custom-prop' }}
+      buttonProps={{customProp: 'custom-prop'}}
       menu={
         <Dropdown>
           <MenuList>
@@ -141,7 +177,9 @@ test('passes buttonProps to custom component', () => {
 
   const button = TestUtils.findRenderedDOMComponentWithTag(root, 'button');
   if (!button) throw new Error();
-  expect(TestUtils.scryRenderedComponentsWithType(root, Dropdown).length).toBe(0);
+  expect(TestUtils.scryRenderedComponentsWithType(root, Dropdown).length).toBe(
+    0
+  );
 
   expect(button.getAttribute('custom')).toBeDefined();
 

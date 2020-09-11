@@ -26,15 +26,16 @@ test('cursor movement works', () => {
     mountPoint
   ): any);
 
-  const menuListItems = TestUtils.scryRenderedComponentsWithType(root, MenuItem);
-
-  expect(menuListItems.map(c=>c.props.children)).toEqual(
-    ['A', 'B', 'C']
+  const menuListItems = TestUtils.scryRenderedComponentsWithType(
+    root,
+    MenuItem
   );
 
-  const keydownCaptureHandlers = window.addEventListener.mock.calls.filter(args =>
-    args[0] === 'keydown' && args[2]
-  ).map(args => args[1]);
+  expect(menuListItems.map(c => c.props.children)).toEqual(['A', 'B', 'C']);
+
+  const keydownCaptureHandlers = window.addEventListener.mock.calls
+    .filter(args => args[0] === 'keydown' && args[2])
+    .map(args => args[1]);
   expect(keydownCaptureHandlers.length).toBe(1);
 
   expect(menuListItems[0].props.onHighlightChange.mock.calls).toEqual([]);
@@ -46,11 +47,15 @@ test('cursor movement works', () => {
     stopPropagation: jest.fn(),
     key: 'ArrowDown',
     which: 40,
-    target: document.body
+    target: document.body,
   });
 
   expect(menuListItems[0].props.onHighlightChange.mock.calls).toEqual([
-    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}]]);
+    [
+      true,
+      {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'},
+    ],
+  ]);
   expect(menuListItems[1].props.onHighlightChange.mock.calls).toEqual([]);
   expect(menuListItems[2].props.onHighlightChange.mock.calls).toEqual([]);
 
@@ -59,14 +64,29 @@ test('cursor movement works', () => {
     stopPropagation: jest.fn(),
     key: 'ArrowDown',
     which: 40,
-    target: document.body
+    target: document.body,
   });
 
   expect(menuListItems[0].props.onHighlightChange.mock.calls).toEqual([
-    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
-    [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]]);
+    [
+      true,
+      {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'},
+    ],
+    [
+      false,
+      {
+        byKeyboard: undefined,
+        prevCursorLocation: undefined,
+        direction: undefined,
+      },
+    ],
+  ]);
   expect(menuListItems[1].props.onHighlightChange.mock.calls).toEqual([
-    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}]]);
+    [
+      true,
+      {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'},
+    ],
+  ]);
   expect(menuListItems[2].props.onHighlightChange.mock.calls).toEqual([]);
 
   keydownCaptureHandlers[0]({
@@ -74,36 +94,98 @@ test('cursor movement works', () => {
     stopPropagation: jest.fn(),
     key: 'ArrowDown',
     which: 40,
-    target: document.body
+    target: document.body,
   });
 
   expect(menuListItems[0].props.onHighlightChange.mock.calls).toEqual([
-    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
-    [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]]);
+    [
+      true,
+      {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'},
+    ],
+    [
+      false,
+      {
+        byKeyboard: undefined,
+        prevCursorLocation: undefined,
+        direction: undefined,
+      },
+    ],
+  ]);
   expect(menuListItems[1].props.onHighlightChange.mock.calls).toEqual([
-    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
-    [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]]);
+    [
+      true,
+      {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'},
+    ],
+    [
+      false,
+      {
+        byKeyboard: undefined,
+        prevCursorLocation: undefined,
+        direction: undefined,
+      },
+    ],
+  ]);
   expect(menuListItems[2].props.onHighlightChange.mock.calls).toEqual([
-    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}]]);
+    [
+      true,
+      {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'},
+    ],
+  ]);
 
   keydownCaptureHandlers[0]({
     preventDefault: jest.fn(),
     stopPropagation: jest.fn(),
     key: 'ArrowDown',
     which: 40,
-    target: document.body
+    target: document.body,
   });
 
   expect(menuListItems[0].props.onHighlightChange.mock.calls).toEqual([
-    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
-    [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}],
-    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}]]);
+    [
+      true,
+      {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'},
+    ],
+    [
+      false,
+      {
+        byKeyboard: undefined,
+        prevCursorLocation: undefined,
+        direction: undefined,
+      },
+    ],
+    [
+      true,
+      {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'},
+    ],
+  ]);
   expect(menuListItems[1].props.onHighlightChange.mock.calls).toEqual([
-    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
-    [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]]);
+    [
+      true,
+      {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'},
+    ],
+    [
+      false,
+      {
+        byKeyboard: undefined,
+        prevCursorLocation: undefined,
+        direction: undefined,
+      },
+    ],
+  ]);
   expect(menuListItems[2].props.onHighlightChange.mock.calls).toEqual([
-    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
-    [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]]);
+    [
+      true,
+      {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'},
+    ],
+    [
+      false,
+      {
+        byKeyboard: undefined,
+        prevCursorLocation: undefined,
+        direction: undefined,
+      },
+    ],
+  ]);
 
   // Up time
 
@@ -112,63 +194,220 @@ test('cursor movement works', () => {
     stopPropagation: jest.fn(),
     key: 'ArrowUp',
     which: 38,
-    target: document.body
+    target: document.body,
   });
 
   expect(menuListItems[0].props.onHighlightChange.mock.calls).toEqual([
-    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
-    [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}],
-    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
-    [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]]);
+    [
+      true,
+      {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'},
+    ],
+    [
+      false,
+      {
+        byKeyboard: undefined,
+        prevCursorLocation: undefined,
+        direction: undefined,
+      },
+    ],
+    [
+      true,
+      {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'},
+    ],
+    [
+      false,
+      {
+        byKeyboard: undefined,
+        prevCursorLocation: undefined,
+        direction: undefined,
+      },
+    ],
+  ]);
   expect(menuListItems[1].props.onHighlightChange.mock.calls).toEqual([
-    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
-    [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]]);
+    [
+      true,
+      {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'},
+    ],
+    [
+      false,
+      {
+        byKeyboard: undefined,
+        prevCursorLocation: undefined,
+        direction: undefined,
+      },
+    ],
+  ]);
   expect(menuListItems[2].props.onHighlightChange.mock.calls).toEqual([
-    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
-    [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}],
-    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'up'}]]);
+    [
+      true,
+      {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'},
+    ],
+    [
+      false,
+      {
+        byKeyboard: undefined,
+        prevCursorLocation: undefined,
+        direction: undefined,
+      },
+    ],
+    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'up'}],
+  ]);
 
   keydownCaptureHandlers[0]({
     preventDefault: jest.fn(),
     stopPropagation: jest.fn(),
     key: 'ArrowUp',
     which: 38,
-    target: document.body
+    target: document.body,
   });
 
   expect(menuListItems[0].props.onHighlightChange.mock.calls).toEqual([
-    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
-    [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}],
-    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
-    [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]]);
+    [
+      true,
+      {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'},
+    ],
+    [
+      false,
+      {
+        byKeyboard: undefined,
+        prevCursorLocation: undefined,
+        direction: undefined,
+      },
+    ],
+    [
+      true,
+      {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'},
+    ],
+    [
+      false,
+      {
+        byKeyboard: undefined,
+        prevCursorLocation: undefined,
+        direction: undefined,
+      },
+    ],
+  ]);
   expect(menuListItems[1].props.onHighlightChange.mock.calls).toEqual([
-    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
-    [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}],
-    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'up'}]]);
-  expect(menuListItems[2].props.onHighlightChange.mock.calls).toEqual([
-    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
-    [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}],
+    [
+      true,
+      {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'},
+    ],
+    [
+      false,
+      {
+        byKeyboard: undefined,
+        prevCursorLocation: undefined,
+        direction: undefined,
+      },
+    ],
     [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'up'}],
-    [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]]);
+  ]);
+  expect(menuListItems[2].props.onHighlightChange.mock.calls).toEqual([
+    [
+      true,
+      {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'},
+    ],
+    [
+      false,
+      {
+        byKeyboard: undefined,
+        prevCursorLocation: undefined,
+        direction: undefined,
+      },
+    ],
+    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'up'}],
+    [
+      false,
+      {
+        byKeyboard: undefined,
+        prevCursorLocation: undefined,
+        direction: undefined,
+      },
+    ],
+  ]);
 
   root.moveCursor('up', {top: 5, bottom: 6, left: 7, right: 8});
 
   expect(menuListItems[0].props.onHighlightChange.mock.calls).toEqual([
-    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
-    [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}],
-    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
-    [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}],
-    [true, {byKeyboard: true, prevCursorLocation: {top: 5, bottom: 6, left: 7, right: 8}, direction: 'up'}]]);
+    [
+      true,
+      {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'},
+    ],
+    [
+      false,
+      {
+        byKeyboard: undefined,
+        prevCursorLocation: undefined,
+        direction: undefined,
+      },
+    ],
+    [
+      true,
+      {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'},
+    ],
+    [
+      false,
+      {
+        byKeyboard: undefined,
+        prevCursorLocation: undefined,
+        direction: undefined,
+      },
+    ],
+    [
+      true,
+      {
+        byKeyboard: true,
+        prevCursorLocation: {top: 5, bottom: 6, left: 7, right: 8},
+        direction: 'up',
+      },
+    ],
+  ]);
   expect(menuListItems[1].props.onHighlightChange.mock.calls).toEqual([
-    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
-    [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}],
+    [
+      true,
+      {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'},
+    ],
+    [
+      false,
+      {
+        byKeyboard: undefined,
+        prevCursorLocation: undefined,
+        direction: undefined,
+      },
+    ],
     [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'up'}],
-    [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]]);
+    [
+      false,
+      {
+        byKeyboard: undefined,
+        prevCursorLocation: undefined,
+        direction: undefined,
+      },
+    ],
+  ]);
   expect(menuListItems[2].props.onHighlightChange.mock.calls).toEqual([
-    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
-    [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}],
+    [
+      true,
+      {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'},
+    ],
+    [
+      false,
+      {
+        byKeyboard: undefined,
+        prevCursorLocation: undefined,
+        direction: undefined,
+      },
+    ],
     [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'up'}],
-    [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]]);
+    [
+      false,
+      {
+        byKeyboard: undefined,
+        prevCursorLocation: undefined,
+        direction: undefined,
+      },
+    ],
+  ]);
 
   ReactDOM.unmountComponentAtNode(mountPoint);
 });
@@ -186,11 +425,12 @@ test('index prop change is respected', () => {
     mountPoint
   ): any);
 
-  const menuListItems = TestUtils.scryRenderedComponentsWithType(root, MenuItem);
-
-  expect(menuListItems.map(c=>c.props.children)).toEqual(
-    ['A', 'B', 'C']
+  const menuListItems = TestUtils.scryRenderedComponentsWithType(
+    root,
+    MenuItem
   );
+
+  expect(menuListItems.map(c => c.props.children)).toEqual(['A', 'B', 'C']);
 
   expect(menuListItems[0].props.onHighlightChange.mock.calls).toEqual([]);
   expect(menuListItems[1].props.onHighlightChange.mock.calls).toEqual([]);
@@ -199,28 +439,60 @@ test('index prop change is respected', () => {
   root.moveCursor('down');
 
   expect(menuListItems[0].props.onHighlightChange.mock.calls).toEqual([
-    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}]]);
+    [
+      true,
+      {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'},
+    ],
+  ]);
   expect(menuListItems[1].props.onHighlightChange.mock.calls).toEqual([]);
   expect(menuListItems[2].props.onHighlightChange.mock.calls).toEqual([]);
 
   root.moveCursor('down');
 
   expect(menuListItems[0].props.onHighlightChange.mock.calls).toEqual([
-    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
-    [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]
+    [
+      true,
+      {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'},
+    ],
+    [
+      false,
+      {
+        byKeyboard: undefined,
+        prevCursorLocation: undefined,
+        direction: undefined,
+      },
+    ],
   ]);
   expect(menuListItems[1].props.onHighlightChange.mock.calls).toEqual([
-    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}]
+    [
+      true,
+      {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'},
+    ],
   ]);
   expect(menuListItems[2].props.onHighlightChange.mock.calls).toEqual([]);
 
   ReactDOM.render(
     <MenuList>
-      <MenuItem index={5} onHighlightChange={menuListItems[0].props.onHighlightChange}>A</MenuItem>
+      <MenuItem
+        index={5}
+        onHighlightChange={menuListItems[0].props.onHighlightChange}
+      >
+        A
+      </MenuItem>
       <div>
-        <MenuItem index={4} onHighlightChange={menuListItems[1].props.onHighlightChange}>B</MenuItem>
+        <MenuItem
+          index={4}
+          onHighlightChange={menuListItems[1].props.onHighlightChange}
+        >
+          B
+        </MenuItem>
       </div>
-      <MenuItem index={3} onHighlightChange={menuListItems[2].props.onHighlightChange}>C</MenuItem>
+      <MenuItem
+        index={3}
+        onHighlightChange={menuListItems[2].props.onHighlightChange}
+      >
+        C
+      </MenuItem>
     </MenuList>,
     mountPoint
   );
@@ -228,13 +500,36 @@ test('index prop change is respected', () => {
   root.moveCursor('down');
 
   expect(menuListItems[0].props.onHighlightChange.mock.calls).toEqual([
-    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
-    [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}],
-    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}]
+    [
+      true,
+      {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'},
+    ],
+    [
+      false,
+      {
+        byKeyboard: undefined,
+        prevCursorLocation: undefined,
+        direction: undefined,
+      },
+    ],
+    [
+      true,
+      {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'},
+    ],
   ]);
   expect(menuListItems[1].props.onHighlightChange.mock.calls).toEqual([
-    [true, {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'}],
-    [false, {byKeyboard: undefined, prevCursorLocation: undefined, direction: undefined}]
+    [
+      true,
+      {byKeyboard: true, prevCursorLocation: undefined, direction: 'down'},
+    ],
+    [
+      false,
+      {
+        byKeyboard: undefined,
+        prevCursorLocation: undefined,
+        direction: undefined,
+      },
+    ],
   ]);
   expect(menuListItems[2].props.onHighlightChange.mock.calls).toEqual([]);
 
@@ -244,8 +539,7 @@ test('index prop change is respected', () => {
 test('empty list works', () => {
   const mountPoint = document.createElement('div');
   const root: MenuList = (ReactDOM.render(
-    <MenuList>
-    </MenuList>,
+    <MenuList></MenuList>,
     mountPoint
   ): any);
 
@@ -268,11 +562,14 @@ test('does not emit ChosenEvents on enter if nothing was chosen', () => {
     mountPoint
   ): any);
 
-  const menuListItems = TestUtils.scryRenderedComponentsWithType(root, MenuItem);
+  const menuListItems = TestUtils.scryRenderedComponentsWithType(
+    root,
+    MenuItem
+  );
 
-  const keydownCaptureHandlers = window.addEventListener.mock.calls.filter(args =>
-    args[0] === 'keydown' && args[2]
-  ).map(args => args[1]);
+  const keydownCaptureHandlers = window.addEventListener.mock.calls
+    .filter(args => args[0] === 'keydown' && args[2])
+    .map(args => args[1]);
   expect(keydownCaptureHandlers.length).toBe(1);
 
   expect(root.props.onItemChosen).not.toHaveBeenCalled();
@@ -285,7 +582,7 @@ test('does not emit ChosenEvents on enter if nothing was chosen', () => {
       stopPropagation: jest.fn(),
       key: 'Enter',
       which: 13,
-      target: document.body
+      target: document.body,
     };
     keydownCaptureHandlers[0](event);
     expect(event.preventDefault).not.toHaveBeenCalled();
@@ -302,7 +599,7 @@ test('does not emit ChosenEvents on enter if nothing was chosen', () => {
     stopPropagation: jest.fn(),
     key: 'ArrowDown',
     which: 40,
-    target: document.body
+    target: document.body,
   });
 
   expect(root.hasHighlight()).toBe(true);
@@ -313,7 +610,7 @@ test('does not emit ChosenEvents on enter if nothing was chosen', () => {
       stopPropagation: jest.fn(),
       key: 'Enter',
       which: 13,
-      target: document.body
+      target: document.body,
     };
     keydownCaptureHandlers[0](event);
     expect(event.preventDefault).toHaveBeenCalledTimes(1);

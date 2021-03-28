@@ -1,7 +1,7 @@
 /* @flow */
 /* eslint-disable no-console, react/prop-types */
 
-import React from 'react';
+import * as React from 'react';
 import {MenuList, MenuItem, MenuButton, Dropdown, SubMenuItem} from '../src';
 import AutoComplete from './AutoComplete';
 

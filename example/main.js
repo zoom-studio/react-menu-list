@@ -1,8 +1,8 @@
 /* @flow */
 /*eslint no-console: "off" */
 
-import React from 'react';
-import ReactDOM from 'react-dom';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import Example from './Example';
 
 const onReady = new Promise(resolve => {

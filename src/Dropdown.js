@@ -1,6 +1,6 @@
 /* @flow */
 
-import React from 'react';
+import * as React from 'react';
 import type {Node as ReactNode} from 'react';
 import PropTypes from 'prop-types';
 

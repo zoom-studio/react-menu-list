@@ -1,7 +1,7 @@
 /* @flow */
 
-import React from 'react';
-import ReactDOM from 'react-dom';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import TestUtils from 'react-dom/test-utils';
 import {MenuButton, Dropdown, MenuList, MenuItem} from '.';

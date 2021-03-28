@@ -1,7 +1,7 @@
 /* @flow */
 /* eslint-disable react/prop-types */
 
-import React from 'react';
+import * as React from 'react';
 import {Dropdown, MenuList, MenuItem, SubMenuItem} from '../src';
 import FloatAnchor from 'react-float-anchor';
 import type {Options as PositionOptions} from 'react-float-anchor';

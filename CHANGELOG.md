@@ -1,3 +1,11 @@
+## 7.0.2 (2021-03-27)
+
+- Batch React updates during all event handling.
+
+## 6.1.1 (2021-03-27)
+
+- Batch React updates during all event handling.
+
 ## 7.0.1 (2020-09-11)
 
 - Use correct types for events in the Typescript definition of MenuButton's `renderButton` prop.

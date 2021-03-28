@@ -1,6 +1,7 @@
 /* @flow */
 
-import React from 'react';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import type {Node as ReactNode} from 'react';
 import PropTypes from 'prop-types';
 import Kefir from 'kefir';
@@ -267,7 +268,11 @@ export default class MenuList extends React.Component<Props> {
         .filter(e => !el.contains(e.target)),
     ])
       .takeUntilBy(this._stopper)
-      .onValue(event => this._key(event));
+      .onValue(event => {
+        ReactDOM.unstable_batchedUpdates(() => {
+          this._key(event);
+        });
+      });
 
     const parentCtx = this._parentCtx();
     if (parentCtx) {

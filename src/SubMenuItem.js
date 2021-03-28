@@ -4,7 +4,8 @@ import Kefir from 'kefir';
 import kefirBus from 'kefir-bus';
 import type {Bus} from 'kefir-bus';
 import kefirStopper from 'kefir-stopper';
-import React from 'react';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import type {Node as ReactNode} from 'react';
 import PropTypes from 'prop-types';
 import pointRectDistance from './lib/pointRectDistance';
@@ -179,7 +180,9 @@ export default class SubMenuItem extends React.Component<Props, State> {
         .takeUntilBy(this._resetMouseLeaveWatcher)
         .takeUntilBy(this._stopper)
         .onValue(() => {
-          this.open();
+          ReactDOM.unstable_batchedUpdates(() => {
+            this.open();
+          });
         });
     } else if (!highlighted) {
       this.close();
@@ -255,8 +258,10 @@ export default class SubMenuItem extends React.Component<Props, State> {
       .takeUntilBy(this._resetMouseLeaveWatcher)
       .takeUntilBy(this._stopper)
       .onValue(() => {
-        this.close();
-        menuItem.unhighlight();
+        ReactDOM.unstable_batchedUpdates(() => {
+          this.close();
+          menuItem.unhighlight();
+        });
       });
   }
 

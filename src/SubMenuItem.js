@@ -317,21 +317,30 @@ export default class SubMenuItem extends React.Component<Props, State> {
               if (!this.state.opened) {
                 e.stopPropagation();
                 e.preventDefault();
-                this.open();
-                const menuInspector = this._menuInspectorRef.current;
-                if (!menuInspector) throw new Error();
-                menuInspector.moveCursor('down');
+                this.open().then(() => {
+                  const menuInspector = this._menuInspectorRef.current;
+                  if (!menuInspector)
+                    throw new Error(
+                      'SubMenuItem MenuListInspector not present'
+                    );
+                  menuInspector.moveCursor('down');
+                });
               }
             }}
             onItemChosen={(e: ChosenEvent) => {
               e.stopPropagation();
               e.preventDefault();
-              this.open();
-              if (e.byKeyboard) {
-                const menuInspector = this._menuInspectorRef.current;
-                if (!menuInspector) throw new Error();
-                menuInspector.moveCursor('down');
-              }
+              const {byKeyboard} = e;
+              this.open().then(() => {
+                if (byKeyboard) {
+                  const menuInspector = this._menuInspectorRef.current;
+                  if (!menuInspector)
+                    throw new Error(
+                      'SubMenuItem MenuListInspector not present'
+                    );
+                  menuInspector.moveCursor('down');
+                }
+              });
             }}
             aria-haspopup={true}
             aria-expanded={opened}

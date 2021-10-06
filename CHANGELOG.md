@@ -1,3 +1,11 @@
+## 7.0.3 (2021-10-06)
+
+- Fixed [issue #35](https://github.com/StreakYC/react-menu-list/issues/35).
+
+## 6.1.2 (2021-10-06)
+
+- Fixed [issue #35](https://github.com/StreakYC/react-menu-list/issues/35).
+
 ## 7.0.2 (2021-03-27)
 
 - Batch React updates during all event handling.

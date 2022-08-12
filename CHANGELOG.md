@@ -1,3 +1,11 @@
+## 7.0.4 (2022-08-11)
+
+- Fixed issue where MenuButton closes its dropdown if the page loses and regains focus.
+
+## 6.1.3 (2022-08-11)
+
+- Fixed issue where MenuButton closes its dropdown if the page loses and regains focus.
+
 ## 7.0.3 (2021-10-06)
 
 - Fixed [issue #35](https://github.com/StreakYC/react-menu-list/issues/35).

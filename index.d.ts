@@ -6,12 +6,12 @@ export {Options as FloatAnchorOptions} from 'react-float-anchor';
 
 export type Direction = 'up' | 'down' | 'left' | 'right';
 
-export type Rect = {
+export interface Rect {
   top: number;
   bottom: number;
   left: number;
   right: number;
-};
+}
 
 export interface MenuEvent {
   type: string;
@@ -27,12 +27,12 @@ export interface ChosenEvent extends MenuEvent {
 
 // MenuList
 
-export type MenuListProps = {
+export interface MenuListProps {
   onItemChosen?: (event: ChosenEvent) => void;
   onLeftPushed?: (event: MenuEvent) => void;
   onRightPushed?: (event: MenuEvent) => void;
   children?: ReactNode;
-};
+}
 export class MenuList extends React.Component<MenuListProps> {
   moveCursor(direction: Direction, prevCursorLocation?: Rect): void;
   hasHighlight(): boolean;
@@ -40,7 +40,7 @@ export class MenuList extends React.Component<MenuListProps> {
 
 // MenuItem
 
-export type MenuItemProps = {
+export interface MenuItemProps {
   onItemChosen?: (event: ChosenEvent) => void;
   onLeftPushed?: (event: MenuEvent) => void;
   onRightPushed?: (event: MenuEvent) => void;
@@ -67,7 +67,7 @@ export type MenuItemProps = {
 
   'aria-haspopup'?: boolean;
   'aria-expanded'?: boolean;
-};
+}
 export class MenuItem extends React.Component<MenuItemProps> {
   hasHighlight(): boolean;
   takeKeyboard(): void;
@@ -87,12 +87,12 @@ export class MenuItem extends React.Component<MenuItemProps> {
 
 // MenuListInspector
 
-export type MenuListInspectorProps = {
+export interface MenuListInspectorProps {
   onItemChosen?: (event: ChosenEvent) => void;
   onLeftPushed?: (event: MenuEvent) => void;
   onRightPushed?: (event: MenuEvent) => void;
   children: ReactNode;
-};
+}
 export class MenuListInspector extends React.Component<MenuListInspectorProps> {
   moveCursor(direction: Direction, prevCursorLocation?: Rect): boolean;
   hasHighlight(): boolean;
@@ -111,7 +111,7 @@ type RenderProp = (
   onMouseDown: (e: React.MouseEvent) => void
 ) => ReactNode;
 
-export type MenuButtonProps = {
+export interface MenuButtonProps {
   className?: string;
   style?: Object;
   disabled?: boolean;
@@ -130,7 +130,7 @@ export type MenuButtonProps = {
   onWillOpen?: () => void;
   onDidOpen?: () => void;
   onWillClose?: () => void;
-};
+}
 export class MenuButton extends React.Component<MenuButtonProps> {
   open(): Promise<void>;
   close(): void;
@@ -140,7 +140,7 @@ export class MenuButton extends React.Component<MenuButtonProps> {
 
 // SubMenuItem
 
-export type SubMenuItemProps = {
+export interface SubMenuItemProps {
   menu: ReactNode;
   positionOptions?: FloatAnchorOptions;
   menuZIndex?: string | number;
@@ -170,7 +170,7 @@ export type SubMenuItemProps = {
   ) => void;
 
   children?: ReactNode;
-};
+}
 export class SubMenuItem extends React.Component<SubMenuItemProps> {
   open(): Promise<void>;
   close(): void;

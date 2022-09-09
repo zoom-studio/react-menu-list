@@ -104,7 +104,7 @@ export class Dropdown extends React.Component<{}> {}
 
 // MenuButton
 
-type RenderProp = (
+export type MenuButtonRenderProp = (
   domRef: React.Ref<any>,
   opened: boolean,
   onKeyPress: (e: React.KeyboardEvent) => void,
@@ -120,7 +120,7 @@ export interface MenuButtonProps {
   openedStyle?: Object;
   children?: ReactNode;
 
-  renderButton?: RenderProp;
+  renderButton?: MenuButtonRenderProp;
 
   positionOptions?: FloatAnchorOptions;
   menuZIndex?: string | number;

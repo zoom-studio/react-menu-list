@@ -16,7 +16,7 @@ type State = {
   opened: boolean,
 };
 
-type RenderProp = (
+export type MenuButtonRenderProp = (
   domRef: React.Ref<any>,
   opened: boolean,
   onKeyPress: (e: KeyboardEvent) => void,
@@ -27,7 +27,7 @@ export type Props = {
   menuZIndex?: string | number,
   menuParentElement?: HTMLElement,
 
-  renderButton?: RenderProp,
+  renderButton?: MenuButtonRenderProp,
 
   children?: React.Node,
   className?: string,

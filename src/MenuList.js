@@ -256,7 +256,7 @@ export default class MenuList extends React.Component<Props> {
     const el = this._elRef.current;
     /*:: if (!el) throw new Error(); */
 
-    // The only things that should receive keydown/keypress events before us
+    // The only things that should receive keydown/keydown events before us
     // are our children. This allows a MenuItem to contain a text input
     // which selectively stops propagation on key events for example.
     Kefir.merge([

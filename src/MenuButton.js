@@ -19,7 +19,7 @@ type State = {
 export type MenuButtonRenderProp = (
   domRef: React.Ref<any>,
   opened: boolean,
-  onKeyPress: (e: KeyboardEvent) => void,
+  onKeyDown: (e: KeyboardEvent) => void,
   onMouseDown: (e: MouseEvent) => void
 ) => React.Node;
 export type Props = {
@@ -146,8 +146,13 @@ export default class MenuButton extends React.Component<Props, State> {
     this.toggle();
   };
 
-  _onKeyPress = (e: KeyboardEvent) => {
+  _onKeyDown = (e: KeyboardEvent) => {
+    if (e.isComposing) {
+      return;
+    }
     if (e.key === 'Enter' || e.key === ' ') {
+      e.stopPropagation();
+      e.preventDefault();
       this.toggle();
     }
   };
@@ -164,7 +169,7 @@ export default class MenuButton extends React.Component<Props, State> {
   _defaultRenderButton = (
     domRef: React.Ref<any>,
     opened: boolean,
-    onKeyPress: (e: KeyboardEvent) => void,
+    onKeyDown: (e: KeyboardEvent) => void,
     onMouseDown: (e: MouseEvent) => void
   ) => {
     const {openedStyle, openedClassName} = this.props;
@@ -185,7 +190,7 @@ export default class MenuButton extends React.Component<Props, State> {
         ref={domRef}
         aria-haspopup={true}
         aria-expanded={opened}
-        onKeyPress={onKeyPress}
+        onKeyDown={onKeyDown}
         onMouseDown={onMouseDown}
         disabled={this.props.disabled}
         title={this.props.title}
@@ -215,7 +220,7 @@ export default class MenuButton extends React.Component<Props, State> {
           renderButton(
             el => this._setRef(el, anchorRef),
             opened,
-            this._onKeyPress,
+            this._onKeyDown,
             this._onMouseDown
           )
         }

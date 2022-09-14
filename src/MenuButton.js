@@ -109,6 +109,13 @@ export default class MenuButton extends React.Component<Props, State> {
         });
       });
 
+    // Possible alternative future design: instead of registering focus/blur/mouse/keydown
+    // handlers globally, we could have a hidden input or menuitem inside of the
+    // menu that's kept focused, and just receive blur and keydown events that bubble up
+    // from it.
+    // This would be more similar to React Select.
+    // Similar design note is in MenuList.
+
     return new Promise(resolve => {
       this.setState({opened: true}, () => {
         if (this.props.onDidOpen) this.props.onDidOpen();

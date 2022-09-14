@@ -4,7 +4,6 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import type {Node as ReactNode} from 'react';
 import PropTypes from 'prop-types';
-import Kefir from 'kefir';
 import kefirStopper from 'kefir-stopper';
 import findIndex from 'array-find-index';
 import fromEventsCapture from './lib/fromEventsCapture';
@@ -256,23 +255,32 @@ export default class MenuList extends React.Component<Props> {
     const el = this._elRef.current;
     /*:: if (!el) throw new Error(); */
 
-    // The only things that should receive keydown/keydown events before us
-    // are our children. This allows a MenuItem to contain a text input
-    // which selectively stops propagation on key events for example.
-    Kefir.merge([
-      Kefir.fromEvents(window, 'keydown')
-        .filter(isEnterOrArrowKey)
-        .filter(e => el.contains(e.target)),
-      fromEventsCapture(window, 'keydown')
-        .filter(isEnterOrArrowKey)
-        .filter(e => !el.contains(e.target)),
-    ])
+    // We want to receive keydown events before any elements that aren't
+    // our children. (Our children specifically should be able to get keydown events
+    // before us and choose to stop propagation on them if desired. This allows a
+    // MenuItem to contain a text input that handles arrow keys itself for example.
+    // We receive keydown events that originate from our children through the
+    // onKeyDown handler attached to our own div. This block of code here
+    // is only for receiving keydown events that don't originate inside of our
+    // div.)
+    fromEventsCapture(window, 'keydown')
+      .filter(isEnterOrArrowKey)
+      .filter(e => !el.contains(e.target))
       .takeUntilBy(this._stopper)
       .onValue(event => {
         ReactDOM.unstable_batchedUpdates(() => {
           this._key(event);
         });
       });
+
+    // Possible alternative future design: instead of registering keydown handlers
+    // globally, we could have a hidden input inside of the menu that's kept
+    // focused, and just receive keydown events that bubble up from there.
+    // This would be similar to React Select and StreakSheet.
+    // This would prevent us from needing to add an event handler on window with
+    // special target-filtering logic, and it would fix certain cases with the
+    // target-filtering logic where React portals are used inside the children.
+    // Similar design note is in MenuButton.
 
     const parentCtx = this._parentCtx();
     if (parentCtx) {
@@ -477,7 +485,13 @@ export default class MenuList extends React.Component<Props> {
 
   render() {
     return (
-      <div role="menu" ref={this._elRef}>
+      <div
+        role="menu"
+        ref={this._elRef}
+        onKeyDown={e => {
+          this._key(e);
+        }}
+      >
         <MenuListContext.Provider value={this._menuListContext}>
           {this.props.children}
         </MenuListContext.Provider>

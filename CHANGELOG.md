@@ -1,11 +1,7 @@
-## 8.0.0 (2022-09-09)
+## 7.1.0 (2022-09-14)
 
-## Possibly Breaking Changes
-
+- MenuList: "keydown" events are now listened for on the MenuList's own div, fixing issues where an ancestor React element could handle the "keydown" event before MenuList does.
 - MenuButton: Enter and space "keydown" events on the button element that toggle it now have `stopPropagation()` called so that no other components attempt to handle the event redundantly.
-
-## Other Changes
-
 - MenuButton: The third argument of the `renderButton` prop callback is now `onKeyDown`, meant to be used as a keydown event handler instead of a keypress event handler. It will still work as a keypress event handler as previously recommended, so this isn't a breaking change.
 
 ## 7.0.4 (2022-08-11)

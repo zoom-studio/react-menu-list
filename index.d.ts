@@ -107,7 +107,7 @@ export class Dropdown extends React.Component<{}> {}
 export type MenuButtonRenderProp = (
   domRef: React.Ref<any>,
   opened: boolean,
-  onKeyPress: (e: React.KeyboardEvent) => void,
+  onKeyDown: (e: React.KeyboardEvent) => void,
   onMouseDown: (e: React.MouseEvent) => void
 ) => ReactNode;
 

@@ -1,3 +1,9 @@
+## 7.1.0 (2022-09-14)
+
+- MenuList: "keydown" events are now listened for on the MenuList's own div, fixing issues where an ancestor React element could handle the "keydown" event before MenuList does.
+- MenuButton: Enter and space "keydown" events on the button element that toggle it now have `stopPropagation()` called so that no other components attempt to handle the event redundantly.
+- MenuButton: The third argument of the `renderButton` prop callback is now `onKeyDown`, meant to be used as a keydown event handler instead of a keypress event handler. It will still work as a keypress event handler as previously recommended, so this isn't a breaking change.
+
 ## 7.0.4 (2022-08-11)
 
 - Fixed issue where MenuButton closes its dropdown if the page loses and regains focus.
@@ -46,10 +52,10 @@ New code example:
 ```jsx
 return (
   <MenuButton
-    renderButton={(domRef, opened, onKeyPress, onMouseDown) =>
+    renderButton={(domRef, opened, onKeyDown, onMouseDown) =>
       <MyButtonComponent
         domRef={domRef}
-        onKeyPress={onKeyPress}
+        onKeyDown={onKeyDown}
         onMouseDown={onMouseDown}
       />
     }

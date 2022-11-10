@@ -1,3 +1,7 @@
+## 7.2.0 (2022-11-10)
+
+- Added `noMouseHighlight` prop to MenuItem to allow keyboard highlighting to be tracked separately from mouse hover.
+
 ## 7.1.0 (2022-11-09)
 
 - MenuList: "keydown" events are now listened for on the MenuList's own div, fixing issues where an ancestor React element could handle the "keydown" event before MenuList does.

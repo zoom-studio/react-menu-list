@@ -32,6 +32,7 @@ export type Props = {
   style?: Object,
   highlightedClassName?: string,
   highlightedStyle?: Object,
+  noMouseHighlight?: boolean,
 
   index?: number,
   onMouseLeave?: (event: MouseEvent) => void,
@@ -59,6 +60,7 @@ export default class MenuItem extends React.Component<Props, State> {
     style: PropTypes.object,
     highlightedClassName: PropTypes.string,
     highlightedStyle: PropTypes.object,
+    noMouseHighlight: PropTypes.bool,
 
     index: PropTypes.number,
     onMouseLeave: PropTypes.func,
@@ -106,10 +108,16 @@ export default class MenuItem extends React.Component<Props, State> {
   // With it false, the highlight might be delayed depending on mouse movement
   // and won't cause anything to scroll.
   highlight(byKeyboard: boolean = true) {
+    if (!byKeyboard && this.props.noMouseHighlight) {
+      return;
+    }
     this._menuListHandle.highlight(byKeyboard);
   }
 
-  unhighlight() {
+  unhighlight(byKeyboard: boolean = true) {
+    if (!byKeyboard && this.props.noMouseHighlight) {
+      return;
+    }
     this._menuListHandle.unhighlight();
   }
 
@@ -199,7 +207,7 @@ export default class MenuItem extends React.Component<Props, State> {
         className={className}
         onClick={() => this._menuListHandle.itemChosen()}
         onMouseEnter={() => this.highlight(false)}
-        onMouseLeave={onMouseLeave || (() => this.unhighlight())}
+        onMouseLeave={onMouseLeave || (() => this.unhighlight(false))}
         role="menuitem"
         aria-haspopup={this.props['aria-haspopup']}
         aria-expanded={this.props['aria-expanded']}

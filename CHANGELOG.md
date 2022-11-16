@@ -1,4 +1,4 @@
-## 7.2.0 (2022-11-10)
+## 7.2.1 (2022-11-10)
 
 - Added `noMouseHighlight` prop to MenuItem to allow keyboard highlighting to be tracked separately from mouse hover.
 

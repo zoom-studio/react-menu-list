@@ -79,7 +79,7 @@ A MenuItem supports the following props:
 - `onItemChosen`: This is an optional function which is called when the item is
   chosen by the user. The callback is passed a `ChosenEvent` object.
 - `onHighlightChange`: This is an optional function which is called when the
-  item is highlighted or unhighlighted by the user. The callback is passed a
+  item is highlighted or unhighlighted by the user. A MenuItem is highlighted when the user hovers the mouse over it or uses the keyboard arrow keys to move the selection to it. The callback is passed a
   boolean representing whether the item is highlighted now, and if the item is
   highlighted, the second argument is an object with `byKeyboard` boolean
   property, `prevCursorLocation` optional property (see MenuList.moveCursor),
@@ -104,6 +104,7 @@ A MenuItem supports the following props:
   this.
 - `domRef`: Optional prop which is passed as the `ref` value to the MenuItem's
   div element.
+- `noMouseHighlight`: Optional boolean prop to make it so the MenuItem doesn't enter the highlighted state when the mouse hovers over it. In this case, the MenuItem only becomes highlighted if selection is moved to it with the arrow keys, and the application is expected to add its own styling using the CSS `:hover` selector to style the MenuItem when it's hovered by the mouse separately from the highlight styling. This allows the behavior of [Material UI's Select component](https://mui.com/material-ui/react-select/) to be emulated where the keyboard-based selection highlight is unaffected by mouse hovering.
 
 A MenuItem has the following public methods:
 

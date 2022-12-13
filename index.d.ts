@@ -101,7 +101,9 @@ export class MenuListInspector extends React.Component<MenuListInspectorProps> {
 
 // Dropdown
 
-export class Dropdown extends React.Component<{}> {}
+export interface DropdownProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+export class Dropdown extends React.Component<DropdownProps> {}
 
 // MenuButton
 

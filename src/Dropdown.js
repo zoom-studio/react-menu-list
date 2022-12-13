@@ -4,9 +4,9 @@ import * as React from 'react';
 import type {Node as ReactNode} from 'react';
 import PropTypes from 'prop-types';
 
-type Props = {
-  children?: ReactNode,
-};
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
+  children?: ReactNode;
+}
 
 export default class Dropdown extends React.Component<Props> {
   static propTypes = {
@@ -16,6 +16,7 @@ export default class Dropdown extends React.Component<Props> {
   render() {
     return (
       <div
+        {...this.props}
         style={{
           background: 'white',
           border: '1px solid rgba(0,0,0,.2)',

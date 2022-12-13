@@ -43,6 +43,7 @@ export default class Example extends React.Component<*> {
           </p>
           <div>
             <MenuButton
+              anchorClassName="cccccccccccccccc"
               menu={
                 <Dropdown>
                   <MenuList>

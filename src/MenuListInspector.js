@@ -14,9 +14,8 @@ export type MenuListInspectorContextValue = {
   dispatchEvent(event: MenuEvent): void,
 };
 
-export const MenuListInspectorContext = React.createContext<?MenuListInspectorContextValue>(
-  null
-);
+export const MenuListInspectorContext =
+  React.createContext<?MenuListInspectorContextValue>(null);
 
 export type Props = {
   onItemChosen?: (event: ChosenEvent) => void,
@@ -93,7 +92,7 @@ export default class MenuListInspector extends React.Component<Props> {
   render() {
     return (
       <MenuListInspectorContext.Provider value={this._menuListInspectorContext}>
-        {this.props.children}
+        <div className="menu-list-inspector">{this.props.children}</div>
       </MenuListInspectorContext.Provider>
     );
   }

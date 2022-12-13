@@ -122,6 +122,7 @@ export interface MenuButtonProps {
   openedClassName?: string;
   openedStyle?: Object;
   children?: ReactNode;
+  anchorClassName?: string;
 
   renderButton?: MenuButtonRenderProp;
 

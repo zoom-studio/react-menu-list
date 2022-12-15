@@ -198,7 +198,7 @@ export default class MenuButton extends React.Component<Props, State> {
         aria-haspopup={true}
         aria-expanded={opened}
         onKeyDown={onKeyDown}
-        onMouseDown={onMouseDown}
+        onClick={onMouseDown}
         disabled={this.props.disabled}
         title={this.props.title}
       >

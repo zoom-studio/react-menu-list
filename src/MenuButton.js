@@ -146,6 +146,9 @@ export default class MenuButton extends React.Component<Props, State> {
   }
 
   _onMouseDown = (e: MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     if (e.button !== 0) {
       return;
     }
@@ -154,12 +157,13 @@ export default class MenuButton extends React.Component<Props, State> {
   };
 
   _onKeyDown = (e: KeyboardEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     if (e.isComposing) {
       return;
     }
     if (e.key === 'Enter' || e.key === ' ') {
-      e.stopPropagation();
-      e.preventDefault();
       this.toggle();
     }
   };

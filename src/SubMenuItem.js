@@ -302,6 +302,7 @@ export default class SubMenuItem extends React.Component<Props, State> {
         ref={this._floatAnchorRef}
         options={positionOptions}
         zIndex={menuZIndex}
+        floatContainerClassName="sub-menu-item-float-anchor"
         anchor={anchorRef => (
           <MenuItem
             ref={this._menuItemRef}

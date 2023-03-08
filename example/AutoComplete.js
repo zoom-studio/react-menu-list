@@ -65,13 +65,8 @@ export default class AutoComplete extends React.Component<Props, State> {
   }
 
   render() {
-    const {
-      className,
-      style,
-      positionOptions,
-      autoHighlight,
-      items,
-    } = this.props;
+    const {className, style, positionOptions, autoHighlight, items} =
+      this.props;
     const {value, opened} = this.state;
 
     function filterItems(items: Array<Item>): Array<Item> {
@@ -97,6 +92,7 @@ export default class AutoComplete extends React.Component<Props, State> {
       <FloatAnchor
         ref={this._floatAnchorRef}
         options={positionOptions}
+        floatContainerClassName="auto-complete-float-anchor"
         anchor={anchorRef => (
           <input
             ref={anchorRef}

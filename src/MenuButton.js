@@ -226,6 +226,7 @@ export default class MenuButton extends React.Component<Props, State> {
         parentElement={this.props.menuParentElement}
         ref={this._floatAnchorRef}
         options={positionOptions}
+        floatContainerClassName="menu-button-float-anchor"
         zIndex={menuZIndex}
         anchor={anchorRef =>
           renderButton(

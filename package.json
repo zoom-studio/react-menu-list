@@ -74,7 +74,7 @@
     "kefir-bus": "^2.2.0",
     "kefir-stopper": "^2.1.0",
     "prop-types": "^15.6.0",
-    "react-float-anchor": "^3.2.0"
+    "react-float-anchor": "https://github.com/zoom-studio/react-float-anchor.git"
   },
   "peerDependencies": {
     "react": "^16.6.0 || ^17.0.0",

@@ -4745,10 +4745,9 @@ react-dom@^17.0.2:
     object-assign "^4.1.1"
     scheduler "^0.20.2"
 
-react-float-anchor@^3.2.0:
+"react-float-anchor@https://github.com/zoom-studio/react-float-anchor.git":
   version "3.4.0"
-  resolved "https://registry.yarnpkg.com/react-float-anchor/-/react-float-anchor-3.4.0.tgz#0fe5f835f34461a332ab70ae0d041b1f63fa6d40"
-  integrity sha512-nB0QHoyeqFIBIUfgHMHhJmQk2WUMCmCasofMWigruuJesPtUiKeu1I5DCu5C5FvvrnnW4CXUzSbur9ajBbW+iA==
+  resolved "https://github.com/zoom-studio/react-float-anchor.git#c659651eec2bf66ee68347ed02efebeba649bc6c"
   dependencies:
     "@babel/runtime" "^7.0.0"
     contain-by-screen "^1.0.4"
